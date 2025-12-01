@@ -135,14 +135,8 @@ export async function POST(request: Request) {
         }
 
         // 3. FALLBACK MEJORADO: REDIRIGIR A "ORDER PAY" (PAGAR ORDEN)
-        // En lugar de enviar al carrito, enviamos a la página de pago de la orden específica.
-        // Como la orden YA fue creada con todos los datos del cliente (líneas 29-60),
-        // WooCommerce NO pedirá llenar los datos de nuevo, solo pedirá el pago.
-
-        // La URL estándar es /checkout/order-pay/ID/?pay_for_order=true&key=ORDER_KEY
-        // Si tu página de checkout tiene otro slug (ej: /finalizar-compra/), se ajustará automáticamente si WOO_URL es correcto.
-
-        const orderPayUrl = `${WOO_URL}/checkout/order-pay/${orderId}/?pay_for_order=true&key=${orderKey}`;
+        // Usamos la URL oficial de pago que devuelve WooCommerce
+        const orderPayUrl = wooOrder.payment_url || `${WOO_URL}/checkout/order-pay/${orderId}/?pay_for_order=true&key=${orderKey}`;
 
         return NextResponse.json({
             success: true,
