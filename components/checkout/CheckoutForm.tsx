@@ -54,7 +54,10 @@ export default function CheckoutForm() {
         message += `*PEDIDO:*\n`;
 
         items.forEach(item => {
-            const variantInfo = item.selectedVariant ? ` - ${item.selectedVariant.attributes.join(' / ')}` : '';
+            const variantInfo = item.attributes && Object.keys(item.attributes).length > 0
+                ? ` - ${Object.values(item.attributes).join(' / ')}`
+                : '';
+
             // Generate product link (client-side)
             const productLink = `${window.location.origin}/producto/${item.slug}`;
             // Removed parentheses from product link for WhatsApp preview
