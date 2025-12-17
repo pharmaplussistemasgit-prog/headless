@@ -14,6 +14,16 @@ import "swiper/css/navigation";
 
 const banners = [
     {
+        id: 0,
+        src: "/banners/nuevas-tokio-saprix.webp",
+        alt: "Nueva Colección Tokio Saprix",
+        title: "Lllegaron las más pedidas",
+        subtitle: "Referencia",
+        link: "/tienda",
+        align: "center",
+        buttonText: "Compralas yá!"
+    },
+    {
         id: 1,
         src: "/banners/Zapatillas Saprix - .ref Tokio Negra.webp",
         alt: "Zapatillas Saprix Tokio Negra",
@@ -29,14 +39,14 @@ const banners = [
         title: "Estilo Único Tokio",
         subtitle: "Diseñadas para destacar en morado",
         link: "/tienda",
-        align: "right"
+        align: "left"
     },
     {
         id: 3,
         src: "/banners/Zapatillas Saprix - ref Londres.webp",
         alt: "Zapatillas Saprix Londres",
         title: "Pasión por el Futsal Londres",
-        subtitle: "La marca de los campeones",
+        subtitle: "",
         link: "/tienda",
         align: "left"
     },
@@ -74,14 +84,15 @@ export default function MainHeroSlider() {
     };
 
     return (
-        <section className="relative w-full h-[50vh] md:h-[70vh] lg:h-[85vh] overflow-hidden bg-gray-900">
+        <section className="relative w-full h-[45vh] md:h-[65vh] lg:h-[75vh] overflow-hidden bg-gray-900">
             <Swiper
                 modules={[Autoplay, EffectFade, Pagination, Navigation]}
                 effect="fade"
                 speed={1000}
                 autoplay={{
-                    delay: 5000,
+                    delay: 7000,
                     disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
                 }}
                 pagination={{
                     clickable: true,
@@ -99,7 +110,7 @@ export default function MainHeroSlider() {
                                 src={banner.src}
                                 alt={banner.alt}
                                 fill
-                                priority={banner.id === 1}
+                                priority={banner.id === 0}
                                 className="object-cover object-center"
                                 sizes="100vw"
                             />
@@ -135,7 +146,7 @@ export default function MainHeroSlider() {
                                         href={banner.link}
                                         className="inline-flex items-center gap-2 px-8 py-4 bg-saprix-electric-blue hover:bg-blue-700 text-white font-bold rounded-none -skew-x-6 transition-all transform hover:scale-105 shadow-lg hover:shadow-saprix-electric-blue/50"
                                     >
-                                        <span className="skew-x-6">Ver Colección</span>
+                                        <span className="skew-x-6">{banner.buttonText || "Ver Colección"}</span>
                                         <svg className="w-5 h-5 skew-x-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>

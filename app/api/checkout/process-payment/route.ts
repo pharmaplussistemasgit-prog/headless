@@ -1,4 +1,6 @@
-import { NextResponse } from 'next/server';
+
+import { NextResponse } from 'next/server'; // Correct Import
+import { createAddiPayment } from '@/lib/addi';
 
 // Configuración de WooCommerce
 const WOO_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://pagos.saprix.com.co";
@@ -7,28 +9,34 @@ const CS = process.env.WOOCOMMERCE_CONSUMER_SECRET || "cs_37ebd5161dd1ed62e19957
 
 // Configuración de Wompi
 const WOMPI_PUBLIC_KEY = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || "pub_test_your_key_here";
-const WOMPI_PRIVATE_KEY = process.env.WOMPI_PRIVATE_KEY || "prv_test_your_key_here";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { customer, billing, cartItems, cartTotal } = body;
+        console.log("🔥 [API CHECKOUT] Iniciando proceso...", { paymentMethod: body.paymentMethod });
+        console.log("DATA DE ENTRADA:", JSON.stringify(body, null, 2));
+
+        const { customer, billing, cartItems, cartTotal, paymentMethod } = body;
 
         if (!customer || !cartItems || cartItems.length === 0) {
             return NextResponse.json({ error: 'Datos inválidos' }, { status: 400 });
         }
 
-        // 1. CREAR ORDEN EN WOOCOMMERCE
+        // 1. PREPARAR DATOS PARA WOOCOMMERCE
         const line_items = cartItems.map((item: any) => ({
             product_id: item.id,
             variation_id: item.variationId || undefined,
             quantity: item.quantity,
         }));
 
+        // Determinar método de pago para WooCommerce
+        const methodId = paymentMethod === 'addi' ? 'addi' : 'wompi';
+        const methodTitle = paymentMethod === 'addi' ? 'Pago con Addi' : 'Pago con Wompi (Tarjetas/PSE)';
+
         const orderData = {
-            payment_method: 'wompi',
-            payment_method_title: 'Pago con Wompi',
+            payment_method: methodId,
+            payment_method_title: methodTitle,
             set_paid: false,
             billing: {
                 first_name: billing?.firstName || customer.firstName,
@@ -54,22 +62,19 @@ export async function POST(request: Request) {
             },
             line_items: line_items,
             meta_data: [
-                {
-                    key: '_billing_cedula',
-                    value: customer.documentId
-                },
-                {
-                    key: 'numero_documento',
-                    value: customer.documentId
-                },
-                {
-                    key: '_numero_documento', // Para compatibilidad con el snippet PHP
-                    value: customer.documentId
-                },
-                {
-                    key: '_tipo_documento', // Para compatibilidad con el snippet PHP
-                    value: 'cedula' // Valor por defecto
-                }
+                // ID Keys for standard WooCommerce
+                { key: '_billing_cedula', value: customer.documentId }, // Common
+                { key: 'billing_cedula', value: customer.documentId },
+                { key: 'tipo_documento', value: 'CC' },
+                { key: 'numero_documento', value: customer.documentId },
+                // ID Keys for Addi Plugin for WooCommerce
+                { key: '_billing_document_id', value: customer.documentId },
+                { key: 'billing_document_id', value: customer.documentId },
+                { key: '_billing_identification', value: customer.documentId },
+                { key: 'billing_identification', value: customer.documentId },
+                // ID Keys for Wompi Plugin for WooCommerce
+                { key: '_billing_dni', value: customer.documentId },
+                { key: 'billing_dni', value: customer.documentId }
             ],
             shipping_lines: [
                 {
@@ -80,15 +85,23 @@ export async function POST(request: Request) {
             ]
         };
 
-        // Crear orden en WooCommerce
-        const wooResponse = await fetch(`${WOO_URL}/wp-json/wc/v3/orders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + Buffer.from(`${CK}:${CS}`).toString('base64'),
-            },
-            body: JSON.stringify(orderData),
-        });
+        // 2. CREAR ORDEN EN WOOCOMMERCE
+        console.log(`📌 Creando orden en WooCommerce: ${WOO_URL}/wp-json/wc/v3/orders`);
+
+        let wooResponse;
+        try {
+            wooResponse = await fetch(`${WOO_URL}/wp-json/wc/v3/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa(`${CK}:${CS}`),
+                },
+                body: JSON.stringify(orderData),
+            });
+        } catch (fetchError) {
+            console.error("❌ ERROR FETCH WOOCOMMERCE:", fetchError);
+            throw new Error(`Error de conexión con WooCommerce: ${(fetchError as Error).message}`);
+        }
 
         const wooOrder = await wooResponse.json();
 
@@ -98,23 +111,34 @@ export async function POST(request: Request) {
         }
 
         const orderId = wooOrder.id;
-        const orderKey = wooOrder.order_key;
+        const orderKey = wooOrder.order_key; // Necesario para fallback
 
-        // 2. INTENTAR CREAR TRANSACCIÓN EN WOMPI (OPCIONAL - CON FALLBACK)
-        // Si Wompi no está configurado o falla, redirigir a WooCommerce checkout
+        // 3. PROCESAR PAGO SEGÚN SELECCIÓN
+        let redirectUrl = '';
 
-        try {
-            // Solo intentar Wompi si las llaves están configuradas correctamente
+        if (paymentMethod === 'addi') {
+            // --- LÓGICA ADDI ---
+            const addiResponse = await createAddiPayment({
+                orderId: String(orderId),
+                totalAmount: cartTotal, // Addi Total
+                firstName: customer.firstName,
+                lastName: customer.lastName,
+                email: customer.email,
+                phone: customer.phone,
+                documentId: customer.documentId,
+                redirectTo: `${SITE_URL}/orden-confirmada?order_id=${orderId}`
+            });
+            redirectUrl = addiResponse._links?.webRedirect?.href || addiResponse.redirectUrl;
+
+        } else {
+            // --- LÓGICA WOMPI ---
             if (WOMPI_PUBLIC_KEY && !WOMPI_PUBLIC_KEY.includes('test_your_key')) {
                 const amountInCents = Math.round(cartTotal * 100);
-                const reference = `SAPRIX-${orderId}`;
-
-                // Usamos el endpoint de Payment Links que es el correcto para generar una URL de pago
                 const wompiPayload = {
-                    name: `Orden Saprix #${orderId}`,
+                    name: `Orden #${orderId}`,
                     description: `Pago de orden #${orderId} en Saprix`,
                     single_use: true,
-                    collect_shipping: false, // Ya recolectamos la info de envío
+                    collect_shipping: false,
                     currency: "COP",
                     amount_in_cents: amountInCents,
                     redirect_url: `${SITE_URL}/orden-confirmada?order_id=${orderId}`,
@@ -132,44 +156,39 @@ export async function POST(request: Request) {
 
                 if (wompiResponse.ok) {
                     const wompiData = await wompiResponse.json();
-                    // El endpoint de payment_links devuelve 'permalink' en data.permalink
                     const permalink = wompiData.data?.permalink;
-
                     if (permalink) {
-                        // Concatenamos los datos del cliente a la URL para pre-llenar (si Wompi lo soporta en el link)
-                        // O simplemente devolvemos el link limpio
-                        return NextResponse.json({
-                            success: true,
-                            permalink: `${permalink}?customer_email=${customer.email}`,
-                            orderId,
-                            reference,
-                            provider: 'wompi'
-                        });
+                        redirectUrl = `${permalink}?customer_email=${customer.email}`;
                     }
                 } else {
-                    const errorData = await wompiResponse.json();
-                    console.error('Wompi API Error:', errorData);
+                    console.error('Wompi Link Error:', await wompiResponse.json());
                 }
             }
-        } catch (wompiError) {
-            console.log('Wompi no disponible, usando checkout de WooCommerce:', wompiError);
         }
 
-        // 3. FALLBACK MEJORADO: REDIRIGIR A "ORDER PAY" (PAGAR ORDEN)
-        // Usamos la URL oficial de pago que devuelve WooCommerce
-        const orderPayUrl = wooOrder.payment_url || `${WOO_URL}/checkout/order-pay/${orderId}/?pay_for_order=true&key=${orderKey}`;
-
-        return NextResponse.json({
-            success: true,
-            permalink: orderPayUrl,
-            orderId,
-            provider: 'woocommerce_order_pay'
-        });
+        // 4. RESPUESTA FINAL
+        if (redirectUrl) {
+            return NextResponse.json({
+                success: true,
+                permalink: redirectUrl,
+                orderId,
+                provider: paymentMethod
+            });
+            // ERROR: No se generó link de pago
+            console.error("❌ ERROR: No se obtuvo link de pago del proveedor:", paymentMethod);
+            return NextResponse.json(
+                {
+                    error: `No se pudo generar el link de pago con ${paymentMethod === 'addi' ? 'Addi' : 'Wompi'}. Por favor verifica la configuración o intenta más tarde.`,
+                    details: 'Redirect URL is empty'
+                },
+                { status: 500 }
+            );
+        }
 
     } catch (error: any) {
-        console.error('Error en proceso de pago:', error);
+        console.error("🚨 CRITICAL ERROR EN API CHECKOUT:", error);
         return NextResponse.json(
-            { error: error.message || 'Error al procesar el pago' },
+            { error: error.message || 'Error interno del servidor', details: error.toString() },
             { status: 500 }
         );
     }

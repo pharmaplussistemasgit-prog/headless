@@ -1,6 +1,9 @@
-import { Suspense } from 'react';
+"use client";
+
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 export default function OrdenConfirmadaPage() {
     return (
@@ -15,6 +18,13 @@ export default function OrdenConfirmadaPage() {
 }
 
 function OrdenConfirmadaContent() {
+    const { clearCart } = useCart();
+
+    useEffect(() => {
+        // Limpiar el carrito al llegar a esta página (pago exitoso)
+        clearCart();
+    }, [clearCart]);
+
     return (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12 text-center">
             <div className="mb-8">

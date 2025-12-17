@@ -45,9 +45,6 @@ export default function CheckoutForm() {
     const [shippingMessage, setShippingMessage] = useState('');
     const [shippingZone, setShippingZone] = useState(''); // Default: empty to force selection
 
-    // Payment Method State
-    const [paymentMethod, setPaymentMethod] = useState<'wompi' | 'addi'>('wompi');
-
     const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
 
     // Calculate total weight (each item weighs 0.5 kg)
@@ -147,7 +144,7 @@ export default function CheckoutForm() {
         setIsLoading(true);
 
         try {
-            if (!customerData.firstName || !customerData.lastName || !customerData.email || !customerData.phone || !customerData.documentId || !customerData.address || !customerData.city || !customerData.state) {
+            if (!customerData.firstName || !customerData.lastName || !customerData.email || !customerData.phone) {
                 toast.error('Por favor completa todos los campos obligatorios');
                 setIsLoading(false);
                 return;
@@ -159,55 +156,86 @@ export default function CheckoutForm() {
                 return;
             }
 
-            // --- INTEGRACIÓN DIRECTA API ADDI ---
-            // Enviamos los datos al backend para crear la orden y obtener el link de Addi
+            // --- ESTRATEGIA HANDOVER (TRANSFERENCIA AL CHECKOUT DE WORDPRESS) ---
+            // Construimos una URL para llevar al usuario al checkout nativo con los datos prellenados.
 
-            const response = await fetch('/api/checkout/process-payment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cartItems: items,
-                    customer: {
-                        ...customerData,
-                        shippingZone // Enviamos la zona para costo de envío
-                    },
-                    billing: sameAsShipping ? undefined : billingAddress,
-                    cartTotal: finalTotal,
-                    shippingCost: shippingCost,
-                    paymentMethod: paymentMethod // <-- ENVIAMOS EL MÉTODO SELECCIONADO
-                }),
-            });
+            const baseUrl = 'https://pagos.saprix.com.co/finalizar-compra/';
+            const params = new URLSearchParams();
 
-            const responseText = await response.text();
-            console.log("📥 [CheckoutForm] Respuesta Raw:", responseText);
-            console.log("📥 [CheckoutForm] Status:", response.status);
+            // Mapeo de Departamentos a códigos ISO para WooCommerce (Colombia)
+            const CO_DEPARTMENTS: { [key: string]: string } = {
+                'AMAZONAS': 'AMA', 'ANTIOQUIA': 'ANT', 'ARAUCA': 'ARA', 'ATLANTICO': 'ATL', 'ATLÁNTICO': 'ATL',
+                'BOLIVAR': 'BOL', 'BOLÍVAR': 'BOL', 'BOYACA': 'BOY', 'BOYACÁ': 'BOY', 'CALDAS': 'CAL',
+                'CAQUETA': 'CAQ', 'CAQUETÁ': 'CAQ', 'CASANARE': 'CAS', 'CAUCA': 'CAU', 'CESAR': 'CES',
+                'CHOCO': 'CHO', 'CHOCÓ': 'CHO', 'CORDOBA': 'COR', 'CÓRDOBA': 'COR', 'CUNDINAMARCA': 'CUN',
+                'GUAINIA': 'GUA', 'GUAINÍA': 'GUA', 'GUAVIARE': 'GUV', 'HUILA': 'HUI', 'LA GUAJIRA': 'LAG',
+                'MAGDALENA': 'MAG', 'META': 'MET', 'NARINO': 'NAR', 'NARIÑO': 'NAR', 'NORTE DE SANTANDER': 'NSA',
+                'PUTUMAYO': 'PUT', 'QUINDIO': 'QUI', 'QUINDÍO': 'QUI', 'RISARALDA': 'RIS',
+                'SAN ANDRES': 'SAP', 'SAN ANDRÉS': 'SAP', 'SANTANDER': 'SAN', 'SUCRE': 'SUC', 'TOLIMA': 'TOL',
+                'VALLE DEL CAUCA': 'VAC', 'VALLE': 'VAC', 'VAUPES': 'VAU', 'VAUPÉS': 'VAU', 'VICHADA': 'VID',
+                // CAMBIO: Intentamos mapear Bogotá a Cundinamarca (CUN) ya que DC falló o es tratado como ciudad
+                'BOGOTA': 'CUN', 'BOGOTÁ': 'CUN', 'BOGOTA D.C.': 'CUN', 'D.C.': 'CUN'
+            };
 
-            let data;
-            try {
-                data = JSON.parse(responseText);
-            } catch (e) {
-                console.error("❌ ERROR CRÍTICO: El servidor no devolvió JSON.", responseText);
-                toast.error(`Error del servidor (No es JSON): ${responseText.substring(0, 50)}...`);
-                setIsLoading(false);
-                return;
-            }
+            const getStateCode = (name: string) => {
+                const normalized = name.toUpperCase().trim();
+                return CO_DEPARTMENTS[normalized] || name; // Retorna código o el original si no encuentra
+            };
 
-            if (data.success && data.permalink) {
-                toast.success('Redirigiendo a Addi para finalizar el pago...');
-                window.location.href = data.permalink;
-            } else {
-                console.error('Error en checkout (Data parsed):', data);
-                // Si data está vacío o es {}, mostramos el raw text para depurar
-                const errorMessage = data.error || (Object.keys(data).length === 0 ? `Respuesta vacía del servidor: ${responseText.substring(0, 100)}` : 'Hubo un error al procesar tu solicitud.');
-                toast.error(errorMessage);
-                setIsLoading(false);
-            }
+            const billingStateCode = getStateCode(customerData.state);
+
+
+            // 1. Activar nuestro snippet PHP
+            params.append('saprix_handover', 'true');
+
+            // 2. Transferir Items del Carrito (Formato ID:Cantidad,ID:Cantidad)
+            const itemsString = items.map(item => {
+                // Si tienes variación, idealmente pasar el variationId, pero muchos plugins usan el ID padre o el ID de variación directo
+                // Probamos con el ID principal (o variationId si existe y es diferente)
+                return `${item.variationId || item.id}:${item.quantity}`;
+            }).join(',');
+            params.append('items', itemsString);
+
+            // 3. Transferir Datos del Cliente (Billing)
+            params.append('billing_first_name', customerData.firstName);
+            params.append('billing_last_name', customerData.lastName);
+            params.append('billing_email', customerData.email);
+            params.append('billing_phone', customerData.phone);
+            params.append('billing_country', 'CO');
+            params.append('billing_address_1', customerData.address);
+            params.append('billing_address_2', customerData.apartment);
+            params.append('billing_city', customerData.city);
+            params.append('billing_state', billingStateCode);
+            params.append('billing_postcode', customerData.postcode);
+
+            // 4. Transferir Datos de Envío (Shipping) - MIRROR de Billing
+            // Es vital enviar estos también para que aparezcan en la sección "Dirección de Envío"
+            params.append('shipping_first_name', customerData.firstName);
+            params.append('shipping_last_name', customerData.lastName);
+            params.append('shipping_country', 'CO');
+            params.append('shipping_address_1', customerData.address);
+            params.append('shipping_address_2', customerData.apartment);
+            params.append('shipping_city', customerData.city);
+            params.append('shipping_state', billingStateCode);
+            params.append('shipping_postcode', customerData.postcode);
+
+            // 5. Transferir Cédula (Usando los nombres del snippet del usuario)
+            // El snippet del usuario busca 'tipo_documento' y 'numero_documento'
+            params.append('billing_tipo_documento', 'cedula'); // Valor por defecto
+            params.append('tipo_documento', 'cedula');
+            params.append('billing_numero_documento', customerData.documentId);
+            params.append('numero_documento', customerData.documentId);
+
+            params.append('billing_cedula', customerData.documentId);
+
+            // Redirección
+            toast.success('Redirigiendo a la pasarela de pagos segura de Saprix...');
+            await new Promise(resolve => setTimeout(resolve, 800));
+            window.location.href = `${baseUrl}?${params.toString()}`;
 
         } catch (error: any) {
             console.error('Error:', error);
-            toast.error('Error de conexión con el servidor.');
+            toast.error('Error al redirigir al pago.');
             setIsLoading(false);
         }
     };
@@ -445,25 +473,22 @@ export default function CheckoutForm() {
                                         </div>
                                     </div>
 
-                                    <div className="border-t-2 border-black pt-4 mt-4 mb-6">
+                                    <div className="border-t-2 border-black pt-4 mt-4">
                                         <div className="flex justify-between items-center">
                                             <span className="text-lg font-black uppercase italic text-black">Total</span>
-
                                             <span className="text-2xl font-black text-black">
-                                                ${cartTotal.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+                                                ${finalTotal.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
                                             </span>
                                         </div>
                                         <p className="text-[10px] text-gray-500 mt-1 text-right">(IVA incluido)</p>
                                     </div>
                                 </div>
 
-                                {/* Botón Continuar (Va al Formulario) */}
                                 <button
-                                    type="button"
                                     onClick={() => setShowCustomerForm(true)}
                                     className="w-full py-4 bg-black text-white font-bold uppercase tracking-widest hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-3 group"
                                 >
-                                    <span>CONTINUAR COMPRA</span>
+                                    <span>Continuar al Pago</span>
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </button>
 
@@ -493,7 +518,6 @@ export default function CheckoutForm() {
                 </div>
 
                 <motion.form
-                    id="checkout-form"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
@@ -902,52 +926,8 @@ export default function CheckoutForm() {
                                 </label>
                             </div>
 
-                            {/* Selector de Método de Pago (Ahora está AQUÍ en el paso final) */}
-                            <div className="space-y-3 pt-4 border-t border-gray-100 mb-6">
-                                <label className="block text-xs font-bold uppercase text-black">
-                                    Método de Pago
-                                </label>
-                                <div className="grid grid-cols-1 gap-3">
-                                    {/* Opción Wompi */}
-                                    <label className={`relative flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${paymentMethod === 'wompi' ? 'border-black bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}>
-                                        <input
-                                            type="radio"
-                                            name="paymentMethodCheckout"
-                                            value="wompi"
-                                            checked={paymentMethod === 'wompi'}
-                                            onChange={() => setPaymentMethod('wompi')}
-                                            className="w-4 h-4 text-black focus:ring-black border-gray-300"
-                                        />
-                                        <div className="ml-3">
-                                            <span className="block text-sm font-bold text-black uppercase">Wompi (Tarjetas / PSE)</span>
-                                            <span className="block text-xs text-gray-500">Paga con crédito, débito o transferencia.</span>
-                                        </div>
-                                    </label>
-
-                                    {/* Opción Addi */}
-                                    <label className={`relative flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${paymentMethod === 'addi' ? 'border-[#00E5FF] bg-cyan-50' : 'border-gray-200 hover:border-cyan-200'}`}>
-                                        <input
-                                            type="radio"
-                                            name="paymentMethodCheckout"
-                                            value="addi"
-                                            checked={paymentMethod === 'addi'}
-                                            onChange={() => setPaymentMethod('addi')}
-                                            className="w-4 h-4 text-[#00E5FF] focus:ring-[#00E5FF] border-gray-300"
-                                        />
-                                        <div className="ml-3">
-                                            <span className="block text-sm font-bold text-black uppercase">ADDI (Crédito)</span>
-                                            <span className="block text-xs text-gray-500">Paga a cuotas sin tarjeta.</span>
-                                        </div>
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                                            <span className="text-[10px] font-black bg-[#00E5FF] text-black px-2 py-1 rounded">ADDI</span>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-
                             <button
                                 type="submit"
-                                form="checkout-form"
                                 disabled={isLoading}
                                 className="w-full py-4 bg-black hover:bg-gray-800 text-white font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
                             >
@@ -958,7 +938,7 @@ export default function CheckoutForm() {
                                     </>
                                 ) : (
                                     <>
-                                        <span>Procesar Pago con {paymentMethod === 'wompi' ? 'Wompi' : 'Addi'}</span>
+                                        <span>PAGAR AHORA</span>
                                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     </>
                                 )}
