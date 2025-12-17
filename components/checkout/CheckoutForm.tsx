@@ -15,7 +15,7 @@ export default function CheckoutForm() {
     const [showCustomerForm, setShowCustomerForm] = useState(false);
 
     // Updated number as requested
-    const WHATSAPP_NUMBER = "573218737931";
+    const WHATSAPP_NUMBER = "573023932008";
 
     // Function now accepts data to build the full message
     const handleWhatsAppCheckout = (data: typeof customerData) => {
@@ -32,14 +32,20 @@ export default function CheckoutForm() {
         const incrementFactor = Math.floor((totalQty - 1) / 2);
         const incrementPrice = 5000;
 
+        let shippingLabel = '';
+
         if (shippingZone === 'bogota') {
             calculatedShipping = 10000 + (incrementFactor * incrementPrice);
+            shippingLabel = `Bogotá D.C.: $10.000`; // Removed "- Desde" as requested
         } else if (shippingZone === 'cercanos') { // Alrededores
             calculatedShipping = 15000 + (incrementFactor * incrementPrice);
+            shippingLabel = `Alrededores a Bogotá: $15.000`;
         } else if (shippingZone === 'nacional') {
             calculatedShipping = 25000 + (incrementFactor * incrementPrice);
+            shippingLabel = `Nacional: $25.000`;
         } else if (shippingZone === 'recoger') {
             calculatedShipping = 0;
+            shippingLabel = `Recoger en Tienda: Gratis`;
         }
 
         // 2. Build Message with Customer Data
@@ -49,10 +55,13 @@ export default function CheckoutForm() {
 
         items.forEach(item => {
             const variantInfo = item.selectedVariant ? ` - ${item.selectedVariant.attributes.join(' / ')}` : '';
-            message += `• (${item.quantity}) ${item.name}${variantInfo}\n`;
+            // Generate product link (client-side)
+            const productLink = `${window.location.origin}/producto/${item.slug}`;
+            // Removed parentheses from product link for WhatsApp preview
+            message += `* (${item.quantity}) ${item.name}${variantInfo} ${productLink}\n`;
         });
 
-        message += `\n*ENVÍO:* ${shippingZone.toUpperCase()} ($${calculatedShipping.toLocaleString('es-CO')})\n`;
+        message += `\n*ENVÍO:* ${shippingLabel}\n`;
         message += `*TOTAL A PAGAR:* $${finalTotal.toLocaleString('es-CO')}\n\n`;
 
         message += `📋 *DATOS DEL CLIENTE:*\n`;
@@ -63,8 +72,7 @@ export default function CheckoutForm() {
         message += `Dirección: ${data.address} ${data.apartment ? `(${data.apartment})` : ''}\n`;
         message += `Ciudad/Depto: ${data.city}, ${data.state}\n\n`;
 
-        message += `🔗 *Link de pago seguro (Wompi):*\nhttps://checkout.wompi.co/l/VPOS_TdPgzp\n\n`;
-        message += `Quedo atento al despacho. Gracias.`;
+        message += `*Quedo atento para proceder con el pago me pueden informar porque medio?*`;
 
         // 3. Open WhatsApp
         const encodedMessage = encodeURIComponent(message);
