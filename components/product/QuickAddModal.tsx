@@ -100,7 +100,7 @@ export default function QuickAddModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div className="relative w-full max-w-5xl bg-white shadow-2xl overflow-hidden">
+            <div className="relative w-full max-w-5xl bg-white shadow-2xl overflow-hidden max-h-[90vh]">
                 {/* Close Button */}
                 <button
                     onClick={onClose}
@@ -109,9 +109,9 @@ export default function QuickAddModal({
                     <X className="w-5 h-5" />
                 </button>
 
-                <div className="grid md:grid-cols-[1.2fr_1fr] gap-0">
+                <div className="grid md:grid-cols-[1.2fr_1fr] gap-0 max-h-[90vh]">
                     {/* Left Side - Image Gallery */}
-                    <div className="bg-gray-50 p-8">
+                    <div className="bg-gray-50 p-8 overflow-y-auto">
                         {/* Main Image */}
                         <div className="relative aspect-square bg-white mb-4 overflow-hidden">
                             <Image
@@ -148,111 +148,113 @@ export default function QuickAddModal({
                     </div>
 
                     {/* Right Side - Product Details */}
-                    <div className="p-8 flex flex-col max-h-[85vh] overflow-y-auto">
-                        {/* Product Info */}
-                        <div className="mb-6">
-                            <h2 className="text-2xl font-bold text-black mb-3 leading-tight">
-                                {product?.name}
-                            </h2>
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-3xl font-black text-black">
-                                    {priceFmt.format(currentPrice)}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Color Selection */}
-                        {colorOptions && colorOptions.length > 0 && (
-                            <div className="mb-6">
-                                <label className="block text-xs font-bold uppercase text-gray-700 mb-3">
-                                    Color: <span className="font-normal text-black capitalize">{selectedColor}</span>
-                                </label>
-                                <div className="flex flex-wrap gap-2">
-                                    {colorOptions.map((color) => (
-                                        <button
-                                            key={color.option}
-                                            onClick={() => setSelectedColor(color.option)}
-                                            className={`group relative flex items-center gap-2 px-3 py-2 border-2 transition-all ${selectedColor === color.option
-                                                    ? 'border-black bg-gray-50'
-                                                    : 'border-gray-200 hover:border-gray-400'
-                                                }`}
-                                        >
-                                            {color.image && (
-                                                <div className="relative w-8 h-8 flex-shrink-0">
-                                                    <Image
-                                                        src={color.image}
-                                                        alt={color.option}
-                                                        fill
-                                                        className="object-cover"
-                                                    />
-                                                </div>
-                                            )}
-                                            <span className="text-sm font-medium capitalize">{color.option}</span>
-                                        </button>
-                                    ))}
+                    <div className="p-8 flex flex-col justify-between">
+                        <div>
+                            {/* Product Info */}
+                            <div className="mb-4">
+                                <h2 className="text-2xl font-bold text-black mb-2 leading-tight">
+                                    {product?.name}
+                                </h2>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-3xl font-black text-black">
+                                        {priceFmt.format(currentPrice)}
+                                    </span>
                                 </div>
                             </div>
-                        )}
 
-                        {/* Size Selection */}
-                        {sizeOptions && sizeOptions.length > 0 && (
-                            <div className="mb-6">
-                                <label className="block text-xs font-bold uppercase text-gray-700 mb-3">
-                                    Talla: <span className="font-normal text-black">{selectedSize}</span>
-                                </label>
-                                <div className="grid grid-cols-6 gap-2">
-                                    {sizeAvailability.map((sz) => (
-                                        <button
-                                            key={sz.option}
-                                            onClick={() => setSelectedSize(sz.option)}
-                                            disabled={!sz.available}
-                                            className={`aspect-square flex items-center justify-center text-sm font-bold border-2 transition-all ${selectedSize === sz.option
+                            {/* Color Selection */}
+                            {colorOptions && colorOptions.length > 0 && (
+                                <div className="mb-4">
+                                    <label className="block text-xs font-bold uppercase text-gray-700 mb-3">
+                                        Color: <span className="font-normal text-black capitalize">{selectedColor}</span>
+                                    </label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {colorOptions.map((color) => (
+                                            <button
+                                                key={color.option}
+                                                onClick={() => setSelectedColor(color.option)}
+                                                className={`group relative flex items-center gap-2 px-3 py-2 border-2 transition-all ${selectedColor === color.option
+                                                    ? 'border-black bg-gray-50'
+                                                    : 'border-gray-200 hover:border-gray-400'
+                                                    }`}
+                                            >
+                                                {color.image && (
+                                                    <div className="relative w-6 h-6 flex-shrink-0">
+                                                        <Image
+                                                            src={color.image}
+                                                            alt={color.option}
+                                                            fill
+                                                            className="object-cover"
+                                                        />
+                                                    </div>
+                                                )}
+                                                <span className="text-xs font-medium capitalize">{color.option}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Size Selection */}
+                            {sizeOptions && sizeOptions.length > 0 && (
+                                <div className="mb-4">
+                                    <label className="block text-xs font-bold uppercase text-gray-700 mb-2">
+                                        Talla: <span className="font-normal text-black">{selectedSize}</span>
+                                    </label>
+                                    <div className="grid grid-cols-6 gap-2">
+                                        {sizeAvailability.map((sz) => (
+                                            <button
+                                                key={sz.option}
+                                                onClick={() => setSelectedSize(sz.option)}
+                                                disabled={!sz.available}
+                                                className={`h-9 w-full flex items-center justify-center text-xs font-bold border-2 transition-all ${selectedSize === sz.option
                                                     ? 'border-black bg-black text-white'
                                                     : sz.available
                                                         ? 'border-gray-300 hover:border-black'
                                                         : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed line-through'
-                                                }`}
-                                        >
-                                            {sz.option}
-                                        </button>
-                                    ))}
+                                                    }`}
+                                            >
+                                                {sz.option}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {!isOutOfStock && typeof variationStock === 'number' && (
+                                        <p className="text-xs text-green-600 font-medium mt-2">
+                                            {variationStock} disponibles
+                                        </p>
+                                    )}
                                 </div>
-                                {!isOutOfStock && typeof variationStock === 'number' && (
-                                    <p className="text-xs text-green-600 font-medium mt-2">
-                                        {variationStock} disponibles
-                                    </p>
-                                )}
-                            </div>
-                        )}
+                            )}
 
-                        {/* Quantity Selector */}
-                        <div className="mb-6">
-                            <label className="block text-xs font-bold uppercase text-gray-700 mb-3">
-                                Cantidad
-                            </label>
-                            <div className="flex items-center border border-gray-300 w-fit">
-                                <button
-                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors text-lg"
-                                >
-                                    −
-                                </button>
-                                <span className="w-12 text-center font-bold">{quantity}</span>
-                                <button
-                                    onClick={() => setQuantity(quantity + 1)}
-                                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors text-lg"
-                                >
-                                    +
-                                </button>
+                            {/* Quantity Selector */}
+                            <div className="mb-4">
+                                <label className="block text-xs font-bold uppercase text-gray-700 mb-3">
+                                    Cantidad
+                                </label>
+                                <div className="flex items-center border border-gray-300 w-fit">
+                                    <button
+                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 transition-colors text-lg"
+                                    >
+                                        −
+                                    </button>
+                                    <span className="w-10 text-center font-bold text-sm">{quantity}</span>
+                                    <button
+                                        onClick={() => setQuantity(quantity + 1)}
+                                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 transition-colors text-lg"
+                                    >
+                                        +
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="mt-auto space-y-3">
+                        <div className="space-y-3">
                             <button
                                 onClick={handleAddToCart}
                                 disabled={isOutOfStock}
-                                className={`w-full py-4 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''
+                                className={`w-full py-3 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''
                                     }`}
                             >
                                 <ShoppingCart className="w-5 h-5" />
@@ -261,7 +263,7 @@ export default function QuickAddModal({
 
                             <Link
                                 href={`/${product?.slug}`}
-                                className="block w-full py-3 text-center border border-black text-black text-sm font-bold uppercase tracking-wider hover:bg-gray-50 transition-colors"
+                                className="block w-full py-2 text-center border border-black text-black text-sm font-bold uppercase tracking-wider hover:bg-gray-50 transition-colors"
                                 onClick={onClose}
                             >
                                 Ver detalles completos
