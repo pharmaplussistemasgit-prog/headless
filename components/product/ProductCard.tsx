@@ -5,8 +5,10 @@ import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { ShoppingCart } from 'lucide-react';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useState, useEffect } from 'react';
 import { ensureHttps } from '@/lib/utils';
+import QuickAddModal from './QuickAddModal';
+import { getColorOptionsFromVariations, getSizeOptionsFromVariations, getProductVariations } from '@/lib/woocommerce';
 
 interface ProductCardProps {
   id: number;
@@ -17,13 +19,21 @@ interface ProductCardProps {
   category?: string;
   subcategory?: string;
   images?: string[];
+  type?: string; // 'simple' | 'variable'
 }
 
-export default function ProductCard({ id, name, price, imageUrl, slug, category, subcategory, images = [] }: ProductCardProps) {
+export default function ProductCard({ id, name, price, imageUrl, slug, category, subcategory, images = [], type = 'simple' }: ProductCardProps) {
   const { addItem } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const [isHovered, setIsHovered] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [isLoadingVariations, setIsLoadingVariations] = useState(false);
+  const [variationsData, setVariationsData] = useState<{
+    colorOptions: any[];
+    sizeOptions: any[];
+    variations: any[];
+  } | null>(null);
 
   // Ensure we have at least the main image
   const mainImage = ensureHttps(imageUrl) || '/placeholder-image.png';
@@ -47,10 +57,33 @@ export default function ProductCard({ id, name, price, imageUrl, slug, category,
   // Parse price string to number (remove non-numeric chars except dot)
   const numericPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
 
-  const handleAddToCart = (e: MouseEvent) => {
+  const handleAddToCart = async (e: MouseEvent) => {
     e.preventDefault(); // Prevent navigation
     e.stopPropagation();
 
+    // If it's a variable product, open modal
+    if (type === 'variable') {
+      setIsLoadingVariations(true);
+      setIsQuickAddOpen(true);
+
+      // Fetch variations data
+      try {
+        const [colorOptions, sizeOptions, variations] = await Promise.all([
+          getColorOptionsFromVariations(id),
+          getSizeOptionsFromVariations(id),
+          getProductVariations(id)
+        ]);
+
+        setVariationsData({ colorOptions, sizeOptions, variations });
+      } catch (error) {
+        console.error('Error loading variations:', error);
+      } finally {
+        setIsLoadingVariations(false);
+      }
+      return;
+    }
+
+    // Simple product - add directly
     addItem({
       id,
       name,
@@ -148,8 +181,31 @@ export default function ProductCard({ id, name, price, imageUrl, slug, category,
           <p className="text-gray-500 text-xs font-medium uppercase tracking-wide">
             {subcategory || category || 'Fútbol Sala'}
           </p>
+
+          {/* Add to Cart Button - Appears on hover */}
+          <div className={`transition-all duration-300 overflow-hidden ${isHovered ? 'max-h-12 opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'}`}>
+            <button
+              onClick={handleAddToCart}
+              className="w-full bg-black text-white py-2 px-4 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span>Agregar al carrito</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Quick Add Modal */}
+      {isQuickAddOpen && variationsData && (
+        <QuickAddModal
+          product={{ id, name, price, slug, image: mainImage, images }}
+          colorOptions={variationsData.colorOptions}
+          sizeOptions={variationsData.sizeOptions}
+          variations={variationsData.variations}
+          isOpen={isQuickAddOpen}
+          onClose={() => setIsQuickAddOpen(false)}
+        />
+      )}
     </Link>
   );
 }

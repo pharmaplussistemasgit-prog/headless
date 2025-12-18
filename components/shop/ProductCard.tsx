@@ -8,6 +8,8 @@ export type ProductSummary = {
   sale_price?: string | null;
   image_url: string;
   is_new?: boolean;
+  type?: string;
+  images?: string[];
 };
 
 // Re-export con props adaptadas al `ProductCard` existente
@@ -19,6 +21,8 @@ export function ProductCard({ product }: { product: ProductSummary }) {
       price={product.sale_price || product.price}
       imageUrl={product.image_url}
       slug={product.slug}
+      type={product.type || 'simple'}
+      images={product.images}
     />
   );
 }
