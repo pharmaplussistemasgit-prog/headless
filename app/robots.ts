@@ -7,8 +7,8 @@ export const revalidate = 0;
 export default function robots(): MetadataRoute.Robots {
     let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://saprix.com.co';
 
-    // Sanitize baseUrl: Remove ALL trailing slashes and any query parameters
-    baseUrl = baseUrl.replace(/\/+$/, '').split('?')[0].trim();
+    // Sanitize baseUrl: FIRST trim & remove query params, THEN remove trailing slashes
+    baseUrl = baseUrl.trim().split('?')[0].replace(/\/+$/, '');
 
     return {
         rules: {
