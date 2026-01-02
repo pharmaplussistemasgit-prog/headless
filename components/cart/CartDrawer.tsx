@@ -150,9 +150,9 @@ export default function CartDrawer() {
                                     href="/checkout"
                                     onClick={toggleCart}
                                     id="btn-proceed-to-checkout"
-                                    className="block w-full bg-lime-400 hover:bg-lime-500 text-black font-bold py-3 px-4 rounded-full text-center transition-colors"
+                                    className="block w-full bg-[var(--color-action-green)] hover:bg-green-700 text-white font-bold py-3 px-4 rounded-full text-center transition-colors shadow-md"
                                 >
-                                    Proceder al Pago
+                                    Ir a Pagar
                                 </Link>
                             </div>
                         )}

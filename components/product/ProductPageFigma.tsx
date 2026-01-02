@@ -146,14 +146,14 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Breadcrumbs - Minimal */}
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <nav className="flex items-center space-x-2 text-xs uppercase tracking-wide text-gray-600 font-medium">
-          <Link href="/" className="hover:underline">Inicio</Link>
-          <span>/</span>
-          <Link href="/tienda" className="hover:underline">Tienda</Link>
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 font-medium">
+          <Link href="/" className="hover:underline hover:text-[var(--color-pharma-blue)] transition-colors">Inicio</Link>
+          <span className="text-gray-300">/</span>
+          <Link href="/tienda" className="hover:underline hover:text-[var(--color-pharma-blue)] transition-colors">Tienda</Link>
           {mapped?.categories && mapped.categories.length > 0 && (
             <>
-              <span>/</span>
-              <span className="font-bold text-black">{mapped.categories[0].name}</span>
+              <span className="text-gray-300">/</span>
+              <span className="text-[var(--color-pharma-blue)] font-semibold">{mapped.categories[0].name}</span>
             </>
           )}
         </nav>
@@ -204,14 +204,14 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                   </div>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-black uppercase italic leading-none tracking-tight text-black">
+                <h1 className="text-3xl md:text-3xl font-semibold leading-tight tracking-tight text-[var(--color-pharma-blue)]">
                   {mapped?.name ?? slug}
                 </h1>
 
                 <div className="flex items-baseline gap-3 pt-2">
-                  <span className="text-xl font-bold text-black">{priceFmt.format(currentPrice)}</span>
+                  <span className="text-2xl font-semibold text-[var(--color-pharma-blue)]">{priceFmt.format(currentPrice)}</span>
                   {currentRegularPrice > currentPrice && (
-                    <span className="text-sm text-gray-500 line-through">{priceFmt.format(currentRegularPrice)}</span>
+                    <span className="text-sm text-gray-400 line-through">{priceFmt.format(currentRegularPrice)}</span>
                   )}
                 </div>
               </div>
@@ -222,14 +222,14 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                   <Star className="w-3 h-3 text-black fill-black" />
                 </div>
                 <div className="text-xs text-gray-800">
-                  <span className="font-bold">¡Popular!</span> Más de 200 personas han visto este producto en las últimas 24 horas.
+                  <span className="font-semibold">¡Popular!</span> Más de 200 personas han visto este producto en las últimas 24 horas.
                 </div>
               </div>
 
               {/* Colors */}
               {colorOptions && colorOptions.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-bold uppercase">Colores</h3>
+                  <h3 className="text-sm font-semibold uppercase">Colores</h3>
                   <div className="flex flex-wrap gap-2">
                     {colorOptions.map((color) => (
                       <button
@@ -237,11 +237,11 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                         onClick={() => setSelectedColor(color.option)}
                         className={`w-16 h-16 border-b-2 transition-all ${selectedColor === color.option ? "border-black opacity-100" : "border-transparent opacity-70 hover:opacity-100 hover:border-gray-300"}`}
                       >
-                        <div className="w-full h-full bg-gray-100 relative overflow-hidden">
+                        <div className="w-full h-full bg-white relative overflow-hidden flex items-center justify-center border border-gray-100 rounded-sm">
                           {color.image ? (
                             <Image src={color.image} alt={color.option} fill className="object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px]">{color.option}</div>
+                            <div className="text-[10px] text-gray-600 font-medium">{color.option}</div>
                           )}
                         </div>
                       </button>
@@ -255,7 +255,7 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
               {sizeOptions && sizeOptions.length > 0 && (
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-bold uppercase">Tallas</h3>
+                    <h3 className="text-sm font-semibold uppercase">Tallas</h3>
                     <button onClick={() => setIsSizeGuideOpen(true)} className="text-xs underline flex items-center gap-1">
                       <Ruler className="w-3 h-3" /> Guía de tallas
                     </button>
@@ -267,10 +267,10 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                         onClick={() => setSelectedSize(sz.option)}
                         disabled={!sz.available}
                         className={`h-10 min-w-[3.5rem] px-2 text-sm font-medium transition-all border ${selectedSize === sz.option
-                          ? "bg-black text-white border-black"
+                          ? "bg-[var(--color-pharma-blue)] text-white border-[var(--color-pharma-blue)]"
                           : sz.available
-                            ? "bg-white text-black border-gray-300 hover:border-black"
-                            : "bg-gray-50 text-gray-300 border-gray-200 cursor-not-allowed"
+                            ? "bg-white text-gray-700 border-gray-200 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)]"
+                            : "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed"
                           }`}
                       >
                         {sz.option}
@@ -293,30 +293,30 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                   <button
                     onClick={addToCart}
                     disabled={isOutOfStock}
-                    className={`flex-1 bg-black text-white h-12 font-bold uppercase tracking-wider flex items-center justify-center gap-3 hover:bg-gray-800 transition-colors ${isOutOfStock ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`flex-1 bg-[var(--color-pharma-green)] text-white h-12 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#007a38] transition-all shadow-sm hover:shadow-md ${isOutOfStock ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
-                    <span>{isOutOfStock ? "Agotado" : "Añadir al carrito"}</span>
+                    <span>{isOutOfStock ? "Agotado" : "Agregar al Carrito"}</span>
                     {!isOutOfStock && <ShoppingCart className="w-5 h-5" />}
                   </button>
                   <button
                     onClick={toggleWishlist}
-                    className="w-12 h-12 border border-black flex items-center justify-center hover:bg-gray-50 transition-colors"
+                    className="w-12 h-12 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50 hover:border-gray-300 transition-colors text-gray-400 hover:text-[var(--color-pharma-blue)]"
                   >
-                    <Heart className={`w-5 h-5 ${isWishlisted ? "fill-black" : ""}`} />
+                    <Heart className={`w-5 h-5 ${isWishlisted ? "fill-[var(--color-pharma-blue)] text-[var(--color-pharma-blue)]" : ""}`} />
                   </button>
                 </div>
 
                 {/* Benefits */}
                 <div className="space-y-3 pt-4">
-                  <div className="flex items-center gap-3 text-xs uppercase font-bold tracking-wide cursor-pointer hover:underline">
+                  <div className="flex items-center gap-3 text-xs uppercase font-semibold tracking-wide cursor-pointer hover:underline">
                     <Truck className="w-4 h-4" />
                     <span>Envío gratis desde $300.000</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs uppercase font-bold tracking-wide cursor-pointer hover:underline">
+                  <div className="flex items-center gap-3 text-xs uppercase font-semibold tracking-wide cursor-pointer hover:underline">
                     <Shield className="w-4 h-4" />
                     <span>Paga seguro en línea</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs uppercase font-bold tracking-wide cursor-pointer hover:underline">
+                  <div className="flex items-center gap-3 text-xs uppercase font-semibold tracking-wide cursor-pointer hover:underline">
                     <RotateCcw className="w-4 h-4" />
                     <span>Devoluciones gratis en 30 días</span>
                   </div>
@@ -331,7 +331,7 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                     onClick={() => toggleSection('description')}
                     className="w-full py-4 flex justify-between items-center text-left group"
                   >
-                    <span className="font-bold uppercase text-sm">Descripción</span>
+                    <span className="font-semibold text-sm text-[var(--color-pharma-blue)]">Descripción</span>
                     <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openSections.includes('description') ? 'rotate-180' : ''}`} />
                   </button>
                   <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openSections.includes('description') ? 'max-h-[1000px] opacity-100 mb-4' : 'max-h-0 opacity-0'}`}>
@@ -345,7 +345,7 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                     onClick={() => toggleSection('details')}
                     className="w-full py-4 flex justify-between items-center text-left group"
                   >
-                    <span className="font-bold uppercase text-sm">Detalles</span>
+                    <span className="font-semibold text-sm text-[var(--color-pharma-blue)]">Detalles</span>
                     <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openSections.includes('details') ? 'rotate-180' : ''}`} />
                   </button>
                   <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openSections.includes('details') ? 'max-h-[1000px] opacity-100 mb-4' : 'max-h-0 opacity-0'}`}>
@@ -365,7 +365,7 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                     onClick={() => toggleSection('reviews')}
                     className="w-full py-4 flex justify-between items-center text-left group"
                   >
-                    <span className="font-bold uppercase text-sm">Valoraciones (51)</span>
+                    <span className="font-semibold text-sm text-[var(--color-pharma-blue)]">Valoraciones (51)</span>
                     <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openSections.includes('reviews') ? 'rotate-180' : ''}`} />
                   </button>
                   <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openSections.includes('reviews') ? 'max-h-[1000px] opacity-100 mb-4' : 'max-h-0 opacity-0'}`}>

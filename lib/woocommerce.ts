@@ -9,7 +9,8 @@ import type {
   Tag,
   ProductAttribute,
   AttributeTerm,
-  AttributeWithTerms
+  AttributeWithTerms,
+  CategoryTree
 } from "@/types/woocommerce";
 
 let _api: API | null = null;
@@ -17,7 +18,7 @@ let _api: API | null = null;
 export function getWooApi(): API {
   if (_api) return _api;
 
-  const url = process.env.WOOCOMMERCE_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://pagos.saprix.com.co";
+  const url = process.env.WOOCOMMERCE_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://example.com";
   const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY || "";
   const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET || "";
 
@@ -170,7 +171,7 @@ export async function getSizeOptionsFromVariations(productId: number): Promise<A
 // -------- Catálogo global: categorías, etiquetas y atributos --------
 
 function buildUrl(endpoint: string, params: Record<string, unknown> = {}): string {
-  const base = (process.env.WOOCOMMERCE_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://pagos.saprix.com.co").replace(/\/$/, "");
+  const base = (process.env.WOOCOMMERCE_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://example.com").replace(/\/$/, "");
   const ck = process.env.WOOCOMMERCE_CONSUMER_KEY || "";
   const cs = process.env.WOOCOMMERCE_CONSUMER_SECRET || "";
   const url = new URL(`${base}/wp-json/wc/v3/${endpoint}`);
@@ -287,6 +288,34 @@ export async function getShopSidebarData(): Promise<{
   return { categories, tags, attributes };
 }
 
+export function buildCategoryTree(categories: Category[]): CategoryTree[] {
+  const map: Record<number, CategoryTree> = {};
+  const roots: CategoryTree[] = [];
+
+  // Initialize map
+  categories.forEach(cat => {
+    map[cat.id] = { ...cat, children: [] };
+  });
+
+  // Build tree
+  categories.forEach(cat => {
+    if (cat.parent === 0) {
+      roots.push(map[cat.id]);
+    } else {
+      if (map[cat.parent]) {
+        map[cat.parent].children?.push(map[cat.id]);
+      }
+    }
+  });
+
+  return roots;
+}
+
+export async function getCategoryTreeData(): Promise<CategoryTree[]> {
+  const categories = await getAllProductCategories();
+  return buildCategoryTree(categories);
+}
+
 /**
  * Obtiene productos con filtros, paginación y ordenamiento
  */
@@ -298,6 +327,7 @@ export async function getProducts(params: {
   orderby?: string;
   order?: 'asc' | 'desc';
   search?: string;
+  sku?: string;
 } = {}): Promise<{ products: Product[]; total: number; totalPages: number }> {
   try {
     const {
@@ -308,6 +338,7 @@ export async function getProducts(params: {
       orderby = 'date',
       order = 'desc',
       search,
+      sku,
     } = params;
 
     const queryParams: any = {
@@ -317,6 +348,10 @@ export async function getProducts(params: {
       order,
       status: 'publish',
     };
+
+    if (sku) {
+      queryParams.sku = sku;
+    }
 
     if (category) {
       queryParams.category = category;

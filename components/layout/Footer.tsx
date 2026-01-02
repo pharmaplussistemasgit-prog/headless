@@ -1,327 +1,200 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { MapPin, Mail, Phone, Clock, Send, Sparkles } from 'lucide-react';
-import { FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa6';
-import { useState } from 'react';
-import SaprixLogo from '@/components/ui/SaprixLogo';
+import Image from 'next/image';
+import { Facebook, Instagram, Phone, Mail, MapPin, Truck, ShieldCheck, Clock, MessageCircle, Send, CreditCard } from 'lucide-react';
 
-export default function DixorFooter() {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simular envío
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('Newsletter subscription:', email);
-    setEmail('');
-    setIsSubmitting(false);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-
-  const socialLinks = [
-    {
-      icon: FaFacebook,
-      href: 'https://www.facebook.com/Saprixoficial',
-      label: 'Facebook',
-      color: 'hover:bg-[#1877F2]'
-    },
-    {
-      icon: FaInstagram,
-      href: 'https://www.instagram.com/saprixoficial',
-      label: 'Instagram',
-      color: 'hover:bg-gradient-to-br hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#F77737]'
-    },
-    {
-      icon: FaTiktok,
-      href: 'https://www.tiktok.com/@saprixoficial',
-      label: 'TikTok',
-      color: 'hover:bg-[#000000]'
-    },
-    {
-      icon: FaWhatsapp,
-      href: 'https://wa.me/573019086637',
-      label: 'WhatsApp',
-      color: 'hover:bg-[#25D366]'
-    }
-  ];
-
-  const footerLinks = [
-    {
-      title: 'Compra',
-      links: [
-        { label: 'Nuevos Lanzamientos', href: '/nuevos' },
-        { label: 'Categorías', href: '/productos' },
-        { label: 'Ofertas', href: '/ofertas' },
-        { label: 'Gift Cards', href: '/gift-cards' }
-      ]
-    },
-    {
-      title: 'Soporte',
-      links: [
-        { label: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
-        { label: 'Envíos', href: '/envios' },
-        { label: 'Devoluciones', href: '/devoluciones' },
-        { label: 'Contacto', href: '/contacto' }
-      ]
-    },
-    {
-      title: 'Legal',
-      links: [
-        { label: 'Términos y Condiciones', href: '/terminos-y-condiciones' },
-        { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
-        { label: 'Cookies', href: '/cookies' }
-      ]
-    }
-  ];
-
+export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-b from-gray-900 via-gray-950 to-black text-gray-300 overflow-hidden">
-      {/* Efectos de fondo decorativos */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-saprix-electric-blue/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-lime-400/5 rounded-full blur-3xl" />
+    <footer className="w-full">
+      {/* 1. NEWSLETTER SECTION - "EL PASTILLERO VIRTUAL" */}
+      <div className="relative bg-gradient-to-br from-blue-50 via-white to-green-50 py-8 border-b border-gray-100 overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-pharma-blue)] opacity-5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[var(--color-pharma-green)] opacity-5 rounded-full blur-3xl"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+
+            {/* Icon + Title */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="bg-gradient-to-br from-[var(--color-pharma-blue)] to-[var(--color-pharma-green)] p-3 rounded-2xl shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-pharma-blue)]">
+                El Pastillero <span className="text-[var(--color-pharma-green)]">Virtual</span>
+              </h2>
+            </div>
+
+            {/* Subtitle */}
+            <p className="text-[var(--color-text-body)] text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+              <span className="font-semibold text-[var(--color-pharma-blue)]">No olvides tu dosis de bienestar.</span> Recibe recordatorios personalizados, ofertas exclusivas y consejos de salud certificados por expertos.
+            </p>
+
+            {/* Benefits Pills */}
+            <div className="flex flex-wrap justify-center gap-3 py-4">
+              <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-[var(--color-pharma-blue)] shadow-sm border border-blue-100">
+                <svg className="w-4 h-4 text-[var(--color-pharma-green)]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Recordatorios de medicamentos
+              </span>
+              <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-[var(--color-pharma-blue)] shadow-sm border border-blue-100">
+                <svg className="w-4 h-4 text-[var(--color-pharma-green)]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Ofertas personalizadas
+              </span>
+              <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-[var(--color-pharma-blue)] shadow-sm border border-blue-100">
+                <svg className="w-4 h-4 text-[var(--color-pharma-green)]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Consejos de expertos
+              </span>
+            </div>
+
+            {/* Form */}
+            <form className="max-w-xl mx-auto flex flex-col sm:flex-row gap-3 pt-2">
+              <input
+                type="email"
+                placeholder="tucorreo@ejemplo.com"
+                className="flex-1 bg-white border-2 border-gray-200 rounded-full px-6 py-4 text-sm focus:outline-none focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-[var(--color-pharma-blue)]/20 shadow-sm text-gray-700 placeholder-gray-400 transition-all"
+              />
+              <button
+                type="submit"
+                className="bg-[var(--color-pharma-green)] text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+              >
+                Suscribirme Ahora
+                <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
+
+            {/* Privacy Note */}
+            <p className="text-xs text-gray-400 pt-2">
+              🔒 Tus datos están protegidos. Puedes cancelar tu suscripción en cualquier momento.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Newsletter Section - Destacado */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="py-12 border-b border-white/5"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-saprix-electric-blue/10 to-lime-400/10 border border-saprix-electric-blue/20 mb-4">
-              <Sparkles className="w-4 h-4 text-saprix-electric-blue" />
-              <span className="text-sm font-medium text-white">Únete a nuestra comunidad</span>
-            </div>
+      {/* 2. MAIN FOOTER CONTENT */}
+      {/* Background: Pure White as per Propharm reference */}
+      <div className="bg-white pt-16 pb-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-center md:text-left">
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
-              Recibe ofertas exclusivas
-            </h2>
-            <p className="text-gray-400 text-lg mb-6 max-w-2xl mx-auto">
-              Suscríbete y obtén un <span className="text-lime-400 font-semibold">10% de descuento</span> en tu primera compra
-            </p>
-
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-              <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-saprix-electric-blue to-lime-400 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300" />
-                <div className="relative flex items-center bg-gray-900 rounded-2xl border border-white/10 overflow-hidden">
-                  <Mail className="w-5 h-5 text-gray-500 ml-5" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="tu@email.com"
-                    className="flex-1 px-4 py-4 bg-transparent text-white placeholder:text-gray-500 focus:outline-none"
-                    required
-                    disabled={isSubmitting}
-                    suppressHydrationWarning={true}
+            {/* COLUMN 1: BRAND & SOCIALS */}
+            <div className="space-y-6 flex flex-col items-center md:items-start">
+              <div className="flex items-center justify-center md:justify-start">
+                {/* PharmaPlus Logo */}
+                <Link href="/">
+                  <Image
+                    src="/brand/logo-new-clean.png"
+                    alt="PharmaPlus"
+                    width={180}
+                    height={60}
+                    className="h-12 w-auto"
+                    priority
                   />
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="m-1 px-6 py-3 bg-gradient-to-r from-saprix-electric-blue to-lime-400 text-black font-semibold rounded-xl hover:shadow-lg hover:shadow-saprix-electric-blue/50 transition-all duration-300 disabled:opacity-50 flex items-center gap-2 group"
-                  >
-                    {isSubmitting ? (
-                      <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <span>Suscribirse</span>
-                        <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
-                  </button>
-                </div>
+                </Link>
               </div>
-            </form>
-          </div>
-        </motion.div>
 
-        {/* Main Footer Content */}
-        <div className="py-10">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16"
-          >
-            {/* Left Section - Brand */}
-            <motion.div variants={itemVariants} className="space-y-4">
-              <Link href="/" className="inline-block group">
-                <SaprixLogo bg="dark" retina width={160} height={40} />
+              <div className="space-y-2 text-sm text-[var(--color-text-body)]">
+                <p>NIT 830.110.109-7</p>
+                <p>Calle 123 # 45-67, Bogotá D.C.</p>
+                <p>Colombia, Suramérica</p>
+              </div>
+
+              <Link href="/tiendas" className="inline-flex text-sm text-[var(--color-pharma-blue)] underline font-medium hover:text-[var(--color-pharma-green)]">
+                Ver ubicaciones en mapa
               </Link>
 
-              <p className="text-gray-400 max-w-sm leading-relaxed text-sm">
-                Tu destino para moda urbana de calidad. Estilo, comodidad y las últimas tendencias en un solo lugar.
-              </p>
-
-              {/* Contact Info */}
-              <div className="space-y-2">
-                <a
-                  href="mailto:info@saprix.com"
-                  className="flex items-center gap-3 text-gray-300 hover:text-saprix-electric-blue transition-colors group"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-saprix-electric-blue/10 transition-colors">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <span className="text-sm">info@saprix.com</span>
-                </a>
-
-                <a
-                  href="tel:3023932008"
-                  className="flex items-center gap-3 text-gray-300 hover:text-lime-400 transition-colors group"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-lime-400/10 transition-colors">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <span className="text-sm font-semibold">302 3932008</span>
-                </a>
-              </div>
-
-              {/* Social Media */}
-              <div className="flex gap-3 pt-1">
-                {socialLinks.map((social) => (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-11 h-11 rounded-xl bg-white/5 backdrop-blur-sm flex items-center justify-center transition-all duration-300 border border-white/10 hover:border-white/20 hover:scale-110 hover:-translate-y-1 ${social.color} group`}
-                    aria-label={social.label}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <social.icon className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" />
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Right Section - Links + Store Info Below */}
-            <div className="space-y-6">
-              {/* Links Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {footerLinks.map((section) => (
-                  <motion.div key={section.title} variants={itemVariants} className="space-y-3">
-                    <h3 className="text-white font-semibold text-base">{section.title}</h3>
-                    <ul className="space-y-2">
-                      {section.links.map((link) => (
-                        <li key={link.label}>
-                          <Link
-                            href={link.href}
-                            className="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group"
-                          >
-                            <span className="w-0 h-px bg-saprix-electric-blue group-hover:w-4 transition-all duration-300" />
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Store Info - Below Links */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-white/5">
-                {/* Visítanos */}
-                <motion.div variants={itemVariants}>
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-4 h-4 text-saprix-electric-blue" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold text-sm mb-1.5">Visítanos</h4>
-                      <p className="text-xs text-gray-400 mb-2">Calle 48b # 78n - 21, Bogotá, Colombia</p>
-                      <a
-                        href="https://maps.app.goo.gl/katpg74CmKH7oELr7"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs text-saprix-electric-blue hover:text-lime-400 transition-colors font-medium"
-                      >
-                        <span>Ver en el mapa</span>
-                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Horarios */}
-                <motion.div variants={itemVariants}>
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-4 h-4 text-lime-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold text-sm mb-2">Horario de atención</h4>
-                      <div className="space-y-1 text-xs">
-                        <div className="flex justify-between gap-3">
-                          <span className="text-gray-400">Lun - Vie:</span>
-                          <span className="text-white">9:00 AM - 5:00 PM</span>
-                        </div>
-                        <div className="flex justify-between gap-3">
-                          <span className="text-gray-400">Sábado:</span>
-                          <span className="text-white">9:00 AM - 5:00 PM</span>
-                        </div>
-                        <div className="flex justify-between gap-3">
-                          <span className="text-gray-400">Domingo:</span>
-                          <span className="text-red-400">Cerrado</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+              <div className="flex gap-3 pt-2 justify-center md:justify-start">
+                <Link href="#" className="text-gray-400 hover:text-[var(--color-pharma-blue)] transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </Link>
+                <Link href="#" className="text-gray-400 hover:text-[var(--color-pharma-blue)] transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </Link>
+                <Link href="#" className="text-gray-400 hover:text-[var(--color-pharma-blue)] transition-colors">
+                  <MessageCircle className="w-5 h-5" />
+                </Link>
               </div>
             </div>
-          </motion.div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="py-6 border-t border-white/5">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-            <p className="text-xs text-gray-500 text-center md:text-left">
-              © 2025 Saprix. Todos los derechos reservados.
-            </p>
-            <p className="text-xs text-gray-500 text-center md:text-right">
-              Diseñado y desarrollado por{' '}
-              <a
-                href="https://iango.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-saprix-electric-blue hover:text-lime-400 transition-colors font-medium"
-              >
-                iAnGo
-              </a>
-              {' '}- Soluciones con IA
-            </p>
+            {/* COLUMN 2: HELP & CONTACT (Highlighted) */}
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-semibold text-[var(--color-pharma-green)] uppercase tracking-wider mb-6">
+                ¿Necesitas Ayuda?
+              </h3>
+
+              <div className="space-y-6 w-full">
+                <div>
+                  <Link href="tel:6015934005" className="block text-2xl md:text-3xl font-bold text-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-green)] transition-colors">
+                    (601) 593 4005
+                  </Link>
+                  <span className="text-xs text-gray-400 mt-1 block">Línea de atención nacional</span>
+                </div>
+
+                <div className="space-y-1 text-sm text-[var(--color-text-body)]">
+                  <p><span className="font-semibold text-gray-700">Lunes - Viernes:</span> 7:00 am - 9:00 pm</p>
+                  <p><span className="font-semibold text-gray-700">Sábados:</span> 8:00 am - 8:00 pm</p>
+                </div>
+
+                <Link href="mailto:atencionalusuario@pharmaplus.com.co" className="flex items-center justify-center md:justify-start gap-2 text-sm text-[var(--color-pharma-blue)] hover:underline break-words">
+                  <Mail className="w-4 h-4 shrink-0" />
+                  <span className="truncate">atencionalusuario@pharmaplus.com.co</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* COLUMN 3: INFORMATION LINKS */}
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-semibold text-[var(--color-pharma-blue)] uppercase tracking-wider mb-6">
+                Información
+              </h3>
+              <ul className="space-y-3 w-full">
+                <li><Link href="/nosotros" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Quiénes somos</Link></li>
+                <li><Link href="/domicilios" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Información de envíos</Link></li>
+                <li><Link href="/politicas" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Políticas de privacidad</Link></li>
+                <li><Link href="/terminos" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Términos y condiciones</Link></li>
+                <li><Link href="/pqr" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Peticiones, quejas y reclamos</Link></li>
+              </ul>
+            </div>
+
+            {/* COLUMN 4: ACCOUNT & SERVICES */}
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-semibold text-[var(--color-pharma-blue)] uppercase tracking-wider mb-6">
+                Mi Cuenta
+              </h3>
+              <ul className="space-y-3 w-full">
+                <li><Link href="/mi-cuenta" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Panel de control</Link></li>
+                <li><Link href="/mi-cuenta/pedidos" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Mis pedidos</Link></li>
+                <li><Link href="/carrito" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Carrito de compras</Link></li>
+                <li><Link href="/lista-deseos" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Lista de deseos</Link></li>
+                <li><Link href="/reversion" className="text-sm text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">Reversión de pago</Link></li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* 3. BOTTOM BAR: COPYRIGHT & PAYMENTS */}
+      <div className="bg-[var(--color-pharma-green)] py-8">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+          <p className="text-sm text-white opacity-90 leading-relaxed">
+            © 2025 PharmaPlus S.A.S. Todos los derechos reservados.<br className="md:hidden" /> Desarrollado por iAnGo - Agencia de Desarrollo e Implementaciones con IA
+          </p>
+
+          <div className="flex items-center justify-center gap-4 opacity-90 hover:opacity-100 transition-all">
+            {/* Payment Icons Placeholder */}
+            <div className="flex gap-2">
+              <span className="text-[10px] font-bold text-[#1A1F71] bg-white px-2 py-1 rounded shadow-sm">VISA</span>
+              <span className="text-[10px] font-bold text-[#EB001B] bg-white px-2 py-1 rounded shadow-sm">MC</span>
+              <span className="text-[10px] font-bold text-[#006FCF] bg-white px-2 py-1 rounded shadow-sm">AMEX</span>
+              <span className="text-[10px] font-bold text-[var(--color-pharma-blue)] bg-white px-2 py-1 rounded shadow-sm">PSE</span>
+            </div>
           </div>
         </div>
       </div>

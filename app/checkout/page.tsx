@@ -1,8 +1,8 @@
 import CheckoutForm from '@/components/checkout/CheckoutForm';
 
 export const metadata = {
-    title: 'Checkout - Saprix',
-    description: 'Finaliza tu compra en Saprix',
+    title: 'Finalizar Compra - PharmaPlus',
+    description: 'Finaliza tu compra de forma segura en PharmaPlus',
 };
 
 export default function CheckoutPage() {

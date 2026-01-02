@@ -28,6 +28,8 @@ export interface Product {
   regular_price?: string;
   sale_price?: string;
   stock_status?: string;
+  stock_quantity?: number;
+  sku?: string;
 }
 
 export interface VariationAttribute {
@@ -80,4 +82,8 @@ export interface AttributeTerm {
 export interface AttributeWithTerms {
   attribute: ProductAttribute;
   terms: AttributeTerm[];
+}
+
+export interface CategoryTree extends Category {
+  children?: CategoryTree[];
 }

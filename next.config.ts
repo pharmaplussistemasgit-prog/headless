@@ -51,6 +51,21 @@ const nextConfig: NextConfig = {
         destination: '/tienda',
         permanent: true,
       },
+      {
+        source: '/product/:slug',
+        destination: '/producto/:slug',
+        permanent: true,
+      },
+      {
+        source: '/category/:slug',
+        destination: '/categoria/:slug',
+        permanent: true,
+      },
+      {
+        source: '/checkout',
+        destination: '/finalizar-compra',
+        permanent: true,
+      },
     ];
   },
 };

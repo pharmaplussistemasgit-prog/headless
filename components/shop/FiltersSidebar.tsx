@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronUp, Search, Check } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export type Category = { id: number; name: string; slug: string; count?: number; parent?: number };
 export type Tag = { id: number; name: string; slug: string; count?: number };
@@ -30,36 +29,30 @@ interface FiltersSidebarProps {
 
 export function FiltersSidebar({
   categories,
-  tags,
   attributes,
   selected,
   currentParams,
 }: FiltersSidebarProps) {
   const router = useRouter();
-  const [openSections, setOpenSections] = useState({
-    categories: true,
-    price: true,
-    color: true,
-    size: true,
-    tags: false,
-    linea: false,
-    audiencia: false,
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    departamentos: true,
+    subcategorias: true,
+    marca: true,
+    precio: true,
+    programate: true,
   });
 
-  const [searchQuery, setSearchQuery] = useState(selected.search || "");
   const [priceMin, setPriceMin] = useState(selected.price_min?.toString() || "");
   const [priceMax, setPriceMax] = useState(selected.price_max?.toString() || "");
 
-  function toggleSection(section: keyof typeof openSections) {
+  function toggleSection(section: string) {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   }
 
   function makeHref(next: Record<string, string | undefined>) {
     const stringParams: Record<string, string> = {};
     Object.entries(currentParams).forEach(([key, value]) => {
-      if (typeof value === 'string') {
-        stringParams[key] = value;
-      }
+      if (typeof value === 'string') stringParams[key] = value;
     });
 
     const params = new URLSearchParams(stringParams);
@@ -69,16 +62,11 @@ export function FiltersSidebar({
     });
     params.delete("page");
 
-    // Always navigate to /productos with the query params
     const queryString = params.toString();
-    return queryString ? `/productos?${queryString}` : '/productos';
+    return queryString ? `/tienda?${queryString}` : '/tienda';
   }
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const href = makeHref({ q: searchQuery });
-    router.push(href);
-  };
+  const clearAllFilters = () => router.push('/tienda');
 
   const handlePriceApply = () => {
     const href = makeHref({
@@ -88,225 +76,232 @@ export function FiltersSidebar({
     router.push(href);
   };
 
-  // Build Category Tree
-  const categoryTree = categories
-    .filter(c => c.parent === 0 && !c.name.toLowerCase().includes('nacionales'))
-    .map(parent => ({
-      ...parent,
-      children: categories.filter(c => c.parent === parent.id && !c.name.toLowerCase().includes('nacionales'))
-    }));
+  // --- Data Processing for UI Sections ---
 
-  // Find Attributes
-  const colorAttr = attributes.find(a => a.attribute.slug.includes("color") || a.attribute.name.toLowerCase().includes("color"));
-  const sizeAttr = attributes.find(a => a.attribute.slug.includes("talla") || a.attribute.slug.includes("size") || a.attribute.name.toLowerCase().includes("talla"));
-  const lineaAttr = attributes.find(a => a.attribute.slug.includes("linea") || a.attribute.name.toLowerCase().includes("linea"));
-  const audienciaAttr = attributes.find(a => a.attribute.slug.includes("audiencia") || a.attribute.name.toLowerCase().includes("audiencia"));
+  // 1. Departamentos (Top Level Categories, e.g. "Salud y Medicamentos")
+  const departamentos = categories.filter(c => c.parent === 0 && c.name.toLowerCase() !== 'uncategorized');
+
+  // 2. Subcategorías (Level 1 Categories, e.g. "Capilar", "Facial")
+  // For better UX, we should ideally show children of SELECTED parent. 
+  // If no parent selected, maybe show popular ones or all.
+  // Given the "fixed" request, let's show all non-parent for now, or refine if user complains.
+  const subcategorias = categories.filter(c => c.parent !== 0);
+
+  // 3. Marcas (Attribute 'Marca' or 'Laboratorio')
+  const marcaAttribute = attributes.find(a =>
+    a.attribute.name.toLowerCase() === 'marca' ||
+    a.attribute.name.toLowerCase() === 'laboratorio'
+  );
+  const marcas = marcaAttribute ? marcaAttribute.terms : [];
+
+  const SidebarSection = ({
+    title,
+    id,
+    children,
+    className = ""
+  }: {
+    title: string,
+    id: string,
+    children: React.ReactNode,
+    className?: string
+  }) => (
+    <div className={`border-b border-gray-100 py-4 ${className}`}>
+      <button
+        onClick={() => toggleSection(id)}
+        className="w-full flex items-center justify-between group px-1"
+      >
+        <h3 className="text-base font-bold text-gray-900 group-hover:text-[var(--color-primary-blue)] transition-colors text-left flex-1">
+          {title}
+        </h3>
+        {openSections[id] ?
+          <ChevronUp className="w-5 h-5 text-[var(--color-primary-blue)]" /> :
+          <ChevronDown className="w-5 h-5 text-gray-400" />
+        }
+      </button>
+
+      {openSections[id] && (
+        <div className="mt-3 animate-fadeIn">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+
+  const CheckboxItem = ({
+    label,
+    count,
+    isActive,
+    onClick
+  }: {
+    label: string,
+    count?: number,
+    isActive?: boolean,
+    onClick: () => void
+  }) => (
+    <div
+      onClick={onClick}
+      className="flex items-center justify-between py-2 cursor-pointer group hover:bg-gray-50 px-2 rounded-lg transition-colors"
+    >
+      <div className="flex items-center gap-3 overflow-hidden">
+        <div className={`flex-shrink-0 w-5 h-5 rounded-full border flex items-center justify-center transition-colors shadow-sm ${isActive
+            ? 'border-[var(--color-primary-blue)] bg-[var(--color-primary-blue)]'
+            : 'border-gray-300 bg-white group-hover:border-[var(--color-primary-blue)]'
+          }`}>
+          {isActive && <div className="w-2 h-2 rounded-full bg-white" />}
+        </div>
+        <span className={`text-sm truncate ${isActive ? 'font-bold text-[var(--color-primary-blue)]' : 'text-gray-600 group-hover:text-gray-900'}`}>
+          {label}
+        </span>
+      </div>
+      {(count !== undefined && count !== 0) && (
+        <span className={`text-xs font-bold ml-2 ${isActive ? 'text-[var(--color-primary-blue)]' : 'text-gray-900'}`}>
+          {count}
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <aside className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Filtros</h2>
-
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="relative">
-          <input
-            type="text"
-            placeholder="Buscar producto..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-saprix-electric-blue"
-          />
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-        </form>
+    <div className="w-full bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden font-sans">
+      {/* Header Blue - Exact match to image 0 */}
+      <div className="bg-[var(--color-primary-blue)] p-4 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-white">Filtros</h2>
+        <button
+          onClick={clearAllFilters}
+          className="bg-white px-3 py-1 rounded-full text-xs font-bold text-[var(--color-primary-blue)] hover:bg-blue-50 transition-colors shadow-sm"
+        >
+          Limpiar Filtros
+        </button>
       </div>
 
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="p-4 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
 
-        {/* Price Filter */}
-        <div className="p-4">
-          <button
-            onClick={() => toggleSection("price")}
-            className="w-full flex items-center justify-between mb-2"
-          >
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Precio</h3>
-            {openSections.price ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-
-          {openSections.price && (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={priceMin}
-                  onChange={(e) => setPriceMin(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm"
-                />
-                <span className="text-gray-400">-</span>
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm"
-                />
-              </div>
-              <button
-                onClick={handlePriceApply}
-                className="w-full py-2 bg-gray-900 dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider rounded-md hover:opacity-90 transition-opacity"
-              >
-                Filtrar
-              </button>
-            </div>
-          )}
+        {/* Prográmate y Ahorra - Match image 1 */}
+        <div className="flex items-center justify-between py-2 mb-2">
+          <span className="text-base font-bold text-gray-900">Prográmate y Ahorra</span>
+          <div className="w-5 h-5 rounded-full border border-gray-400 cursor-pointer hover:border-[var(--color-primary-blue)]"></div>
         </div>
 
-        {/* Categories (Hierarchical) */}
-        <div className="p-4">
-          <button
-            onClick={() => toggleSection("categories")}
-            className="w-full flex items-center justify-between mb-2"
-          >
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Categorías</h3>
-            {openSections.categories ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+        {/* Departamentos - Match image 1 */}
+        <SidebarSection title="Departamentos" id="departamentos">
+          <div className="max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200">
+            {departamentos.map(cat => {
+              const isActive = selected.category?.includes(cat.slug);
+              return (
+                <CheckboxItem
+                  key={cat.id}
+                  label={cat.name}
+                  count={cat.count}
+                  isActive={!!isActive}
+                  onClick={() => router.push(makeHref({ category: isActive ? undefined : cat.slug }))}
+                />
+              );
+            })}
+          </div>
+        </SidebarSection>
 
-          {openSections.categories && (
-            <div className="space-y-1">
-              {categoryTree.map((parent) => {
-                const isActiveParent = selected.category?.includes(parent.slug);
+        {/* Categoría / Subcategoría - Match image 2 */}
+        {subcategorias.length > 0 && (
+          <SidebarSection title="Subcategoría" id="subcategorias">
+            <div className="max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200">
+              {subcategorias.slice(0, 50).map(cat => {
+                const isActive = selected.category?.includes(cat.slug);
                 return (
-                  <div key={parent.id} className="space-y-1">
-                    <button
-                      onClick={() => {
-                        const href = makeHref({ category: isActiveParent ? undefined : parent.slug });
-                        router.push(href);
-                      }}
-                      className={`w-full flex items-center justify-between py-1.5 px-2 rounded-md text-sm font-medium transition-colors ${isActiveParent
-                        ? "text-white bg-saprix-electric-blue"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                        }`}
-                    >
-                      <span>{parent.name}</span>
-                      {parent.count !== undefined && <span className="text-xs opacity-60">({parent.count})</span>}
-                    </button>
-
-                    {/* Children */}
-                    {parent.children && parent.children.length > 0 && (
-                      <div className="ml-3 pl-3 border-l border-gray-200 dark:border-gray-700 space-y-1">
-                        {parent.children.map((child: any) => {
-                          const isActiveChild = selected.category?.includes(child.slug);
-                          return (
-                            <button
-                              key={child.id}
-                              onClick={() => {
-                                const href = makeHref({ category: isActiveChild ? undefined : child.slug });
-                                router.push(href);
-                              }}
-                              className={`w-full flex items-center justify-between py-1 px-2 rounded-md text-sm transition-colors ${isActiveChild
-                                ? "text-white bg-saprix-electric-blue font-medium"
-                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-                                }`}
-                            >
-                              <span>{child.name}</span>
-                              {child.count !== undefined && <span className="text-xs opacity-60">({child.count})</span>}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                  <CheckboxItem
+                    key={cat.id}
+                    label={cat.name}
+                    count={cat.count}
+                    isActive={!!isActive}
+                    onClick={() => router.push(makeHref({ category: isActive ? undefined : cat.slug }))}
+                  />
                 );
               })}
             </div>
-          )}
-        </div>
-
-        {/* Colors */}
-        {colorAttr && (
-          <div className="p-4">
-            <button
-              onClick={() => toggleSection("color")}
-              className="w-full flex items-center justify-between mb-2"
-            >
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Color</h3>
-              {openSections.color ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-            {openSections.color && (
-              <div className="flex flex-wrap gap-2">
-                {colorAttr.terms.map(term => {
-                  // Simple color mapping logic (can be improved)
-                  const colorMap: Record<string, string> = {
-                    'negro': '#000000', 'blanco': '#ffffff', 'rojo': '#ef4444', 'azul': '#3b82f6',
-                    'verde': '#22c55e', 'amarillo': '#eab308', 'naranja': '#f97316', 'gris': '#6b7280',
-                    'morado': '#a855f7', 'rosa': '#ec4899', 'dorado': '#fbbf24', 'plateado': '#9ca3af',
-                    'neon': '#ccff00'
-                  };
-                  const bg = colorMap[term.slug.split('-')[0]] || '#cccccc';
-                  const isActive = selected.attr_color?.includes(term.slug);
-
-                  return (
-                    <Link
-                      key={term.id}
-                      href={makeHref({ attr_color: isActive ? undefined : term.slug })}
-                      className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${isActive ? 'ring-2 ring-offset-2 ring-saprix-electric-blue scale-110' : 'border-gray-200 hover:scale-105'
-                        }`}
-                      style={{ backgroundColor: bg }}
-                      title={term.name}
-                    >
-                      {isActive && <Check className={`w-4 h-4 ${bg === '#ffffff' ? 'text-black' : 'text-white'}`} />}
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          </SidebarSection>
         )}
 
-        {/* Sizes */}
-        {sizeAttr && (
-          <div className="p-4">
-            <button
-              onClick={() => toggleSection("size")}
-              className="w-full flex items-center justify-between mb-2"
-            >
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Talla</h3>
-              {openSections.size ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-            {openSections.size && (
-              <div className="grid grid-cols-4 gap-2">
-                {sizeAttr.terms.map(term => {
-                  const isActive = selected.attr_talla?.includes(term.slug);
-                  return (
-                    <Link
-                      key={term.id}
-                      href={makeHref({ attr_talla: isActive ? undefined : term.slug })}
-                      className={`flex items-center justify-center py-2 rounded-md text-xs font-bold border transition-all ${isActive
-                        ? 'bg-saprix-electric-blue text-white border-saprix-electric-blue'
-                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
-                        }`}
-                    >
-                      {term.name}
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Other Attributes (Linea, Audiencia, Tags) */}
-        {lineaAttr && (
-          <div className="p-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Línea</h3>
-            <div className="flex flex-wrap gap-2">
-              {lineaAttr.terms.map(term => (
-                <Link key={term.id} href={makeHref({ attr_linea: term.slug })} className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded hover:bg-gray-200">{term.name}</Link>
-              ))}
+        {/* Marca - Match image 3 */}
+        {marcas.length > 0 && (
+          <SidebarSection title="Marca" id="marca">
+            <div className="max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200">
+              {marcas.map(term => {
+                const isActive = selected.tag?.includes(term.slug) || false;
+                return (
+                  <CheckboxItem
+                    key={term.id}
+                    label={term.name}
+                    count={term.count}
+                    isActive={isActive}
+                    onClick={() => {
+                      // Assuming brand filtering might use 'search' or 'tag' param for now based on typical Woo setups
+                      // Updating to use 'tag' param logic if available, else standard search
+                      router.push(makeHref({ q: term.name }));
+                    }}
+                  />
+                );
+              })}
             </div>
-          </div>
+          </SidebarSection>
         )}
+
+        {/* Precio - Match image 3 */}
+        <SidebarSection title="Precio" id="precio">
+          <div className="px-2 pt-4 pb-2">
+            {/* Visual Slider Representation */}
+            <div className="relative h-1.5 bg-gray-200 rounded-full mb-6 mx-2">
+              <div className="absolute top-0 bottom-0 left-[0%] right-[0%] bg-[var(--color-primary-blue)] rounded-full opacity-50"></div>
+              <div className="absolute left-[0%] top-1/2 -translate-y-1/2 w-4 h-4 bg-[var(--color-primary-blue)] rounded-full shadow border-2 border-white cursor-pointer hover:scale-110 transition-transform"></div>
+              <div className="absolute right-[0%] top-1/2 -translate-y-1/2 w-4 h-4 bg-[var(--color-primary-blue)] rounded-full shadow border-2 border-white cursor-pointer hover:scale-110 transition-transform"></div>
+            </div>
+
+            <div className="flex items-center justify-between text-gray-600 font-bold text-sm mb-4">
+              <span>${priceMin || '0'}</span>
+              <span>${priceMax || 'Max'}</span>
+            </div>
+
+            <div className="flex gap-2 mb-2">
+              <input
+                type="number"
+                value={priceMin}
+                onChange={e => setPriceMin(e.target.value)}
+                placeholder="Min"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-[var(--color-primary-blue)] outline-none transition-shadow"
+              />
+              <input
+                type="number"
+                value={priceMax}
+                onChange={e => setPriceMax(e.target.value)}
+                placeholder="Max"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-[var(--color-primary-blue)] outline-none transition-shadow"
+              />
+            </div>
+
+            <button
+              onClick={handlePriceApply}
+              className="w-full mt-2 bg-[var(--color-primary-blue)] text-white py-2 rounded-lg text-sm font-bold hover:bg-[var(--color-dark-blue)] transition-colors shadow-md active:scale-95 transform"
+            >
+              Aplicar Precio
+            </button>
+          </div>
+        </SidebarSection>
       </div>
-    </aside>
+
+      {/* Custom Scrollbar Styles */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+      `}</style>
+    </div>
   );
 }

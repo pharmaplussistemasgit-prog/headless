@@ -157,7 +157,7 @@ export default function QuickAddModal({
                                     {product?.name}
                                 </h2>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-black text-black">
+                                    <span className="text-3xl font-bold text-[var(--color-primary-blue)]">
                                         {priceFmt.format(currentPrice)}
                                     </span>
                                 </div>
@@ -210,11 +210,11 @@ export default function QuickAddModal({
                                                 onClick={() => setSelectedSize(sz.option)}
                                                 id={`btn-size-${sz.option}`}
                                                 disabled={!sz.available}
-                                                className={`h-9 w-full flex items-center justify-center text-xs font-bold border-2 transition-all ${selectedSize === sz.option
-                                                    ? 'border-black bg-black text-white'
+                                                className={`h-9 w-full flex items-center justify-center text-xs font-semibold border transition-all rounded-md ${selectedSize === sz.option
+                                                    ? 'border-[var(--color-primary-blue)] bg-[var(--color-primary-blue)] text-white'
                                                     : sz.available
-                                                        ? 'border-gray-300 hover:border-black'
-                                                        : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed line-through'
+                                                        ? 'border-gray-200 hover:border-[var(--color-primary-blue)] hover:text-[var(--color-primary-blue)]'
+                                                        : 'border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed line-through'
                                                     }`}
                                             >
                                                 {sz.option}
@@ -273,18 +273,17 @@ export default function QuickAddModal({
                             <button
                                 onClick={handleAddToCart}
                                 disabled={isOutOfStock}
-                                id="btn-add-to-cart-modal"
-                                className={`w-full py-3 bg-black text-white text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''
+                                className={`w-full py-3 bg-[var(--color-action-blue)] text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-md ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''
                                     }`}
                             >
                                 <ShoppingCart className="w-5 h-5" />
-                                <span>{isOutOfStock ? 'Agotado' : 'Agregar al carrito'}</span>
+                                <span>{isOutOfStock ? 'Agotado' : 'Agregar al Carrito'}</span>
                             </button>
 
                             <Link
-                                href={`/${product?.slug}`}
+                                href={`/producto/${product?.slug}`}
                                 id="link-view-details-modal"
-                                className="block w-full py-2 text-center border border-black text-black text-sm font-bold uppercase tracking-wider hover:bg-gray-50 transition-colors"
+                                className="block w-full py-2 text-center border border-[var(--color-primary-blue)] text-[var(--color-primary-blue)] text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors"
                                 onClick={onClose}
                             >
                                 Ver detalles completos
