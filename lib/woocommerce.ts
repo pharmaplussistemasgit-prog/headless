@@ -328,6 +328,7 @@ export async function getProducts(params: {
   order?: 'asc' | 'desc';
   search?: string;
   sku?: string;
+  featured?: boolean;
 } = {}): Promise<{ products: Product[]; total: number; totalPages: number }> {
   try {
     const {
@@ -339,6 +340,7 @@ export async function getProducts(params: {
       order = 'desc',
       search,
       sku,
+      featured,
     } = params;
 
     const queryParams: any = {
@@ -363,6 +365,10 @@ export async function getProducts(params: {
 
     if (search) {
       queryParams.search = search;
+    }
+
+    if (featured !== undefined) {
+      queryParams.featured = featured;
     }
 
     const response = await getWooApi().get('products', queryParams);
