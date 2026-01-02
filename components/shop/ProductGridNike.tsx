@@ -111,34 +111,37 @@ export async function ProductGridNike({ searchParams }: ProductGridNikeProps) {
                     const price = parseFloat(product.price || '0');
                     const salePrice = product.sale_price ? parseFloat(product.sale_price) : null;
                     const regularPrice = product.regular_price ? parseFloat(product.regular_price) : price;
+                    const isOnSale = salePrice !== null && salePrice < regularPrice;
 
-                    // Build hierarchical URL logic is now handled inside ProductCard, but we pass the data
-                    let categorySlug = undefined;
-                    let subcategorySlug = undefined;
+                    const discountPercentage = isOnSale
+                        ? Math.round(((regularPrice - (salePrice || 0)) / regularPrice) * 100)
+                        : null;
 
-                    if (product.categories && product.categories.length > 0) {
-                        const subCat = product.categories[0];
-                        // If we are in a specific category page (searchParams.categoria), use that as top level
-                        // Otherwise try to guess or just use the subcategory as is (ProductCard handles fallback)
-                        categorySlug = searchParams.categoria || 'productos';
-                        subcategorySlug = subCat.slug;
-
-                        // Refinement: If the product has multiple categories, we might want to find the parent.
-                        // But for now, using the first one as subcategory and the current page param as category is a safe bet for navigation continuity.
-                    }
+                    const mappedProduct = {
+                        id: product.id,
+                        name: product.name,
+                        slug: product.slug,
+                        sku: product.sku || null,
+                        price: salePrice || price,
+                        regularPrice: regularPrice,
+                        isOnSale: isOnSale,
+                        stock: product.stock_quantity ?? null,
+                        isInStock: product.stock_status === 'instock',
+                        showExactStock: (product.stock_quantity || 0) < 10,
+                        images: product.images?.map(img => img.src) || [],
+                        categories: product.categories || [],
+                        shortDescription: product.short_description || '',
+                        brand: product.attributes?.find(a => a.name.toLowerCase() === 'marca')?.options[0] || null,
+                        invima: null,
+                        productType: product.type,
+                        requiresRx: false,
+                        isRefrigerated: false,
+                        discountPercentage: discountPercentage
+                    };
 
                     return (
                         <div key={product.id} className="group">
-                            <ProductCard
-                                id={product.id}
-                                name={product.name}
-                                price={product.price || '0'}
-                                imageUrl={product.images?.[0]?.src || ''}
-                                slug={product.slug}
-                                category={categorySlug}
-                                subcategory={subcategorySlug}
-                                images={product.images?.map(img => img.src) || []}
-                            />
+                            <ProductCard product={mappedProduct} />
                         </div>
                     );
                 })}

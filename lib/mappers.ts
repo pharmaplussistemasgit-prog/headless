@@ -49,6 +49,7 @@ export function mapWooProduct(p: WooProduct): MappedProduct {
         isInStock,
         showExactStock,
         images,
+        categories: p.categories || [],
         shortDescription: p.short_description || '', // Se enviará HTML crudo para renderizar con precaución o limpiar
         brand,
         invima,

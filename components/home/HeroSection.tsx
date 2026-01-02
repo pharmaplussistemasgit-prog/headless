@@ -16,10 +16,10 @@ export interface MinimalProduct {
     id: number;
     name: string;
     slug: string;
-    price: string;
-    regular_price: string;
-    images: { src: string; name: string }[];
-    categories: { id: number; name: string }[];
+    price?: string;
+    regular_price?: string;
+    images: { src: string; name?: string; alt?: string }[];
+    categories?: { id: number; name: string }[];
 }
 
 export interface HeroSlide {

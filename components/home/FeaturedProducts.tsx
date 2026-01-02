@@ -75,7 +75,7 @@ export default function FeaturedProducts({
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             {visibleProducts.map((product) => {
                                 const discount = getDiscountPercentage(product);
-                                const hasPromotion = product.meta_data?.find(m => m.key === '_promotion_label')?.value;
+                                const hasPromotion = product.meta_data?.find(m => m.key === '_promotion_label')?.value as string | undefined;
 
                                 return (
                                     <Link

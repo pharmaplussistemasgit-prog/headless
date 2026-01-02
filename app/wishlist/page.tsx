@@ -59,12 +59,27 @@ export default function WishlistPage() {
                                     transition={{ duration: 0.3 }}
                                 >
                                     <ProductCard
-                                        id={item.id}
-                                        name={item.name}
-                                        price={item.price.toString()}
-                                        imageUrl={item.image}
-                                        slug={item.slug}
-                                        category={item.category || "Fútbol Sala"}
+                                        product={{
+                                            id: item.id,
+                                            name: item.name,
+                                            slug: item.slug,
+                                            sku: null,
+                                            price: typeof item.price === 'string' ? parseFloat(item.price) : item.price,
+                                            regularPrice: typeof item.price === 'string' ? parseFloat(item.price) : item.price,
+                                            isOnSale: false,
+                                            stock: null,
+                                            isInStock: true,
+                                            showExactStock: false,
+                                            images: [item.image],
+                                            categories: item.category ? [{ id: 0, name: item.category, slug: item.category }] : [],
+                                            shortDescription: '',
+                                            brand: null,
+                                            invima: null,
+                                            productType: null,
+                                            requiresRx: false,
+                                            isRefrigerated: false,
+                                            discountPercentage: null,
+                                        }}
                                     />
                                 </motion.div>
                             ))}
