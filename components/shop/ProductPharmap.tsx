@@ -10,7 +10,7 @@ import { WooProduct } from '@/types/product';
 
 export type SortValue = 'newest' | 'price-asc' | 'price-desc' | 'popular';
 
-interface ProductGridNikeProps {
+interface ProductPharmapProps {
     searchParams: {
         categoria?: string;
         tag?: string;
@@ -20,7 +20,7 @@ interface ProductGridNikeProps {
     };
 }
 
-export async function ProductGridNike({ searchParams }: ProductGridNikeProps) {
+export async function ProductPharmap({ searchParams }: ProductPharmapProps) {
     // Helper to build pagination URLs preserving existing params (except page)
     const buildPaginationUrl = (newPage: number) => {
         const stringParams: Record<string, string> = {};
