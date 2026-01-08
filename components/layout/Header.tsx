@@ -95,8 +95,8 @@ export default function Header({ categories = [] }: HeaderProps) {
                             </button>
 
                             {/* Logo */}
-                            <Link href="/" className="flex-shrink-0">
-                                <div className="relative w-[155px] lg:w-[190px] h-[48px] lg:h-[54px]">
+                            <Link href="/" className="flex-shrink-0 group">
+                                <div className="relative w-[155px] lg:w-[190px] h-[48px] lg:h-[54px] group-hover:scale-105 transition-transform duration-300">
                                     <Image
                                         src="/brand/logo-new-clean.png"
                                         alt="PharmaPlus"

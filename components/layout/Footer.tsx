@@ -93,7 +93,7 @@ export default function Footer() {
                       alt="PharmaPlus"
                       width={180}
                       height={60}
-                      className="h-12 w-auto brightness-0 invert opacity-90"
+                      className="h-12 w-auto brightness-0 invert opacity-90 hover:scale-105 hover:opacity-100 transition-all duration-300"
                       priority
                     />
                   </Link>
