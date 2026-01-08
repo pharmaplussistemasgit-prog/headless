@@ -347,6 +347,7 @@ export async function getProducts(params: {
       maxPrice,
     } = params;
 
+    // Build query params including min/max price which were manually added before
     const queryParams: any = {
       per_page: perPage,
       page,
@@ -355,39 +356,21 @@ export async function getProducts(params: {
       status: 'publish',
     };
 
-    if (sku) {
-      queryParams.sku = sku;
-    }
+    if (sku) queryParams.sku = sku;
+    if (category) queryParams.category = category;
+    if (tag) queryParams.tag = tag;
+    if (search) queryParams.search = search;
+    if (featured !== undefined) queryParams.featured = featured;
+    if (minPrice) queryParams.min_price = minPrice;
+    if (maxPrice) queryParams.max_price = maxPrice;
 
-    if (category) {
-      queryParams.category = category;
-    }
+    // Use wcFetchRaw for caching (default 600s revalidation)
+    // cache-tag could be added here for on-demand revalidation if needed
+    const { data, headers } = await wcFetchRaw<Product[]>('products', queryParams);
 
-    if (tag) {
-      queryParams.tag = tag;
-    }
-
-    if (search) {
-      queryParams.search = search;
-    }
-
-    if (featured !== undefined) {
-      queryParams.featured = featured;
-    }
-
-    if (minPrice) {
-      queryParams.min_price = minPrice;
-    }
-
-    if (maxPrice) {
-      queryParams.max_price = maxPrice;
-    }
-
-    const response = await getWooApi().get('products', queryParams);
-
-    const products = (response.data ?? []) as Product[];
-    const total = parseInt(response.headers?.['x-wp-total'] || '0');
-    const totalPages = parseInt(response.headers?.['x-wp-totalpages'] || '1');
+    const products = (data ?? []) as Product[];
+    const total = parseInt(headers.get('x-wp-total') || '0');
+    const totalPages = parseInt(headers.get('x-wp-totalpages') || '1');
 
     return { products, total, totalPages };
   } catch (error) {

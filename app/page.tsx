@@ -63,69 +63,57 @@ const heroSlides: HeroSlide[] = [
 ];
 
 export default async function HomePage() {
-  // 1. Fetch Featured Products
-  let featuredResult = await getProducts({
-    perPage: 12,
-    featured: true,
-    orderby: 'popularity'
-  });
+  // Parallelize Data Fetching using Promise.all
+  // 1. Featured (with fallback logic inside if needed, but here simple)
+  // 2. Flash Deals (with complex fallback)
+  // 3. Cold Chain
+  // 4. Beauty
+  // 5. Health (with complex fallback)
 
-  if (featuredResult.products.length === 0) {
-    console.warn('No featured products found, falling back to popular products');
-    featuredResult = await getProducts({
-      perPage: 12,
-      orderby: 'popularity'
-    });
-  }
+  const [featuredResult, flashDealsProducts, coldChainResult, beautyResult, healthResult] = await Promise.all([
+    // 1. Featured Products
+    (async () => {
+      let res = await getProducts({ perPage: 12, featured: true, orderby: 'popularity' });
+      if (res.products.length === 0) {
+        console.warn('No featured products found, falling back to popular products');
+        res = await getProducts({ perPage: 12, orderby: 'popularity' });
+      }
+      return res;
+    })(),
 
-  // 2. Fetch Flash Deals (Specific SKUs or Fallback)
-  let flashDealsProducts: any[] = [];
-  try {
-    const flashDealsResult = await getProducts({
-      perPage: 10,
-      sku: '3294,76205',
-    });
-    flashDealsProducts = flashDealsResult.products;
-    if (flashDealsProducts.length === 0) {
-      const tempResult = await getProducts({ perPage: 2, orderby: 'date', order: 'desc' });
-      flashDealsProducts = tempResult.products;
-    }
-  } catch (error) {
-    console.error('Error fetching flash deals:', error);
-    const tempResult = await getProducts({ perPage: 2 });
-    flashDealsProducts = tempResult.products;
-  }
+    // 2. Flash Deals
+    (async () => {
+      try {
+        const res = await getProducts({ perPage: 10, sku: '3294,76205' });
+        if (res.products.length > 0) return res.products;
 
-  // 3. Fetch Cold Chain Products
-  const coldChainResult = await getProducts({
-    search: 'insulina',
-    perPage: 8,
-    orderby: 'popularity'
-  });
+        // Fallback 1
+        const temp = await getProducts({ perPage: 2, orderby: 'date', order: 'desc' });
+        return temp.products;
+      } catch (error) {
+        console.error('Error fetching flash deals:', error);
+        const temp = await getProducts({ perPage: 2 });
+        return temp.products;
+      }
+    })(),
 
-  // 4. Fetch Beauty Products
-  const beautyResult = await getProducts({
-    search: 'shampoo', // Fallback search term for beauty/personal care
-    perPage: 10,
-    orderby: 'popularity'
-  });
+    // 3. Cold Chain
+    getProducts({ search: 'insulina', perPage: 8, orderby: 'popularity' }),
 
-  // 5. Fetch Health Products
-  // Using broad terms to get medicines like Electrolit, Pedialyte etc.
-  // Fallback to 'farmacia' or 'medicamento'
-  let healthResult = await getProducts({
-    category: '20', // Try explicit category ID if known, otherwise search
-    perPage: 10,
-    orderby: 'popularity'
-  });
+    // 4. Beauty
+    getProducts({ search: 'shampoo', perPage: 10, orderby: 'popularity' }),
 
-  if (healthResult.products.length === 0) {
-    healthResult = await getProducts({ search: 'farmacia', perPage: 10 });
-  }
+    // 5. Health (with chained fallbacks)
+    (async () => {
+      let res = await getProducts({ category: '20', perPage: 10, orderby: 'popularity' });
+      if (res.products.length > 0) return res;
 
-  if (healthResult.products.length === 0) {
-    healthResult = await getProducts({ search: 'medicamento', perPage: 10 });
-  }
+      res = await getProducts({ search: 'farmacia', perPage: 10 });
+      if (res.products.length > 0) return res;
+
+      return await getProducts({ search: 'medicamento', perPage: 10 });
+    })()
+  ]);
 
   return (
     <div className="w-full bg-[var(--color-bg-light)]">
