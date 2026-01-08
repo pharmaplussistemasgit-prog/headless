@@ -87,12 +87,14 @@ export default function ColdChainSection({ products }: ColdChainSectionProps) {
                             <button
                                 ref={prevRef}
                                 className="w-10 h-10 rounded-full border border-blue-100 bg-white text-blue-600 flex items-center justify-center hover:bg-blue-50 transition-colors shadow-sm"
+                                aria-label="Anterior"
                             >
                                 <ChevronLeft className="w-5 h-5" />
                             </button>
                             <button
                                 ref={nextRef}
                                 className="w-10 h-10 rounded-full border border-blue-100 bg-white text-blue-600 flex items-center justify-center hover:bg-blue-50 transition-colors shadow-sm"
+                                aria-label="Siguiente"
                             >
                                 <ChevronRight className="w-5 h-5" />
                             </button>

@@ -112,13 +112,13 @@ export default function Footer() {
                 </div>
 
                 <div className="flex gap-3 pt-2">
-                  <Link href="#" className="text-blue-200 hover:text-white transition-colors">
+                  <Link href="#" className="text-blue-200 hover:text-white transition-colors" aria-label="Síguenos en Facebook">
                     <Facebook className="w-5 h-5" />
                   </Link>
-                  <Link href="#" className="text-blue-200 hover:text-white transition-colors">
+                  <Link href="#" className="text-blue-200 hover:text-white transition-colors" aria-label="Síguenos en Instagram">
                     <Instagram className="w-5 h-5" />
                   </Link>
-                  <Link href="#" className="text-blue-200 hover:text-white transition-colors">
+                  <Link href="#" className="text-blue-200 hover:text-white transition-colors" aria-label="Escríbenos por WhatsApp">
                     <MessageCircle className="w-5 h-5" />
                   </Link>
                 </div>

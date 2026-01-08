@@ -108,10 +108,10 @@ export default function HeroSection({ slides, featuredProds = [] }: HeroSectionP
 
                         {/* Arrows - Hidden on Mobile, Visible on Desktop Group Hover */}
                         <div className="hidden lg:flex absolute inset-0 items-center justify-between px-4 z-20 pointer-events-none">
-                            <button className="swiper-prev w-10 h-10 bg-white/80 hover:bg-white text-[var(--color-primary-blue)] rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 pointer-events-auto shadow-md">
+                            <button className="swiper-prev w-10 h-10 bg-white/80 hover:bg-white text-[var(--color-primary-blue)] rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 pointer-events-auto shadow-md" aria-label="Anterior diapositiva">
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
-                            <button className="swiper-next w-10 h-10 bg-white/80 hover:bg-white text-[var(--color-primary-blue)] rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 pointer-events-auto shadow-md">
+                            <button className="swiper-next w-10 h-10 bg-white/80 hover:bg-white text-[var(--color-primary-blue)] rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 pointer-events-auto shadow-md" aria-label="Siguiente diapositiva">
                                 <ChevronRight className="w-6 h-6" />
                             </button>
                         </div>

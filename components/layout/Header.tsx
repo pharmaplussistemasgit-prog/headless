@@ -89,6 +89,7 @@ export default function Header({ categories = [] }: HeaderProps) {
                             <button
                                 className="lg:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
                                 onClick={() => setMobileMenuOpen(true)}
+                                aria-label="Abrir menú"
                             >
                                 <Menu className="w-6 h-6" />
                             </button>
@@ -464,7 +465,7 @@ export default function Header({ categories = [] }: HeaderProps) {
                             {/* Header */}
                             <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-[var(--color-pharma-blue)] text-white">
                                 <span className="font-bold text-lg">Menú</span>
-                                <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                                <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors" aria-label="Cerrar menú">
                                     <ChevronDown className="w-6 h-6 rotate-90" />
                                 </button>
                             </div>
@@ -484,7 +485,7 @@ export default function Header({ categories = [] }: HeaderProps) {
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
-                                        <button type="submit" className="absolute right-2 top-2 text-gray-400">
+                                        <button type="submit" className="absolute right-2 top-2 text-gray-400" aria-label="Buscar producto">
                                             <Search className="w-5 h-5" />
                                         </button>
                                     </form>

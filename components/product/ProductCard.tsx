@@ -71,9 +71,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div>
               {/* Title - Click Trigger */}
               <div className="block mb-2">
-                <h4 className="font-bold text-[#1e293b] text-[15px] leading-snug line-clamp-2 md:min-h-[42px] group-hover:text-[var(--color-primary-blue)] transition-colors uppercase">
+                <h3 className="font-bold text-[#1e293b] text-[15px] leading-snug line-clamp-2 md:min-h-[42px] group-hover:text-[var(--color-primary-blue)] transition-colors uppercase">
                   {product.name}
-                </h4>
+                </h3>
               </div>
 
               {/* Brand */}

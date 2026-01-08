@@ -149,7 +149,7 @@ function FlashDealCard({ product, discount, stock }: { product: Product; discoun
             </div>
 
             {/* Add Button */}
-            <button className="absolute top-4 right-4 w-10 h-10 bg-[var(--color-pharma-blue)] hover:bg-[#005a9c] text-white rounded-full flex items-center justify-center transition-all z-10">
+            <button className="absolute top-4 right-4 w-10 h-10 bg-[var(--color-pharma-blue)] hover:bg-[#005a9c] text-white rounded-full flex items-center justify-center transition-all z-10" aria-label="Agregar al carrito">
                 <Plus className="w-5 h-5" />
             </button>
 

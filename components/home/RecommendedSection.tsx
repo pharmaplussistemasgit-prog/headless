@@ -51,6 +51,7 @@ export default function RecommendedSection({ products }: RecommendedSectionProps
                             <button
                                 ref={prevRef}
                                 className="absolute left-0 lg:left-auto lg:right-full lg:mr-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center text-[var(--color-pharma-green)] bg-white shadow-md border border-gray-100 rounded-full hover:bg-slate-50 transition-colors disabled:opacity-30"
+                                aria-label="Anterior"
                             >
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
@@ -58,6 +59,7 @@ export default function RecommendedSection({ products }: RecommendedSectionProps
                             <button
                                 ref={nextRef}
                                 className="absolute right-0 lg:right-auto lg:left-full lg:ml-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center text-[var(--color-pharma-green)] bg-white shadow-md border border-gray-100 rounded-full hover:bg-slate-50 transition-colors disabled:opacity-30"
+                                aria-label="Siguiente"
                             >
                                 <ChevronRight className="w-6 h-6" />
                             </button>

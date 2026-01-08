@@ -74,6 +74,7 @@ export default function BeautySection({ products }: BeautySectionProps) {
                             <button
                                 ref={prevRef}
                                 className="absolute left-0 lg:left-auto lg:right-full lg:mr-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center text-[var(--color-pharma-green)] hover:text-[var(--color-pharma-green)] transition-colors bg-white shadow-md rounded-full disabled:opacity-30 border border-gray-100"
+                                aria-label="Anterior"
                             >
                                 <ChevronLeft className="w-5 h-5" />
                             </button>
@@ -81,6 +82,7 @@ export default function BeautySection({ products }: BeautySectionProps) {
                             <button
                                 ref={nextRef}
                                 className="absolute right-0 lg:right-auto lg:left-full lg:ml-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center text-[var(--color-pharma-green)] hover:text-[var(--color-pharma-green)] transition-colors bg-white shadow-md rounded-full disabled:opacity-30 border border-gray-100"
+                                aria-label="Siguiente"
                             >
                                 <ChevronRight className="w-5 h-5" />
                             </button>
