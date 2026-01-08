@@ -90,14 +90,14 @@ export default function HeroSection({ slides, featuredProds = [] }: HeroSectionP
                             navigation={{ nextEl: '.swiper-next', prevEl: '.swiper-prev' }}
                             className="w-full h-full"
                         >
-                            {slides.map((slide) => (
+                            {slides.map((slide, index) => (
                                 <SwiperSlide key={slide.id}>
                                     <div className="relative w-full h-full bg-gray-100">
                                         <Image
                                             src={slide.image}
                                             alt={slide.title || 'PharmaPlus Offer'}
                                             fill
-                                            priority
+                                            priority={index === 0}
                                             className="object-cover object-center"
                                             sizes="(max-width: 1024px) 100vw, 70vw"
                                         />
