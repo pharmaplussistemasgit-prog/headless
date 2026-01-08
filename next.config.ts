@@ -3,7 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Configuramos next/image para cargar imágenes remotas desde WordPress
   images: {
-    unoptimized: true,
+    // unoptimized: true, // Removed to enable optimization
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: "https",
@@ -25,8 +27,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-
-
   async redirects() {
     return [
       {
