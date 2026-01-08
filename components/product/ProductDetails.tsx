@@ -97,7 +97,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
                             </h1>
 
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="text-3xl font-bold text-[var(--color-primary-blue)]">
+                                <div className="text-3xl font-bold text-[var(--color-pharma-green)]">
                                     ${product.price.toLocaleString('es-CO')}
                                 </div>
                                 {product.isOnSale && (
@@ -158,7 +158,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
                                     className="flex-1 bg-[var(--color-action-green)] text-white h-12 rounded-lg font-bold text-lg hover:bg-green-700 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
                                 >
                                     <ShoppingCart size={20} />
-                                    <span>Agregar al carrito</span>
+                                    <span>Comprar</span>
                                 </button>
                             </div>
                         </div>

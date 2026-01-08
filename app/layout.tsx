@@ -12,6 +12,8 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { Toaster } from "sonner";
 import { getCategoryTreeData } from "@/lib/woocommerce";
 import BottomNav from "@/components/layout/BottomNav";
+import { QuickViewProvider } from "@/context/QuickViewContext";
+import GlobalQuickView from "@/components/product/GlobalQuickView";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,14 +47,17 @@ export default async function RootLayout({
         >
           <CartProvider>
             <WishlistProvider>
-              <div className="flex flex-col min-h-screen">
-                <Header categories={categories} />
-                <main className="flex-grow">{children}</main>
-                <Footer />
-                <CartDrawer />
-                <BottomNav />
-              </div>
-              <Toaster position="top-right" richColors />
+              <QuickViewProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Header categories={categories} />
+                  <main className="flex-grow">{children}</main>
+                  <Footer />
+                  <CartDrawer />
+                  <GlobalQuickView />
+                  <BottomNav />
+                </div>
+                <Toaster position="top-right" richColors />
+              </QuickViewProvider>
             </WishlistProvider>
           </CartProvider>
         </ThemeProvider>

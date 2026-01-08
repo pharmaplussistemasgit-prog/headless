@@ -1,20 +1,42 @@
-import { getAllCategories } from '@/app/actions/products';
+import { getCategoryBySlug, getAllCategories } from '@/app/actions/products';
+import { getCategoryTreeData } from '@/lib/woocommerce';
 import ProductCard from '@/components/product/ProductCard';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getColdChainProducts } from '@/lib/business-logic';
 import { ThermometerSnowflake, Info } from 'lucide-react';
+import CategorySidebar from '@/components/category/CategorySidebar';
 
 export const metadata: Metadata = {
     title: 'Cadena de Frío | PharmaPlus',
     description: 'Medicamentos refrigerados y especiales con control de temperatura garantizado.',
 };
 
-export default async function ColdChainPage() {
+export default async function ColdChainPage({
+    searchParams
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const resolvedSearchParams = await searchParams;
+    const searchQuery = typeof resolvedSearchParams.search === 'string' ? resolvedSearchParams.search : undefined;
+
     // Data Fetching
-    const products = await getColdChainProducts(40); // Traer suficientes items
-    const allCategories = await getAllCategories();
+    const [products, categoryTree, category] = await Promise.all([
+        getColdChainProducts(40, searchQuery),
+        getCategoryTreeData(),
+        getCategoryBySlug('cadena-de-frio')
+    ]);
+
+    // Fallback if category doesn't exist in WP
+    const currentCategory = category || {
+        id: 99999,
+        name: 'Cadena de Frío',
+        slug: 'cadena-de-frio',
+        description: 'Productos refrigerados',
+        count: 0,
+        parent: 0
+    };
 
     return (
         <div className="container mx-auto px-4 py-8 bg-gray-50 min-h-screen">
@@ -27,33 +49,12 @@ export default async function ColdChainPage() {
             />
 
             <div className="flex flex-col md:flex-row gap-8 mt-6">
-                {/* Sidebar (Reutilizado) */}
-                <aside className="w-full md:w-64 flex-shrink-0 hidden md:block">
-                    <div className="bg-white rounded-xl border border-gray-100 p-6 sticky top-24 shadow-sm">
-                        <h3 className="font-bold text-[var(--color-primary-blue)] mb-4 pb-2 border-b border-gray-100">Categorías</h3>
-                        <ul className="space-y-2">
-                            <li className="mb-4">
-                                <Link
-                                    href="/categoria/cadena-de-frio"
-                                    className="block py-2 px-3 rounded-md text-sm font-bold bg-blue-50 text-blue-700 border border-blue-100 flex items-center gap-2"
-                                >
-                                    <ThermometerSnowflake className="w-4 h-4" />
-                                    Cadena de Frío
-                                </Link>
-                            </li>
-                            {allCategories.map(cat => (
-                                <li key={cat.id}>
-                                    <Link
-                                        href={`/categoria/${cat.slug}`}
-                                        className="block py-1.5 px-3 rounded-md text-sm font-medium text-gray-600 hover:text-[var(--color-action-blue)] hover:bg-gray-50 transition-colors"
-                                    >
-                                        {cat.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </aside>
+
+                {/* Sidebar Compartido con Lógica Virtual */}
+                <CategorySidebar
+                    currentCategory={currentCategory}
+                    categoryTree={categoryTree}
+                />
 
                 {/* Main Content */}
                 <main className="flex-1">
@@ -85,6 +86,21 @@ export default async function ColdChainPage() {
                         </div>
                     </div>
 
+                    {/* Results Info and Clear Filter */}
+                    {searchQuery && (
+                        <div className="mb-6 flex items-center gap-4">
+                            <h2 className="text-lg font-semibold text-gray-700">
+                                Filtrando por: <span className="text-[var(--color-primary-blue)]">"{searchQuery}"</span>
+                            </h2>
+                            <Link
+                                href="/categoria/cadena-de-frio"
+                                className="text-sm text-red-500 hover:underline px-3 py-1 bg-white border border-red-100 rounded-full"
+                            >
+                                Borrar Filtro
+                            </Link>
+                        </div>
+                    )}
+
                     {/* Products Grid */}
                     {products.length > 0 ? (
                         <>
@@ -104,8 +120,16 @@ export default async function ColdChainPage() {
                             <div className="mx-auto w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 text-blue-500">
                                 <ThermometerSnowflake className="w-8 h-8" />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-700 mb-2">No encontramos productos refrigerados</h3>
-                            <p className="text-gray-500 mb-6">Intenta verificar más tarde o contacta a soporte si buscas un medicamento específico.</p>
+                            <h3 className="text-xl font-bold text-gray-700 mb-2">No encontramos productos</h3>
+                            <p className="text-gray-500 mb-6">Intenta con otro término o verifica más tarde.</p>
+                            {searchQuery && (
+                                <Link
+                                    href="/categoria/cadena-de-frio"
+                                    className="text-[var(--color-action-blue)] font-bold hover:underline"
+                                >
+                                    Ver todos los productos de Cadena de Frío
+                                </Link>
+                            )}
                         </div>
                     )}
                 </main>

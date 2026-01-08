@@ -1,0 +1,92 @@
+{
+    "tech_stack": [
+        "TypeScript",
+        "Next.js",
+        "Tailwind CSS",
+        "WooCommerce REST API",
+        "Framer Motion",
+        "Radix UI",
+        "Swiper",
+        "React Query",
+        "Headless UI",
+        "Lucide React",
+        "Sonner",
+        "Solar Icon Set"
+    ],
+    "features": [
+        {
+            "name": "Home Page",
+            "description": "Main landing page with hero slider, featured products, and various sections.",
+            "files": [
+                "app/page.tsx",
+                "components/home/HeroSection.tsx",
+                "components/home/HeroSlider.tsx",
+                "components/home/FeaturedProducts.tsx",
+                "components/home/FlashDeals.tsx",
+                "components/home/CategoryIconsSection.tsx"
+            ]
+        },
+        {
+            "name": "Product Listings",
+            "description": "Shop and category pages displaying product grids with filters.",
+            "files": [
+                "app/tienda/page.tsx",
+                "app/categoria/[slug]/page.tsx",
+                "components/shop/ProductGrid.tsx",
+                "components/shop/Filters.tsx"
+            ]
+        },
+        {
+            "name": "Product Details",
+            "description": "Single product page with images, details, and add to cart.",
+            "files": [
+                "app/producto/[slug]/page.tsx",
+                "components/product/ProductDetail.tsx",
+                "components/product/ProductGallery.tsx"
+            ]
+        },
+        {
+            "name": "Global State",
+            "description": "Context providers for cart, wishlist and quick view state.",
+            "files": [
+                "context/CartContext.tsx",
+                "context/WishlistContext.tsx",
+                "context/QuickViewContext.tsx",
+                "components/cart/CartDrawer.tsx"
+            ]
+        },
+        {
+            "name": "Checkout",
+            "description": "Checkout process.",
+            "files": [
+                "app/checkout/page.tsx",
+                "components/checkout/CheckoutForm.tsx"
+            ]
+        },
+        {
+            "name": "Search",
+            "description": "Product search functionality.",
+            "files": [
+                "components/search/SearchBar.tsx",
+                "app/api/search/route.ts"
+            ]
+        },
+        {
+            "name": "WooCommerce Integration",
+            "description": "API clients and utilities for WooCommerce.",
+            "files": [
+                "lib/woocommerce.ts",
+                "lib/woocommerce-edge.ts"
+            ]
+        },
+        {
+            "name": "API Routes",
+            "description": "Backend API routes for various functionalities.",
+            "files": [
+                "app/api/products/route.ts",
+                "app/api/checkout/route.ts",
+                "app/api/create-order/route.ts"
+            ]
+        }
+    ]
+}

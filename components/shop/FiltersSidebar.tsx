@@ -242,7 +242,7 @@ export function FiltersSidebar({
   const marcas = marcaAttribute ? marcaAttribute.terms : [];
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden font-sans">
+    <div className="w-full bg-white rounded-xl shadow-[0_0_15px_rgba(0,80,216,0.1)] border-2 border-[var(--color-pharma-blue)] overflow-hidden font-sans">
       {/* Header Blue */}
       <div className="bg-[var(--color-pharma-blue)] p-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-white">Filtros</h2>

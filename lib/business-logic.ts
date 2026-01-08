@@ -7,8 +7,17 @@ import { WooProduct, MappedProduct } from "@/types/product";
  * Obtiene y agrega productos de cadena de frío desde múltiples búsquedas.
  * Estrategia: Buscar por palabras clave fuertes y deduplicar.
  */
-export async function getColdChainProducts(limit: number = 20): Promise<MappedProduct[]> {
+export async function getColdChainProducts(limit: number = 20, specificSearch?: string): Promise<MappedProduct[]> {
     try {
+        if (specificSearch) {
+            const res = await getProducts({ search: specificSearch, perPage: limit });
+            return res.products.map(p => {
+                const mapped = mapWooProduct(p as unknown as WooProduct);
+                mapped.isRefrigerated = true;
+                return mapped;
+            });
+        }
+
         // 1. Ejecutar búsquedas en paralelo para máxima cobertura
         const [insulinaRes, refrigerRes, vacunaRes] = await Promise.all([
             getProducts({ search: 'insulina', perPage: limit }),

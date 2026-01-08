@@ -1,18 +1,19 @@
-'use client';
-
-import { MappedProduct } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Snowflake, FileText, AlertCircle } from "lucide-react";
+import { Plus, Snowflake, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { MappedProduct } from "@/types/product";
+import { useQuickView } from "@/context/QuickViewContext";
 
 interface ProductCardProps {
   product: MappedProduct;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { openQuickView } = useQuickView();
+
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -21,92 +22,121 @@ export default function ProductCard({ product }: ProductCardProps) {
     }).format(amount);
   };
 
+  const handleOpenModal = () => {
+    openQuickView(product);
+  };
+
   return (
-    <Card className="h-full border-none shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group rounded-2xl overflow-hidden relative flex flex-col bg-white">
+    <>
+      <Card
+        className="h-full border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300 group rounded-xl bg-white overflow-hidden flex flex-col cursor-pointer"
+        onClick={handleOpenModal}
+      >
 
-      {/* Badges */}
-      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 items-start">
-        {product.discountPercentage && (
-          <span className="bg-[#FFD700] text-black text-[11px] font-extrabold px-2.5 py-1 rounded-full shadow-sm">
-            -{product.discountPercentage}%
-          </span>
-        )}
-        {product.isRefrigerated && (
-          <span className="bg-white/90 backdrop-blur-md text-blue-600 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm border border-blue-50">
-            <Snowflake className="w-3 h-3" /> Frío
-          </span>
-        )}
-      </div>
-
-      <CardContent className="p-0 flex flex-col flex-grow relative">
-        {/* Imagen */}
-        <div className="relative h-48 w-full bg-white p-4 flex items-center justify-center overflow-hidden pt-6">
-          <Image
-            src={product.images[0] || '/placeholder.png'}
-            alt={product.name}
-            fill
-            className="object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
-            sizes="(max-width: 768px) 50vw, 25vw"
-          />
+        {/* Badges */}
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
+          {product.discountPercentage && (
+            <span className="bg-[#FFD700] text-black text-[10px] font-extrabold px-2 py-0.5 rounded shadow-sm">
+              -{product.discountPercentage}%
+            </span>
+          )}
+          {product.isRefrigerated && (
+            <span className="bg-blue-50/90 backdrop-blur-sm text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 shadow-sm border border-blue-100">
+              <Snowflake className="w-3 h-3" /> Frío
+            </span>
+          )}
         </div>
 
-        {/* Content Body */}
-        <div className="p-5 flex flex-col flex-grow bg-white">
-
-          {/* Metadata */}
-          <div className="mb-2">
-            {product.brand && (
-              <span className="text-[10px] font-extrabold text-[#003876] uppercase tracking-wider block mb-1 opacity-70">
-                {product.brand}
-              </span>
-            )}
-            <Link href={`/producto/${product.slug}`} className="block">
-              <h4 className="font-bold text-gray-900 text-[15px] leading-snug line-clamp-2 min-h-[42px] group-hover:text-[var(--color-primary-blue)] transition-colors">
-                {product.name}
-              </h4>
-            </Link>
+        <CardContent className="p-0 flex flex-col flex-grow relative">
+          {/* Images Area - Click Trigger */}
+          <div className="relative h-48 w-full bg-white p-6 flex items-center justify-center">
+            <div className="relative w-full h-full">
+              <Image
+                src={product.images[0] || '/placeholder.png'}
+                alt={product.name}
+                fill
+                className="object-contain group-hover:scale-110 transition-transform duration-500"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
+            </div>
           </div>
 
-          {/* Price & Action Area - Pushed to bottom */}
-          <div className="mt-auto pt-4 flex items-end justify-between gap-3">
-            <div className="flex flex-col">
-              {product.isOnSale && (
-                <span className="text-[11px] text-gray-400 line-through decoration-gray-400 mb-0.5 font-medium">
-                  {formatPrice(product.regularPrice)}
+          {/* Separator */}
+          <div className="w-full h-px bg-gray-100"></div>
+
+          {/* Content Body */}
+          <div className="p-5 flex flex-col flex-grow justify-between gap-4">
+            <div>
+              {/* Title - Click Trigger */}
+              <div className="block mb-2">
+                <h4 className="font-bold text-[#1e293b] text-[15px] leading-snug line-clamp-2 md:min-h-[42px] group-hover:text-[var(--color-primary-blue)] transition-colors uppercase">
+                  {product.name}
+                </h4>
+              </div>
+
+              {/* Brand */}
+              {product.brand ? (
+                <span className="text-[12px] text-gray-500 font-light uppercase tracking-wide block mb-3">
+                  {product.brand}
+                </span>
+              ) : (
+                <span className="text-[12px] text-gray-300 font-light uppercase tracking-wide block mb-3 opacity-0 select-none">
+                  -
                 </span>
               )}
-              <span className={cn(
-                "text-xl font-extrabold tracking-tight",
-                product.isOnSale ? "text-[#E63946]" : "text-[#003876]"
-              )}>
-                {formatPrice(product.price)}
-              </span>
+
+              {/* Price Area */}
+              <div className="mb-1">
+                <span className={cn(
+                  "text-xl font-extrabold tracking-tight block",
+                  "text-[var(--color-pharma-green)]"
+                )}>
+                  {formatPrice(product.price)}
+                </span>
+                {product.isOnSale && (
+                  <span className="text-xs text-gray-400 line-through decoration-gray-400">
+                    {formatPrice(product.regularPrice)}
+                  </span>
+                )}
+              </div>
+
+              {/* Exclusive Price Label */}
+              <div className="text-[11px] text-gray-400 font-light mb-1">
+                Precio exclusivo web
+              </div>
             </div>
 
-            <Button
-              disabled={!product.isInStock}
-              className={cn(
-                "h-10 px-4 rounded-full font-bold text-xs shadow-md transition-all flex items-center gap-2",
-                product.isInStock
-                  ? "bg-[var(--color-pharma-blue)] hover:bg-[var(--color-blue-classic)] text-white hover:shadow-lg hover:shadow-blue-200 active:scale-95"
-                  : "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none border border-gray-200"
-              )}
-            >
-              {product.isInStock ? (
-                <>
-                  <Plus className="w-4 h-4 text-white" strokeWidth={3} />
-                  <span className="hidden sm:inline">Agregar</span>
-                </>
-              ) : (
-                <>
-                  <AlertCircle className="w-4 h-4 text-gray-400" />
-                  <span className="text-[10px] uppercase tracking-wide">Agotado</span>
-                </>
-              )}
-            </Button>
+            {/* Action Button - 0 Radius */}
+            <div className="mt-auto">
+              {/* Stop Propagation on Button to allow direct Add To Cart if needed, OR just open modal too. User requested Open Modal. */}
+              <Button
+                disabled={!product.isInStock}
+                onClick={(e) => {
+                  e.stopPropagation(); // Avoid double trigger if card also has logic, but we WANT modal.
+                  handleOpenModal();
+                }}
+                className={cn(
+                  "w-full h-10 rounded-none font-bold text-sm uppercase tracking-wide shadow-none transition-all flex items-center justify-center gap-2",
+                  product.isInStock
+                    ? "bg-[#0051cc] hover:bg-[#003d99] text-white"
+                    : "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                )}
+              >
+                {product.isInStock ? (
+                  <>
+                    <span>Comprar</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="w-3 h-3" />
+                    <span>Agotado</span>
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </>
   );
 }

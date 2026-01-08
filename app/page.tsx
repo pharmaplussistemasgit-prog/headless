@@ -139,12 +139,13 @@ export default async function HomePage() {
       <CategoryIconsSection />
 
       {/* Recommended Section (New, using featured data) */}
+      {/* Force rebuild: Updated columns to 4 */}
       <RecommendedSection products={featuredResult.products} />
 
       {/* Featured Products Grid */}
       {featuredResult.products.length > 0 && (
         <FeaturedProducts
-          title="¡Hola ! Estos productos te pueden interesar"
+          title="Estos productos te pueden interesar"
           products={featuredResult.products}
         />
       )}

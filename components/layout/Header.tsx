@@ -9,6 +9,7 @@ import {
 import { useState, useRef, useEffect } from 'react';
 import { CategoryTree } from '@/types/woocommerce';
 import { motion, AnimatePresence } from 'framer-motion';
+import LiveSearch from '@/components/search/LiveSearch';
 
 interface HeaderProps {
     categories?: CategoryTree[];
@@ -19,6 +20,7 @@ export default function Header({ categories = [] }: HeaderProps) {
     const [isFinanciamientoOpen, setFinanciamientoOpen] = useState(false);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // Mobile State
     const [activeMobileCategory, setActiveMobileCategory] = useState<number | null>(null);
+    const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
 
     const categoryRef = useRef<HTMLDivElement>(null);
@@ -107,21 +109,7 @@ export default function Header({ categories = [] }: HeaderProps) {
 
                         {/* Search Bar - Large & Centered (Hidden on Mobile) */}
                         <div className="hidden lg:block flex-1 max-w-2xl">
-                            <form onSubmit={handleSearch} className="relative">
-                                <input
-                                    type="text"
-                                    className="w-full h-12 pl-6 pr-14 rounded-full border-2 border-gray-200 bg-gray-50 text-[var(--color-text-dark)] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-pharma-blue)] focus:border-transparent focus:bg-white transition-all text-[15px]"
-                                    placeholder="Buscar productos, marcas y más..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                                <button
-                                    type="submit"
-                                    className="absolute right-1.5 top-1.5 h-9 w-9 bg-[var(--color-pharma-green)] hover:bg-[#007a38] rounded-full flex items-center justify-center text-white transition-colors shadow-sm"
-                                >
-                                    <Search className="w-4 h-4" />
-                                </button>
-                            </form>
+                            <LiveSearch />
                         </div>
 
                         {/* User Actions */}
@@ -219,10 +207,17 @@ export default function Header({ categories = [] }: HeaderProps) {
                     <div className="flex items-center gap-8 h-12">
 
                         {/* Categories Dropdown */}
-                        <div ref={categoryRef} className="relative h-full flex items-center">
+                        <div
+                            ref={categoryRef}
+                            className="relative h-full flex items-center"
+                            onMouseEnter={() => {
+                                if (!isCategoryOpen) setCategoryOpen(true);
+                                if (!hoveredCategoryId && categories.length > 0) setHoveredCategoryId(categories[0].id);
+                            }}
+                            onMouseLeave={() => setCategoryOpen(false)}
+                        >
                             <div
                                 className="flex items-center gap-2 cursor-pointer hover:bg-white/10 transition-colors px-4 -ml-4 border-r border-white/20 h-full"
-                                onClick={() => setCategoryOpen(!isCategoryOpen)}
                             >
                                 <Menu className="w-4 h-4 text-white" />
                                 <span className="text-[13px] font-semibold text-white">Categorías</span>
@@ -233,48 +228,84 @@ export default function Header({ categories = [] }: HeaderProps) {
                             <AnimatePresence>
                                 {isCategoryOpen && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.98 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="absolute top-full left-0 mt-3 w-[280px] bg-white rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 z-50 overflow-visible"
+                                        className="absolute top-full left-0 mt-0 w-[800px] bg-white rounded-b-xl shadow-2xl border-t border-gray-100 z-50 overflow-hidden flex h-[400px]"
                                     >
-                                        {/* Decorative Top Line */}
-                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--color-pharma-blue)] to-[var(--color-pharma-green)] rounded-t-xl"></div>
+                                        {/* Decorative Line */}
+                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--color-pharma-blue)] to-[var(--color-pharma-green)]"></div>
 
-                                        <div className="py-2 max-h-[70vh] overflow-y-auto no-scrollbar">
+                                        {/* LEFT COLUMN: Parent Categories */}
+                                        <div className="w-[280px] bg-gray-50 border-r border-gray-100 overflow-y-auto custom-scrollbar py-2">
                                             {categories.map((cat) => (
-                                                <div key={cat.id} className="group/item relative">
-                                                    {/* Parent Category Link */}
-                                                    <Link
-                                                        href={`/categoria/${cat.slug}`}
-                                                        className="flex items-center justify-between px-5 py-3 bg-white border-b border-gray-50 hover:border-[var(--color-pharma-green)] transition-all z-10 relative"
-                                                    >
-                                                        <span className="text-[14px] text-gray-800 font-bold group-hover/item:text-[var(--color-pharma-blue)] transition-colors capitalize">
-                                                            {cat.name.toLowerCase()}
-                                                        </span>
-                                                        {cat.children && cat.children.length > 0 && (
-                                                            <ChevronDown className="w-4 h-4 text-gray-400 group-hover/item:text-[var(--color-pharma-blue)] transition-transform duration-300 group-hover/item:rotate-180" />
-                                                        )}
-                                                    </Link>
+                                                <div
+                                                    key={cat.id}
+                                                    onMouseEnter={() => setHoveredCategoryId(cat.id)}
+                                                    className={`
+                                                        px-5 py-3 cursor-pointer flex items-center justify-between transition-all
+                                                        ${hoveredCategoryId === cat.id
+                                                            ? 'bg-white border-l-4 border-[var(--color-pharma-blue)] text-[var(--color-pharma-blue)] shadow-sm'
+                                                            : 'border-l-4 border-transparent text-gray-600 hover:bg-gray-100'
+                                                        }
+                                                    `}
+                                                >
+                                                    <span className={`text-[13px] font-bold capitalize ${hoveredCategoryId === cat.id ? 'font-bold' : 'font-medium'}`}>
+                                                        {cat.name.toLowerCase()}
+                                                    </span>
+                                                    {hoveredCategoryId === cat.id && (
+                                                        <ChevronDown className="w-4 h-4 -rotate-90 text-[var(--color-pharma-blue)]" />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
 
-                                                    {/* Submenu Level 2 - Accordion Style (Expands Downwards) */}
-                                                    {cat.children && cat.children.length > 0 && (
-                                                        <div className="hidden group-hover/item:block w-full bg-slate-50 border-b border-gray-100 animate-in slide-in-from-top-2 duration-200">
-                                                            <div className="flex flex-col py-2">
-                                                                {cat.children.map(child => (
-                                                                    <Link
-                                                                        key={child.id}
-                                                                        href={`/categoria/${child.slug}`}
-                                                                        className="flex items-center gap-3 px-8 py-2 hover:bg-slate-100 transition-colors"
-                                                                    >
-                                                                        <div className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[var(--color-pharma-green)]"></div>
-                                                                        <span className="text-[13px] text-gray-600 font-medium hover:text-[var(--color-pharma-blue)] transition-colors">
-                                                                            {child.name}
-                                                                        </span>
-                                                                    </Link>
-                                                                ))}
-                                                            </div>
+                                        {/* RIGHT COLUMN: Subcategories Content */}
+                                        <div className="flex-1 p-6 bg-white overflow-y-auto">
+                                            {categories.map((cat) => (
+                                                <div
+                                                    key={cat.id}
+                                                    className={hoveredCategoryId === cat.id ? 'block' : 'hidden'}
+                                                >
+                                                    <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
+                                                        <h3 className="text-xl font-bold text-gray-800 capitalize">
+                                                            {cat.name.toLowerCase()}
+                                                        </h3>
+                                                        <Link
+                                                            href={`/categoria/${cat.slug}`}
+                                                            className="text-xs font-bold text-[var(--color-pharma-blue)] hover:underline flex items-center gap-1"
+                                                        >
+                                                            Ver todo
+                                                            <ChevronDown className="w-3 h-3 -rotate-90" />
+                                                        </Link>
+                                                    </div>
+
+                                                    {cat.children && cat.children.length > 0 ? (
+                                                        <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                                                            {cat.children.map(child => (
+                                                                <Link
+                                                                    key={child.id}
+                                                                    href={`/categoria/${child.slug}`}
+                                                                    className="group flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors"
+                                                                >
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-[var(--color-pharma-green)] transition-colors"></div>
+                                                                    <span className="text-sm text-gray-600 font-medium group-hover:text-gray-900 group-hover:font-semibold transition-colors capitalize">
+                                                                        {child.name.toLowerCase()}
+                                                                    </span>
+                                                                </Link>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center justify-center h-40 text-gray-400">
+                                                            <Store className="w-10 h-10 mb-2 opacity-20" />
+                                                            <p className="text-sm">Explora los productos de esta categoría</p>
+                                                            <Link
+                                                                href={`/categoria/${cat.slug}`}
+                                                                className="mt-4 px-4 py-2 bg-[var(--color-pharma-blue)] text-white text-xs font-bold rounded-full hover:opacity-90 transition-opacity"
+                                                            >
+                                                                Ver Productos
+                                                            </Link>
                                                         </div>
                                                     )}
                                                 </div>

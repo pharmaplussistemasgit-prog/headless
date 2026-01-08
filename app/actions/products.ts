@@ -55,7 +55,8 @@ export async function getCategoryBySlug(slug: string): Promise<MappedCategory | 
                 name: cat.name,
                 slug: cat.slug,
                 description: cat.description,
-                count: cat.count
+                count: cat.count,
+                parent: cat.parent
             };
         }
         return null;
@@ -65,22 +66,37 @@ export async function getCategoryBySlug(slug: string): Promise<MappedCategory | 
     }
 }
 
-export async function getProductsByCategory(categoryId: number): Promise<MappedProduct[]> {
+export async function getProductsByCategory(categoryId: number, options: {
+    minPrice?: string;
+    maxPrice?: string;
+    page?: number;
+    perPage?: number;
+} = {}): Promise<{ products: MappedProduct[], totalPages: number }> {
     try {
         const api = getWooApi();
-        const response = await api.get("products", {
+        const params: any = {
             category: categoryId.toString(),
-            per_page: 20, // Página de categoría usualmente muestra más
-            status: 'publish'
-        });
+            per_page: options.perPage || 12,
+            status: 'publish',
+            page: options.page || 1
+        };
+
+        if (options.minPrice) params.min_price = options.minPrice;
+        if (options.maxPrice) params.max_price = options.maxPrice;
+
+        const response = await api.get("products", params);
 
         if (response.status === 200) {
-            return response.data.map((p: any) => mapWooProduct(p));
+            const totalPages = parseInt(response.headers["x-wp-totalpages"] as string || "1");
+            return {
+                products: response.data.map((p: any) => mapWooProduct(p)),
+                totalPages
+            };
         }
-        return [];
+        return { products: [], totalPages: 0 };
     } catch (error) {
         console.error(`Error fetching products for category ${categoryId}:`, error);
-        return [];
+        return { products: [], totalPages: 0 };
     }
 }
 
@@ -99,12 +115,35 @@ export async function getAllCategories(): Promise<MappedCategory[]> {
                 name: cat.name,
                 slug: cat.slug,
                 description: cat.description,
-                count: cat.count
+                count: cat.count,
+                parent: cat.parent
             }));
         }
         return [];
     } catch (error) {
         console.error("Error fetching all categories:", error);
+        return [];
+    }
+}
+
+export async function searchProducts(query: string): Promise<MappedProduct[]> {
+    try {
+        if (!query || query.length < 3) return [];
+
+        const api = getWooApi();
+        const response = await api.get("products", {
+            search: query,
+            per_page: 8, // Limit results for speed
+            status: 'publish',
+            stock_status: 'instock'
+        });
+
+        if (response.status === 200) {
+            return response.data.map((p: any) => mapWooProduct(p));
+        }
+        return [];
+    } catch (error) {
+        console.error(`Error searching products for query "${query}":`, error);
         return [];
     }
 }

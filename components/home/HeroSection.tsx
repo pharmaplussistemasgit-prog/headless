@@ -71,7 +71,7 @@ export default function HeroSection({ slides, featuredProds = [] }: HeroSectionP
     return (
         <section className="w-full relative py-6">
 
-            <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-[5%]">
                 <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 h-auto lg:h-[420px]">
 
                     {/* LEFT COLUMN: Main Slider (70%) */}

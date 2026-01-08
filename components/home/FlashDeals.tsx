@@ -50,54 +50,56 @@ export default function FlashDeals({
 
     return (
         <div className="w-full bg-[var(--color-bg-light)] py-4">
-            <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-[5%]">
                 {/* White container */}
                 <div className="relative bg-white py-8 px-8">
-                    {/* Header */}
-                    <div className="mb-8">
-                        <h2 className="text-2xl md:text-3xl font-bold italic">
-                            <span className="text-[var(--color-pharma-blue)]">Mundo</span>{' '}
-                            <span className="text-[var(--color-pharma-green)]">Ofertas</span>
-                        </h2>
-                        <div className="w-full h-px bg-gray-300 mt-2"></div>
-                    </div>
-
-                    {/* Flash Deals Carousel */}
-                    <div className="relative">
-                        {/* Left Arrow */}
-                        <button
-                            onClick={() => scroll('left')}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-slate-50 hover:bg-slate-100 text-gray-600 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                            aria-label="Anterior"
-                        >
-                            <ChevronLeft className="w-6 h-6" />
-                        </button>
-
-                        {/* Products Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {visibleProducts.map((product) => {
-                                const discount = getDiscountPercentage(product);
-                                const stock = product.stock_quantity || 100;
-
-                                return (
-                                    <FlashDealCard
-                                        key={product.id}
-                                        product={product}
-                                        discount={discount}
-                                        stock={stock}
-                                    />
-                                );
-                            })}
+                    <div className="w-full lg:w-[90%] mx-auto">
+                        {/* Header */}
+                        <div className="mb-8">
+                            <h2 className="text-2xl md:text-3xl font-bold italic">
+                                <span className="text-[var(--color-pharma-blue)]">Mundo</span>{' '}
+                                <span className="text-[var(--color-pharma-green)]">Ofertas</span>
+                            </h2>
+                            <div className="w-full h-px bg-gray-300 mt-2"></div>
                         </div>
 
-                        {/* Right Arrow */}
-                        <button
-                            onClick={() => scroll('right')}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-slate-50 hover:bg-slate-100 text-gray-600 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                            aria-label="Siguiente"
-                        >
-                            <ChevronRight className="w-6 h-6" />
-                        </button>
+                        {/* Flash Deals Carousel */}
+                        <div className="relative">
+                            {/* Left Arrow */}
+                            <button
+                                onClick={() => scroll('left')}
+                                className="absolute left-0 lg:left-auto lg:right-full lg:mr-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white hover:bg-slate-50 text-[var(--color-pharma-green)] rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-md border border-gray-100"
+                                aria-label="Anterior"
+                            >
+                                <ChevronLeft className="w-6 h-6" />
+                            </button>
+
+                            {/* Products Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {visibleProducts.map((product) => {
+                                    const discount = getDiscountPercentage(product);
+                                    const stock = product.stock_quantity || 100;
+
+                                    return (
+                                        <FlashDealCard
+                                            key={product.id}
+                                            product={product}
+                                            discount={discount}
+                                            stock={stock}
+                                        />
+                                    );
+                                })}
+                            </div>
+
+                            {/* Right Arrow */}
+                            <button
+                                onClick={() => scroll('right')}
+                                className="absolute right-0 lg:right-auto lg:left-full lg:ml-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white hover:bg-slate-50 text-[var(--color-pharma-green)] rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-md border border-gray-100"
+                                aria-label="Siguiente"
+                            >
+                                <ChevronRight className="w-6 h-6" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -175,7 +177,7 @@ function FlashDealCard({ product, discount, stock }: { product: Product; discoun
                     <div className="mb-3">
                         {product.sale_price && product.regular_price ? (
                             <>
-                                <div className="text-2xl font-bold text-[var(--color-pharma-blue)] mb-1">
+                                <div className="text-2xl font-bold text-[var(--color-pharma-green)] mb-1">
                                     ${parseFloat(product.sale_price).toLocaleString('es-CO')}
                                 </div>
                                 <div className="text-sm text-gray-400 line-through mb-1">
@@ -183,7 +185,7 @@ function FlashDealCard({ product, discount, stock }: { product: Product; discoun
                                 </div>
                             </>
                         ) : product.price ? (
-                            <div className="text-2xl font-bold text-[var(--color-pharma-blue)]">
+                            <div className="text-2xl font-bold text-[var(--color-pharma-green)]">
                                 ${parseFloat(product.price).toLocaleString('es-CO')}
                             </div>
                         ) : null}

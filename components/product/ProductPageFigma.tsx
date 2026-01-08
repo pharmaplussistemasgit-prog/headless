@@ -218,8 +218,8 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                     key={`${image.src}-${index}`}
                     onClick={() => setSelectedImage(index)}
                     className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${selectedImage === index
-                        ? "border-[var(--color-pharma-blue)] ring-2 ring-[var(--color-pharma-blue)] ring-opacity-20 opacity-100"
-                        : "border-transparent opacity-70 hover:opacity-100 hover:border-gray-200"
+                      ? "border-[var(--color-pharma-blue)] ring-2 ring-[var(--color-pharma-blue)] ring-opacity-20 opacity-100"
+                      : "border-transparent opacity-70 hover:opacity-100 hover:border-gray-200"
                       }`}
                   >
                     <Image
@@ -255,7 +255,7 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
 
                 <div>
                   <div className="flex items-baseline gap-4">
-                    <span className="text-4xl font-bold text-[var(--color-pharma-blue)]">
+                    <span className="text-4xl font-bold text-[var(--color-pharma-green)]">
                       {priceFmt.format(currentPrice)}
                     </span>
                     {currentRegularPrice > currentPrice && (
@@ -282,8 +282,8 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                         key={color.option}
                         onClick={() => setSelectedColor(color.option)}
                         className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${selectedColor === color.option
-                            ? "ring-2 ring-offset-2 ring-[var(--color-pharma-blue)] scale-110 shadow-md"
-                            : "hover:scale-105 hover:shadow-sm"
+                          ? "ring-2 ring-offset-2 ring-[var(--color-pharma-blue)] scale-110 shadow-md"
+                          : "hover:scale-105 hover:shadow-sm"
                           }`}
                         title={color.option}
                       >
@@ -321,10 +321,10 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                         onClick={() => setSelectedSize(sz.option)}
                         disabled={!sz.available}
                         className={`h-12 min-w-[3rem] px-4 rounded-lg font-bold text-sm transition-all border-2 ${selectedSize === sz.option
-                            ? "border-[var(--color-pharma-blue)] bg-[var(--color-pharma-blue)] text-white shadow-md transform scale-105"
-                            : sz.available
-                              ? "border-gray-200 bg-white text-gray-700 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)]"
-                              : "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed decoration-slice"
+                          ? "border-[var(--color-pharma-blue)] bg-[var(--color-pharma-blue)] text-white shadow-md transform scale-105"
+                          : sz.available
+                            ? "border-gray-200 bg-white text-gray-700 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)]"
+                            : "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed decoration-slice"
                           }`}
                       >
                         {sz.option}
@@ -363,20 +363,20 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
                     onClick={addToCart}
                     disabled={isOutOfStock}
                     className={`flex-1 h-14 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all transform shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 ${isOutOfStock
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-[var(--color-pharma-blue)] text-white hover:bg-[var(--color-blue-classic)]"
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-[var(--color-pharma-blue)] text-white hover:bg-[var(--color-blue-classic)]"
                       }`}
                   >
                     <ShoppingCart className="w-6 h-6" />
-                    {isOutOfStock ? "Agotado" : "Agregar al Carrito"}
+                    {isOutOfStock ? "Agotado" : "Comprar"}
                   </button>
 
                   {/* Wishlist */}
                   <button
                     onClick={toggleWishlist}
                     className={`w-14 h-14 border-2 rounded-xl flex items-center justify-center transition-all ${isWishlisted
-                        ? "border-red-50 text-red-500 bg-red-50"
-                        : "border-gray-200 text-gray-400 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)] bg-white"
+                      ? "border-red-50 text-red-500 bg-red-50"
+                      : "border-gray-200 text-gray-400 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)] bg-white"
                       }`}
                   >
                     <Heart className={`w-6 h-6 ${isWishlisted ? "fill-current" : ""}`} />

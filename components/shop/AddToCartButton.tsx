@@ -31,7 +31,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         <button
             onClick={handleAddToCart}
             className="w-12 h-12 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-lg hover:bg-[var(--color-pharma-green)] hover:text-white transition-all duration-300"
-            aria-label="Agregar al carrito"
+            aria-label="Comprar"
         >
             <ShoppingCart className="w-5 h-5" />
         </button>

@@ -58,4 +58,5 @@ export interface MappedCategory {
     slug: string;
     description: string;
     count: number;
+    parent: number;
 }
