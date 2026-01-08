@@ -6,7 +6,7 @@ import { WooProduct, MappedProduct } from "@/types/product";
  */
 export function mapWooProduct(p: WooProduct): MappedProduct {
     // 1. Extraer Metadatos
-    const getMeta = (key: string) => p.meta_data.find(m => m.key === key)?.value;
+    const getMeta = (key: string) => p.meta_data?.find(m => m.key === key)?.value;
 
     const brand = getMeta('_marca') || getMeta('Marca') || null;
     const invima = getMeta('_registro_invima') || null;
@@ -34,7 +34,7 @@ export function mapWooProduct(p: WooProduct): MappedProduct {
     const showExactStock = stock !== null && stock < 10 && stock > 0;
 
     // 3. Imágenes
-    const images = p.images.map(img => img.src);
+    const images = (p.images || []).map(img => img.src);
     if (images.length === 0) images.push('/placeholder-product.png');
 
     return {
