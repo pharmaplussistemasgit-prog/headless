@@ -109,6 +109,12 @@ export default function Footer() {
                   <Link href="/tiendas" className="inline-flex text-sm text-white underline font-medium hover:text-[var(--color-pharma-green)]">
                     Ver ubicaciones en mapa
                   </Link>
+                  <Link href="/nosotros" className="block mt-2 text-sm text-white font-bold hover:text-[var(--color-pharma-green)] transition-colors">
+                    Quiénes somos
+                  </Link>
+                  <Link href="/trabaja-con-nosotros" className="block mt-2 text-sm text-white font-bold hover:text-[var(--color-pharma-green)] transition-colors">
+                    Trabaja con nosotros
+                  </Link>
                 </div>
 
                 <div className="flex gap-3 pt-2">
@@ -157,14 +163,16 @@ export default function Footer() {
             <div className="flex flex-col items-center w-full">
               <div className="w-full md:w-fit text-left">
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-6 text-center md:text-left">
-                  Información
+                  <Link href="/politicas" className="hover:text-[var(--color-pharma-green)] transition-colors">
+                    Centro de Políticas y Legales
+                  </Link>
                 </h3>
                 <ul className="space-y-3 w-full">
-                  <li><Link href="/nosotros" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Quiénes somos</Link></li>
-                  <li><Link href="/domicilios" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Información de envíos</Link></li>
-                  <li><Link href="/politicas" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas de privacidad</Link></li>
-                  <li><Link href="/terminos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Términos y condiciones</Link></li>
-                  <li><Link href="/pqr" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Peticiones, quejas y reclamos</Link></li>
+                  <li><Link href="/politicas/preguntas-frecuentes" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preguntas Frecuentes</Link></li>
+                  <li><Link href="/politicas/terminos-condiciones" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Términos y Condiciones</Link></li>
+                  <li><Link href="/politicas/politicas-devolucion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas de Devoluciones</Link></li>
+                  <li><Link href="/politicas/proteccion-datos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Política de Protección de Datos</Link></li>
+                  <li><Link href="/politicas/aviso-privacidad" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Aviso de Privacidad</Link></li>
                 </ul>
               </div>
             </div>

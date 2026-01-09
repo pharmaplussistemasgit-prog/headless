@@ -6,6 +6,7 @@ import FlashDeals from "@/components/home/FlashDeals";
 import RecommendedSection from "@/components/home/RecommendedSection";
 import BeautySection from "@/components/home/BeautySection";
 import HealthSection from "@/components/home/HealthSection";
+import FAQSection from "@/components/home/FAQSection";
 import { getProducts } from "@/lib/woocommerce";
 
 // Professional Hero Slides with local images
@@ -171,6 +172,9 @@ export default async function HomePage() {
 
       {/* Health Section (New) */}
       <HealthSection products={healthResult.products} />
+
+      {/* FAQ Section */}
+      <FAQSection />
     </div>
   );
 }

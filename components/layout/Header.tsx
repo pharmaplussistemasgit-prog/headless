@@ -4,13 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
     Search, ShoppingCart, User, MapPin, ChevronDown,
-    Phone, Mail, Tag, Heart, Store, Pill, Menu, CreditCard, Snowflake
+    Phone, Mail, Tag, Heart, Store, Pill, Menu, CreditCard, Snowflake, FileText, HelpCircle
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { CategoryTree } from '@/types/woocommerce';
 import { motion, AnimatePresence } from 'framer-motion';
 import LiveSearch from '@/components/search/LiveSearch';
 import CartBadge from './CartBadge';
+import AccountButton from './AccountButton';
 
 interface HeaderProps {
     categories?: CategoryTree[];
@@ -115,17 +116,9 @@ export default function Header({ categories = [] }: HeaderProps) {
                         </div>
 
                         {/* User Actions */}
-                        <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
-                            {/* User Account */}
-                            <Link href="/login" className="flex items-center gap-2 group">
-                                <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 group-hover:bg-blue-50 group-hover:text-[var(--color-pharma-blue)] group-hover:border-blue-200 transition-all">
-                                    <User className="w-5 h-5" />
-                                </div>
-                                <div className="hidden lg:flex flex-col leading-tight">
-                                    <span className="text-[11px] text-gray-500">Hola,</span>
-                                    <span className="text-[13px] font-semibold text-[var(--color-text-dark)] group-hover:text-[var(--color-pharma-blue)]">Inicia sesión</span>
-                                </div>
-                            </Link>
+                        {/* User Account */}
+                        <div className="flex items-center gap-4 flex-shrink-0">
+                            <AccountButton />
 
                             {/* Cart */}
                             <Link href="/carrito" className="relative group">
@@ -338,6 +331,16 @@ export default function Header({ categories = [] }: HeaderProps) {
                             <Link href="/tiendas" className="flex items-center gap-2 text-[13px] font-medium text-white hover:text-white whitespace-nowrap transition-colors">
                                 <Store className="w-4 h-4 text-white" />
                                 <span>Tiendas</span>
+                            </Link>
+
+                            <Link href="/politicas/preguntas-frecuentes" className="flex items-center gap-2 text-[13px] font-medium text-white hover:text-white whitespace-nowrap transition-colors">
+                                <HelpCircle className="w-4 h-4 text-white" />
+                                <span>Preguntas Frecuentes</span>
+                            </Link>
+
+                            <Link href="/politicas" className="flex items-center gap-2 text-[13px] font-medium text-white hover:text-white whitespace-nowrap transition-colors">
+                                <FileText className="w-4 h-4 text-white" />
+                                <span>Políticas</span>
                             </Link>
                         </nav>
 
