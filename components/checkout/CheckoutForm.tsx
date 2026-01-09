@@ -9,6 +9,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/product/ProductCard';
 
+import { auth } from '@/lib/auth';
+
 export default function CheckoutForm() {
     const { items, cartTotal, removeItem, updateQuantity, clearCart } = useCart();
     const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +25,27 @@ export default function CheckoutForm() {
         city: '',
         state: '',
     });
+
+    // Pre-fill data if logged in
+    useEffect(() => {
+        if (auth.isAuthenticated()) {
+            const user = auth.getUser();
+            if (user) {
+                // Fetch full profile if possible or just use basic data
+                // For now, basic data from localStorage
+                setCustomerData(prev => ({
+                    ...prev,
+                    firstName: user.name?.split(' ')[0] || '',
+                    lastName: user.name?.split(' ').slice(1).join(' ') || '',
+                    email: user.email || '',
+                    // username: user.username
+                }));
+
+                // Optional: Fetch full address from API if we want to be fancy
+                // fetch(`/api/customer?id=${user.id}`).then(...)
+            }
+        }
+    }, []);
 
     // Shipping Logic (Preserved)
     const [shippingCost, setShippingCost] = useState(0);
@@ -120,9 +143,9 @@ export default function CheckoutForm() {
                 <div className="bg-gray-50 p-6 rounded-full mb-6">
                     <ShoppingBag className="w-12 h-12 text-gray-300" />
                 </div>
-                <h2 className="text-2xl font-bold text-[var(--color-primary-blue)] mb-2">Tu carrito está vacío</h2>
+                <h2 className="text-2xl font-bold text-[var(--color-pharma-blue)] mb-2">Tu carrito está vacío</h2>
                 <p className="text-gray-500 mb-8 max-w-md">Explora nuestro catálogo y encuentra lo que necesitas.</p>
-                <Link href="/tienda" className="bg-[var(--color-primary-blue)] text-white px-8 py-3 rounded-full font-bold hover:bg-[var(--color-dark-blue)] transition-colors">
+                <Link href="/tienda" className="bg-[var(--color-pharma-blue)] text-white px-8 py-3 rounded-full font-bold hover:bg-[var(--color-dark-blue)] transition-colors">
                     Ir a la Tienda
                 </Link>
             </div>
@@ -135,38 +158,38 @@ export default function CheckoutForm() {
             <div className="lg:col-span-7 space-y-6">
                 {/* 1. Datos Personales */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-[var(--color-primary-blue)] mb-4 flex items-center gap-2">
-                        <span className="bg-[var(--color-primary-blue)] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                    <h2 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-4 flex items-center gap-2">
+                        <span className="bg-[var(--color-pharma-blue)] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
                         Datos Personales
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1">
                             <label className="text-xs font-bold uppercase text-gray-500">Nombre</label>
-                            <input type="text" name="firstName" value={customerData.firstName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-primary-blue)] outline-none" required />
+                            <input type="text" name="firstName" value={customerData.firstName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
                         </div>
                         <div className="space-y-1">
                             <label className="text-xs font-bold uppercase text-gray-500">Apellido</label>
-                            <input type="text" name="lastName" value={customerData.lastName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-primary-blue)] outline-none" required />
+                            <input type="text" name="lastName" value={customerData.lastName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
                         </div>
                         <div className="space-y-1">
                             <label className="text-xs font-bold uppercase text-gray-500">Cédula</label>
-                            <input type="text" name="documentId" value={customerData.documentId} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-primary-blue)] outline-none" required />
+                            <input type="text" name="documentId" value={customerData.documentId} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
                         </div>
                         <div className="space-y-1">
                             <label className="text-xs font-bold uppercase text-gray-500">Celular</label>
-                            <input type="tel" name="phone" value={customerData.phone} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-primary-blue)] outline-none" required />
+                            <input type="tel" name="phone" value={customerData.phone} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
                         </div>
                         <div className="col-span-1 sm:col-span-2 space-y-1">
                             <label className="text-xs font-bold uppercase text-gray-500">Email</label>
-                            <input type="email" name="email" value={customerData.email} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-primary-blue)] outline-none" required />
+                            <input type="email" name="email" value={customerData.email} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
                         </div>
                     </div>
                 </div>
 
                 {/* 2. Envío */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-[var(--color-primary-blue)] mb-4 flex items-center gap-2">
-                        <span className="bg-[var(--color-primary-blue)] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                    <h2 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-4 flex items-center gap-2">
+                        <span className="bg-[var(--color-pharma-blue)] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
                         Dirección de Envío
                     </h2>
                     <div className="space-y-4">
@@ -175,7 +198,7 @@ export default function CheckoutForm() {
                             <select
                                 value={shippingZone}
                                 onChange={(e) => setShippingZone(e.target.value)}
-                                className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-primary-blue)] outline-none bg-white"
+                                className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-white"
                             >
                                 <option value="">-- Seleccionar --</option>
                                 <option value="bogota">Bogotá D.C.</option>
@@ -210,7 +233,7 @@ export default function CheckoutForm() {
             {/* Right Column: Order Summary */}
             <div className="lg:col-span-5">
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
-                    <h2 className="text-lg font-bold text-[var(--color-primary-blue)] mb-6">Resumen del Pedido</h2>
+                    <h2 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-6">Resumen del Pedido</h2>
 
                     {/* Items List (Brief) */}
                     <div className="max-h-60 overflow-y-auto mb-6 pr-2 space-y-4">
@@ -220,7 +243,7 @@ export default function CheckoutForm() {
                                     <Image src={item.image} alt={item.name} fill className="object-cover" />
                                 </div>
                                 <div className="flex-1 text-sm">
-                                    <p className="font-medium text-[var(--color-primary-blue)] line-clamp-1">{item.name}</p>
+                                    <p className="font-medium text-[var(--color-pharma-blue)] line-clamp-1">{item.name}</p>
                                     <p className="text-gray-500 text-xs">Cant: {item.quantity}</p>
                                 </div>
                                 <div className="text-right text-sm font-bold text-gray-900">
@@ -243,7 +266,7 @@ export default function CheckoutForm() {
                                 <span className="font-bold">${shippingCost.toLocaleString()}</span>
                             )}
                         </div>
-                        <div className="flex justify-between text-xl font-bold text-[var(--color-primary-blue)] pt-2 border-t border-gray-100 mt-2">
+                        <div className="flex justify-between text-xl font-bold text-[var(--color-pharma-blue)] pt-2 border-t border-gray-100 mt-2">
                             <span>Total</span>
                             <span>${finalTotal.toLocaleString()}</span>
                         </div>
@@ -252,7 +275,7 @@ export default function CheckoutForm() {
                     <button
                         onClick={handleCheckout}
                         disabled={isLoading || !shippingZone}
-                        className="w-full py-4 bg-[var(--color-action-green)] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                        className="w-full py-4 bg-[var(--color-pharma-green)] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
                         {isLoading ? 'Procesando...' : 'Pagar Ahora'}
                         {!isLoading && <ArrowRight size={18} />}
