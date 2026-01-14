@@ -35,21 +35,96 @@ export function useReminders() {
     const [logs, setLogs] = useState<LogEntry[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Load from LocalStorage
-    useEffect(() => {
-        const storedReminders = localStorage.getItem(STORAGE_KEY_REMINDERS);
-        const storedLogs = localStorage.getItem(STORAGE_KEY_LOGS);
+    // Sync state
+    const [isSyncing, setIsSyncing] = useState(false);
 
-        if (storedReminders) setReminders(JSON.parse(storedReminders));
-        if (storedLogs) setLogs(JSON.parse(storedLogs));
-        setLoading(false);
+    // Initial Load & Auth Check
+    useEffect(() => {
+        const loadInitialData = async () => {
+            // 1. Load Local
+            const storedReminders = localStorage.getItem(STORAGE_KEY_REMINDERS);
+            const storedLogs = localStorage.getItem(STORAGE_KEY_LOGS);
+
+            let localReminders = storedReminders ? JSON.parse(storedReminders) : [];
+            if (storedReminders) setReminders(localReminders);
+            if (storedLogs) setLogs(JSON.parse(storedLogs));
+            setLoading(false);
+
+            // 2. Load Remote (Silent Sync)
+            const token = localStorage.getItem('pharma_auth_token');
+            if (token) {
+                try {
+                    setIsSyncing(true);
+                    const response = await fetch('/api/sync-pillbox', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.reminders && Array.isArray(data.reminders) && data.reminders.length > 0) {
+                            // Merge Strategy: Remote wins on conflicts or purely additive?
+                            // For simplicity Phase 2: Remote wins if exists, otherwise keep local (Union)
+                            // Actually, let's just use Remote as Single Source of Truth if logged in, 
+                            // but initializing it with Local if Remote is empty.
+
+                            // Strategy: Combine unique IDs
+                            const remoteReminders = data.reminders;
+                            const combined = [...remoteReminders];
+
+                            // Add local ones that aren't in remote (e.g. created offline)
+                            localReminders.forEach((loc: any) => {
+                                if (!combined.find(r => r.id === loc.id)) {
+                                    combined.push(loc);
+                                }
+                            });
+
+                            setReminders(combined);
+                            // Also save this merged state back to local for offline support next time
+                            localStorage.setItem(STORAGE_KEY_REMINDERS, JSON.stringify(combined));
+                        }
+                    }
+                } catch (error) {
+                    console.error("Silent Sync Load Error:", error);
+                } finally {
+                    setIsSyncing(false);
+                }
+            }
+        };
+
+        loadInitialData();
     }, []);
 
-    // Save to LocalStorage whenever state changes
+    // Save to LocalStorage & Sync to Cloud
     useEffect(() => {
         if (!loading) {
+            // Local Save
             localStorage.setItem(STORAGE_KEY_REMINDERS, JSON.stringify(reminders));
             localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+
+            // Remote Sync (Debounced ideally, but here direct for simplicity)
+            const token = localStorage.getItem('pharma_auth_token');
+            if (token && reminders.length > 0) {
+                // We use a small timeout to debounce rapid changes
+                const timeoutId = setTimeout(async () => {
+                    try {
+                        await fetch('/api/sync-pillbox', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ reminders })
+                        });
+                    } catch (err) {
+                        console.error("Silent Sync Save Error:", err);
+                    }
+                }, 1000); // 1s debounce
+
+                return () => clearTimeout(timeoutId);
+            }
         }
     }, [reminders, logs, loading]);
 
@@ -114,6 +189,7 @@ export function useReminders() {
         reminders,
         logs,
         loading,
+        isSyncing,
         addReminder,
         deleteReminder,
         updateReminder,

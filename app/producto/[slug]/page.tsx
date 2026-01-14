@@ -25,7 +25,13 @@ export async function generateMetadata(props: ProductPageProps) {
 
     return {
         title: `${product.name} - PharmaPlus`,
-        description: product.short_description || product.description || `Compra ${product.name} en PharmaPlus`,
+        description: product.short_description?.replace(/<[^>]*>?/gm, '') || `Compra ${product.name} al mejor precio en PharmaPlus. Envíos a todo el país.`,
+        openGraph: {
+            title: product.name,
+            description: product.short_description?.replace(/<[^>]*>?/gm, '') || `Disfruta de ${product.name} con la confianza de PharmaPlus.`,
+            images: product.images?.length > 0 ? [{ url: product.images[0].src }] : [],
+            type: 'website',
+        },
     };
 }
 
