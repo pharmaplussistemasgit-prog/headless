@@ -10,6 +10,9 @@ import FAQSection from "@/components/home/FAQSection";
 import { getProducts } from "@/lib/woocommerce";
 import { getShippingRates } from '@/lib/shipping';
 
+// Enable ISR - revalidate every 1 minute for homepage (high traffic)
+export const revalidate = 60;
+
 // Professional Hero Slides with local images
 const heroSlides: HeroSlide[] = [
   {

@@ -9,6 +9,9 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import CategoryCatalogue from '@/components/category/CategoryCatalogue';
 
+// Enable ISR (Incremental Static Regeneration) - revalidate every 5 minutes
+export const revalidate = 300;
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const category = await getCategoryBySlug(slug);

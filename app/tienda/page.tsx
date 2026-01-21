@@ -7,6 +7,9 @@ export const metadata = {
   description: 'Descubre nuestra colección completa de productos de salud y bienestar',
 };
 
+// Enable ISR - revalidate every 5 minutes
+export const revalidate = 300;
+
 export default async function TiendaPage(props: {
   searchParams: Promise<{ category?: string; page?: string; search?: string; min_price?: string; max_price?: string }>;
 }) {
