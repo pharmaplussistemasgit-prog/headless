@@ -3,8 +3,16 @@ import { Resend } from 'resend';
 import OrderConfirmation from '@/emails/OrderConfirmation';
 import crypto from 'crypto';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const SECRET = process.env.WOOCOMMERCE_WEBHOOK_SECRET;
+
+// Lazy initialize Resend only when API key is available
+function getResendClient() {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+        return null;
+    }
+    return new Resend(apiKey);
+}
 
 export async function POST(req: Request) {
     try {
@@ -32,6 +40,16 @@ export async function POST(req: Request) {
         }
 
         console.log(`Processing Order #${id} for ${billing.email}`);
+
+        // Check if Resend is configured
+        const resend = getResendClient();
+        if (!resend) {
+            console.warn('RESEND_API_KEY not configured. Email notification skipped.');
+            return NextResponse.json({
+                success: true,
+                message: 'Order processed but email not sent (Resend not configured)'
+            });
+        }
 
         // Send Email via Resend
         const { data, error } = await resend.emails.send({
