@@ -110,6 +110,7 @@ export default function WishlistPage() {
                                                     showExactStock: false,
                                                     images: [item.image],
                                                     categories: item.category ? [{ id: 0, name: item.category, slug: item.category }] : [],
+                                                    tags: [],
                                                     shortDescription: '',
                                                     brand: null,
                                                     invima: null,
