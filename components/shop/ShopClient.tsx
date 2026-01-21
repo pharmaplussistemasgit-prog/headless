@@ -225,7 +225,7 @@ export function ShopClient({ initialProducts, categories, tags, attributes, tota
                                         showExactStock: (product.stock_quantity || 0) < 10,
                                         images: product.images?.map(img => img.src) || [],
                                         categories: product.categories || [],
-                                        tags: product.tags || [],
+                                        tags: product.tags || ([] as { id: number; name: string; slug: string }[]),
                                         shortDescription: product.short_description || '',
                                         brand: product.attributes?.find((a: any) => a.name.toLowerCase() === 'marca')?.options[0] || null,
                                         invima: null,
