@@ -230,7 +230,12 @@ async function wcFetchAll<T>(endpoint: string, params: Record<string, unknown> =
 
 export async function getAllProductCategories(): Promise<Category[]> {
   try {
-    return await wcFetchAll<Category>("products/categories", { per_page: 100 }, 600);
+    const categories = await wcFetchAll<Category>("products/categories", { per_page: 100 }, 600);
+    return categories.filter(cat =>
+      cat.slug !== 'uncategorized' &&
+      cat.slug !== 'sin-categorizar' &&
+      cat.slug !== 'ninguna'
+    );
   } catch (error) {
     console.error("Error fetching categories:", error);
     return [];
@@ -297,15 +302,26 @@ export function buildCategoryTree(categories: Category[]): CategoryTree[] {
     map[cat.id] = { ...cat, children: [] };
   });
 
+  // Sort helper
+  const sortByName = (a: CategoryTree, b: CategoryTree) => a.name.localeCompare(b.name);
+
   // Build tree
   categories.forEach(cat => {
     if (cat.parent === 0) {
-      roots.push(map[cat.id]);
+      if (map[cat.id]) roots.push(map[cat.id]);
     } else {
-      if (map[cat.parent]) {
-        map[cat.parent].children?.push(map[cat.id]);
+      const parentNode = map[cat.parent];
+      if (parentNode) {
+        parentNode.children = parentNode.children || [];
+        if (map[cat.id]) parentNode.children.push(map[cat.id]);
       }
     }
+  });
+
+  // Sort roots and children
+  roots.sort(sortByName);
+  Object.values(map).forEach(node => {
+    if (node.children) node.children.sort(sortByName);
   });
 
   return roots;

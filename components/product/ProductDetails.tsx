@@ -127,6 +127,8 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                 <div className="flex flex-col mb-8">
                                     <div className="flex items-baseline gap-4">
                                         <span className="text-4xl font-extrabold text-[var(--color-pharma-green)]">
+                                            {/* Snippet #33: Variable Product Price Logic */}
+                                            {product.type === 'variable' && <span className="text-2xl text-gray-500 mr-1">Desde:</span>}
                                             ${product.price.toLocaleString('es-CO')}
                                         </span>
                                         {product.isOnSale && (
@@ -136,8 +138,17 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                         )}
                                     </div>
                                     <span className="text-xs text-gray-500 mt-1 font-medium">
-                                        Unidad a ${(product.price / 1).toLocaleString('es-CO')}
+                                        Unitarios a ${(product.price / 1).toLocaleString('es-CO')}
                                     </span>
+
+                                    {/* Snippet #32: Short Description near price */}
+                                    {product.shortDescription && (
+                                        <div
+                                            className="mt-4 text-sm text-gray-600 leading-relaxed border-l-2 border-[var(--color-pharma-blue)] pl-3"
+                                            dangerouslySetInnerHTML={{ __html: product.shortDescription }}
+                                        />
+                                    )}
+
                                     <div className="mt-4">
                                         <ColdChainAlert categories={product.categories || []} product={product} />
                                     </div>

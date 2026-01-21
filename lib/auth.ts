@@ -8,6 +8,7 @@ interface LoginResponse {
     user_display_name: string;
     user_id?: number;
     id?: number;
+    user_role?: string[]; // Adding roles support
 }
 
 interface AuthError {
@@ -90,7 +91,8 @@ export const auth = {
                 email: data.user_email,
                 name: data.user_display_name,
                 username: data.user_nicename,
-                id: id
+                id: id,
+                roles: data.user_role || [] // Store roles
             }));
             window.dispatchEvent(new Event('auth-change'));
         }

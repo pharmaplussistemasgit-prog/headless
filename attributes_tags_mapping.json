@@ -1,0 +1,2261 @@
+{
+  "atributos": [],
+  "etiquetas": [
+    {
+      "id": 196,
+      "nombre": "TOPICO",
+      "slug": "topico",
+      "count": 63
+    },
+    {
+      "id": 131,
+      "nombre": "EMOLIENTES",
+      "slug": "emolientes",
+      "count": 29
+    },
+    {
+      "id": 230,
+      "nombre": "PROD.ANTI-A",
+      "slug": "prod-anti-a",
+      "count": 20
+    },
+    {
+      "id": 142,
+      "nombre": "GASTROPROCI",
+      "slug": "gastroproci",
+      "count": 14
+    },
+    {
+      "id": 155,
+      "nombre": "INHIBIDOR B",
+      "slug": "inhibidor-b",
+      "count": 14
+    },
+    {
+      "id": 132,
+      "nombre": "ANTIHISTAMI",
+      "slug": "antihistami",
+      "count": 12
+    },
+    {
+      "id": 110,
+      "nombre": "ANTIBIOTICO",
+      "slug": "antibiotico",
+      "count": 11
+    },
+    {
+      "id": 150,
+      "nombre": "CORTICOST T",
+      "slug": "corticost-t",
+      "count": 11
+    },
+    {
+      "id": 188,
+      "nombre": "HIPERTENTENSION ARTE",
+      "slug": "hipertentension-arte",
+      "count": 11
+    },
+    {
+      "id": 158,
+      "nombre": "OTROS PROD.",
+      "slug": "otros-prod",
+      "count": 11
+    },
+    {
+      "id": 152,
+      "nombre": "PR DISFUNC",
+      "slug": "pr-disfunc",
+      "count": 11
+    },
+    {
+      "id": 148,
+      "nombre": "ORAL",
+      "slug": "oral",
+      "count": 10
+    },
+    {
+      "id": 243,
+      "nombre": "HIPOTIROIDISMO",
+      "slug": "hipotiroidismo",
+      "count": 9
+    },
+    {
+      "id": 16,
+      "nombre": "Analgésico",
+      "slug": "analgesico",
+      "count": 8
+    },
+    {
+      "id": 149,
+      "nombre": "ANTIHISTAMINICO",
+      "slug": "antihistaminico",
+      "count": 8
+    },
+    {
+      "id": 146,
+      "nombre": "COXIBS SOLO",
+      "slug": "coxibs-solo",
+      "count": 8
+    },
+    {
+      "id": 229,
+      "nombre": "INH.SELEC.R",
+      "slug": "inh-selec-r",
+      "count": 8
+    },
+    {
+      "id": 266,
+      "nombre": "PREPAR MONO",
+      "slug": "prepar-mono",
+      "count": 8
+    },
+    {
+      "id": 202,
+      "nombre": "RESEQUEDAD OCULAR",
+      "slug": "resequedad-ocular",
+      "count": 8
+    },
+    {
+      "id": 117,
+      "nombre": "ACNE",
+      "slug": "acne",
+      "count": 7
+    },
+    {
+      "id": 157,
+      "nombre": "ANALG NO NA",
+      "slug": "analg-no-na",
+      "count": 7
+    },
+    {
+      "id": 147,
+      "nombre": "ANGIOTENSIN",
+      "slug": "angiotensin",
+      "count": 7
+    },
+    {
+      "id": 168,
+      "nombre": "ANTIDIABETICOS ORALE",
+      "slug": "antidiabeticos-orale",
+      "count": 7
+    },
+    {
+      "id": 218,
+      "nombre": "COMB ANTG A",
+      "slug": "comb-antg-a",
+      "count": 7
+    },
+    {
+      "id": 263,
+      "nombre": "DERMATOLOGICO",
+      "slug": "dermatologico",
+      "count": 7
+    },
+    {
+      "id": 208,
+      "nombre": "MICROORGANI",
+      "slug": "microorgani",
+      "count": 7
+    },
+    {
+      "id": 340,
+      "nombre": "PROGESTAG,E",
+      "slug": "progestage",
+      "count": 7
+    },
+    {
+      "id": 371,
+      "nombre": "REG.LIP.COM",
+      "slug": "reg-lip-com",
+      "count": 7
+    },
+    {
+      "id": 396,
+      "nombre": "VITAMINA D",
+      "slug": "vitamina-d",
+      "count": 7
+    },
+    {
+      "id": 145,
+      "nombre": "A-ALERG OFT",
+      "slug": "a-alerg-oft",
+      "count": 6
+    },
+    {
+      "id": 156,
+      "nombre": "ANTIMICOTIC",
+      "slug": "antimicotic",
+      "count": 6
+    },
+    {
+      "id": 116,
+      "nombre": "ANTIPSICOTI",
+      "slug": "antipsicoti",
+      "count": 6
+    },
+    {
+      "id": 113,
+      "nombre": "CORTICOIDES",
+      "slug": "corticoides",
+      "count": 6
+    },
+    {
+      "id": 353,
+      "nombre": "EPILEPSIA",
+      "slug": "epilepsia",
+      "count": 6
+    },
+    {
+      "id": 128,
+      "nombre": "LAGRIM ARTI",
+      "slug": "lagrim-arti",
+      "count": 6
+    },
+    {
+      "id": 255,
+      "nombre": "PROTECTOR SOLAR",
+      "slug": "protector-solar",
+      "count": 6
+    },
+    {
+      "id": 231,
+      "nombre": "ANTIHELMINT",
+      "slug": "antihelmint",
+      "count": 5
+    },
+    {
+      "id": 337,
+      "nombre": "ANTIINFECCI",
+      "slug": "antiinfecci",
+      "count": 5
+    },
+    {
+      "id": 367,
+      "nombre": "ANTIINFLAMATORIO",
+      "slug": "antiinflamatorio",
+      "count": 5
+    },
+    {
+      "id": 235,
+      "nombre": "CEFALOSPORI",
+      "slug": "cefalospori",
+      "count": 5
+    },
+    {
+      "id": 209,
+      "nombre": "COLON",
+      "slug": "colon",
+      "count": 5
+    },
+    {
+      "id": 195,
+      "nombre": "CORTICOSTEROIDES TOP",
+      "slug": "corticosteroides-top",
+      "count": 5
+    },
+    {
+      "id": 193,
+      "nombre": "DIARREA ",
+      "slug": "diarrea",
+      "count": 5
+    },
+    {
+      "id": 401,
+      "nombre": "HIPERCOLESTEROLEMIA",
+      "slug": "hipercolesterolemia",
+      "count": 5
+    },
+    {
+      "id": 103,
+      "nombre": "HIPERTENCION",
+      "slug": "hipertencion",
+      "count": 5
+    },
+    {
+      "id": 99,
+      "nombre": "INFECCIONES",
+      "slug": "infecciones",
+      "count": 5
+    },
+    {
+      "id": 179,
+      "nombre": "INFECCIONES OCULARES",
+      "slug": "infecciones-oculares",
+      "count": 5
+    },
+    {
+      "id": 170,
+      "nombre": "OFTALM CORT",
+      "slug": "oftalm-cort",
+      "count": 5
+    },
+    {
+      "id": 169,
+      "nombre": "ULCERA GASTRICA",
+      "slug": "ulcera-gastrica",
+      "count": 5
+    },
+    {
+      "id": 127,
+      "nombre": "ANTIEPILEPT",
+      "slug": "antiepilept",
+      "count": 4
+    },
+    {
+      "id": 115,
+      "nombre": "ANTIESPASM+",
+      "slug": "antiespasm",
+      "count": 4
+    },
+    {
+      "id": 368,
+      "nombre": "ANTIGRIPALE",
+      "slug": "antigripale",
+      "count": 4
+    },
+    {
+      "id": 125,
+      "nombre": "ANTIPARKINS",
+      "slug": "antiparkins",
+      "count": 4
+    },
+    {
+      "id": 102,
+      "nombre": "ANTIVIRALES",
+      "slug": "antivirales",
+      "count": 4
+    },
+    {
+      "id": 135,
+      "nombre": "ASOC ESTROG",
+      "slug": "asoc-estrog",
+      "count": 4
+    },
+    {
+      "id": 348,
+      "nombre": "CORTICOS SO",
+      "slug": "corticos-so",
+      "count": 4
+    },
+    {
+      "id": 192,
+      "nombre": "CORTICOS&amp;AN",
+      "slug": "corticosan",
+      "count": 4
+    },
+    {
+      "id": 140,
+      "nombre": "DESLIPIDEMIAS",
+      "slug": "deslipidemias",
+      "count": 4
+    },
+    {
+      "id": 334,
+      "nombre": "DIABETES",
+      "slug": "diabetes",
+      "count": 4
+    },
+    {
+      "id": 344,
+      "nombre": "ESTATINAS I",
+      "slug": "estatinas-i",
+      "count": 4
+    },
+    {
+      "id": 411,
+      "nombre": "HUESOS",
+      "slug": "huesos",
+      "count": 4
+    },
+    {
+      "id": 105,
+      "nombre": "INHIB ECA+C",
+      "slug": "inhib-ecac",
+      "count": 4
+    },
+    {
+      "id": 174,
+      "nombre": "LUBRICANTE DEL OJO",
+      "slug": "lubricante-del-ojo",
+      "count": 4
+    },
+    {
+      "id": 397,
+      "nombre": "MIOT PREPAR",
+      "slug": "miot-prepar",
+      "count": 4
+    },
+    {
+      "id": 111,
+      "nombre": "NO BARBITUR",
+      "slug": "no-barbitur",
+      "count": 4
+    },
+    {
+      "id": 185,
+      "nombre": "OFTÁLMICO",
+      "slug": "oftalmico",
+      "count": 4
+    },
+    {
+      "id": 124,
+      "nombre": "PENICIL.AMP",
+      "slug": "penicil-amp",
+      "count": 4
+    },
+    {
+      "id": 275,
+      "nombre": "PROTECCIÓN SOLAR",
+      "slug": "proteccion-solar",
+      "count": 4
+    },
+    {
+      "id": 160,
+      "nombre": "REFLUJO",
+      "slug": "reflujo",
+      "count": 4
+    },
+    {
+      "id": 446,
+      "nombre": "SOLUCION OFTALMICA",
+      "slug": "solucion-oftalmica",
+      "count": 4
+    },
+    {
+      "id": 398,
+      "nombre": "SOMNOLENCIA DIURNA",
+      "slug": "somnolencia-diurna",
+      "count": 4
+    },
+    {
+      "id": 121,
+      "nombre": "SUPLEMETO VITAMINICO",
+      "slug": "suplemeto-vitaminico",
+      "count": 4
+    },
+    {
+      "id": 394,
+      "nombre": "TRICOMONACI",
+      "slug": "tricomonaci",
+      "count": 4
+    },
+    {
+      "id": 163,
+      "nombre": "VAGINOSIS BACTERIANA",
+      "slug": "vaginosis-bacteriana",
+      "count": 4
+    },
+    {
+      "id": 260,
+      "nombre": "AGENTES BET",
+      "slug": "agentes-bet",
+      "count": 3
+    },
+    {
+      "id": 416,
+      "nombre": "ANTIBACTERI",
+      "slug": "antibacteri",
+      "count": 3
+    },
+    {
+      "id": 137,
+      "nombre": "ANTICONCEPTIVO",
+      "slug": "anticonceptivo",
+      "count": 3
+    },
+    {
+      "id": 418,
+      "nombre": "ANTICONCEPTIVO ORAL",
+      "slug": "anticonceptivo-oral",
+      "count": 3
+    },
+    {
+      "id": 444,
+      "nombre": "ANTIINF OFT",
+      "slug": "antiinf-oft",
+      "count": 3
+    },
+    {
+      "id": 133,
+      "nombre": "ANTIOBESIDA",
+      "slug": "antiobesida",
+      "count": 3
+    },
+    {
+      "id": 141,
+      "nombre": "ANTIRREUM N",
+      "slug": "antirreum-n",
+      "count": 3
+    },
+    {
+      "id": 187,
+      "nombre": "ASOC TRIMET",
+      "slug": "asoc-trimet",
+      "count": 3
+    },
+    {
+      "id": 350,
+      "nombre": "COMPLEJO B",
+      "slug": "complejo-b",
+      "count": 3
+    },
+    {
+      "id": 181,
+      "nombre": "CORTICOSTEROIDES",
+      "slug": "corticosteroides",
+      "count": 3
+    },
+    {
+      "id": 473,
+      "nombre": "DIARREAS",
+      "slug": "diarreas",
+      "count": 3
+    },
+    {
+      "id": 217,
+      "nombre": "FIEBRE Y DOLORES",
+      "slug": "fiebre-y-dolores",
+      "count": 3
+    },
+    {
+      "id": 421,
+      "nombre": "HIDRATANTE ANTIEDAD",
+      "slug": "hidratante-antiedad",
+      "count": 3
+    },
+    {
+      "id": 410,
+      "nombre": "HIPERTENCIÓN OCULAR",
+      "slug": "hipertencion-ocular",
+      "count": 3
+    },
+    {
+      "id": 222,
+      "nombre": "HIPERTENSION",
+      "slug": "hipertension",
+      "count": 3
+    },
+    {
+      "id": 432,
+      "nombre": "INFECCIONES DE OIDO",
+      "slug": "infecciones-de-oido",
+      "count": 3
+    },
+    {
+      "id": 390,
+      "nombre": "INFECCIONES OFTALMOL",
+      "slug": "infecciones-oftalmol",
+      "count": 3
+    },
+    {
+      "id": 342,
+      "nombre": "INFECCIONES RESPIRAT",
+      "slug": "infecciones-respirat",
+      "count": 3
+    },
+    {
+      "id": 106,
+      "nombre": "INSUFICIENCIA PANCRE",
+      "slug": "insuficiencia-pancre",
+      "count": 3
+    },
+    {
+      "id": 335,
+      "nombre": "LIMPIADOR LIQUIDO D",
+      "slug": "limpiador-liquido-d",
+      "count": 3
+    },
+    {
+      "id": 153,
+      "nombre": "MACROLIDOS",
+      "slug": "macrolidos",
+      "count": 3
+    },
+    {
+      "id": 164,
+      "nombre": "NUTRICION",
+      "slug": "nutricion",
+      "count": 3
+    },
+    {
+      "id": 331,
+      "nombre": "OSTEOARTRITIS",
+      "slug": "osteoartritis",
+      "count": 3
+    },
+    {
+      "id": 186,
+      "nombre": "OTRAS DROGA",
+      "slug": "otras-droga",
+      "count": 3
+    },
+    {
+      "id": 435,
+      "nombre": "OTRAS PREPA",
+      "slug": "otras-prepa",
+      "count": 3
+    },
+    {
+      "id": 213,
+      "nombre": "OTROS CICAT",
+      "slug": "otros-cicat",
+      "count": 3
+    },
+    {
+      "id": 219,
+      "nombre": "PRESION ARTERIAL",
+      "slug": "presion-arterial",
+      "count": 3
+    },
+    {
+      "id": 151,
+      "nombre": "SUPLEMENTOS",
+      "slug": "suplementos",
+      "count": 3
+    },
+    {
+      "id": 425,
+      "nombre": "TERAP CORON",
+      "slug": "terap-coron",
+      "count": 3
+    },
+    {
+      "id": 143,
+      "nombre": "TOD.DEM.ANT",
+      "slug": "tod-dem-ant",
+      "count": 3
+    },
+    {
+      "id": 504,
+      "nombre": "TOD.DEMAS.P",
+      "slug": "tod-demas-p",
+      "count": 3
+    },
+    {
+      "id": 252,
+      "nombre": "TRATAMIENTO ALOPECIA",
+      "slug": "tratamiento-alopecia",
+      "count": 3
+    },
+    {
+      "id": 221,
+      "nombre": "TRATAMIENTO DE ACIDE",
+      "slug": "tratamiento-de-acide",
+      "count": 3
+    },
+    {
+      "id": 257,
+      "nombre": "VITAMINICO",
+      "slug": "vitaminico",
+      "count": 3
+    },
+    {
+      "id": 177,
+      "nombre": "ACTIACIDO",
+      "slug": "actiacido",
+      "count": 2
+    },
+    {
+      "id": 224,
+      "nombre": "AFECCIONES RESPIRATO",
+      "slug": "afecciones-respirato",
+      "count": 2
+    },
+    {
+      "id": 101,
+      "nombre": "AMPOLLAS",
+      "slug": "ampollas",
+      "count": 2
+    },
+    {
+      "id": 393,
+      "nombre": "ANTIAC CON",
+      "slug": "antiac-con",
+      "count": 2
+    },
+    {
+      "id": 253,
+      "nombre": "ANTIARRITMICO",
+      "slug": "antiarritmico",
+      "count": 2
+    },
+    {
+      "id": 346,
+      "nombre": "ANTIASMA AN",
+      "slug": "antiasma-an",
+      "count": 2
+    },
+    {
+      "id": 422,
+      "nombre": "ANTIBACTERIANA",
+      "slug": "antibacteriana",
+      "count": 2
+    },
+    {
+      "id": 210,
+      "nombre": "ANTICBACTERIANO",
+      "slug": "anticbacteriano",
+      "count": 2
+    },
+    {
+      "id": 246,
+      "nombre": "ANTID BIGUA",
+      "slug": "antid-bigua",
+      "count": 2
+    },
+    {
+      "id": 363,
+      "nombre": "ANTIEDAD",
+      "slug": "antiedad",
+      "count": 2
+    },
+    {
+      "id": 491,
+      "nombre": "ANTIFUNG TO",
+      "slug": "antifung-to",
+      "count": 2
+    },
+    {
+      "id": 379,
+      "nombre": "ANTIINFECCIOSO ",
+      "slug": "antiinfeccioso",
+      "count": 2
+    },
+    {
+      "id": 476,
+      "nombre": "ANTIINFLAMATORIOS",
+      "slug": "antiinflamatorios",
+      "count": 2
+    },
+    {
+      "id": 389,
+      "nombre": "ANTIMICROBIANO",
+      "slug": "antimicrobiano",
+      "count": 2
+    },
+    {
+      "id": 130,
+      "nombre": "ANTISEPT GI",
+      "slug": "antisept-gi",
+      "count": 2
+    },
+    {
+      "id": 424,
+      "nombre": "ANTIVARICOS",
+      "slug": "antivaricos",
+      "count": 2
+    },
+    {
+      "id": 109,
+      "nombre": "ARTRITIS REUMATOIDE",
+      "slug": "artritis-reumatoide",
+      "count": 2
+    },
+    {
+      "id": 183,
+      "nombre": "BRONCODILATADOR",
+      "slug": "broncodilatador",
+      "count": 2
+    },
+    {
+      "id": 112,
+      "nombre": "CALCIO",
+      "slug": "calcio",
+      "count": 2
+    },
+    {
+      "id": 118,
+      "nombre": "COLONOSCOPIAS",
+      "slug": "colonoscopias",
+      "count": 2
+    },
+    {
+      "id": 357,
+      "nombre": "CONJUNTIVITIS ",
+      "slug": "conjuntivitis",
+      "count": 2
+    },
+    {
+      "id": 223,
+      "nombre": "CREMA BLANQUEAMIENTO",
+      "slug": "crema-blanqueamiento",
+      "count": 2
+    },
+    {
+      "id": 270,
+      "nombre": "DERMATITIS",
+      "slug": "dermatitis",
+      "count": 2
+    },
+    {
+      "id": 433,
+      "nombre": "DERMATITIS DE PAÑAL",
+      "slug": "dermatitis-de-panal",
+      "count": 2
+    },
+    {
+      "id": 492,
+      "nombre": "DESODORANTE ANTITRANSPIRANTE",
+      "slug": "desodorante-antitranspirante",
+      "count": 2
+    },
+    {
+      "id": 430,
+      "nombre": "DESPARASITARIO",
+      "slug": "desparasitario",
+      "count": 2
+    },
+    {
+      "id": 400,
+      "nombre": "DESPIGMENTANTE",
+      "slug": "despigmentante",
+      "count": 2
+    },
+    {
+      "id": 406,
+      "nombre": "DOLOR AGUDO",
+      "slug": "dolor-agudo",
+      "count": 2
+    },
+    {
+      "id": 448,
+      "nombre": "EPILEPSIA, BIPOLAR Y",
+      "slug": "epilepsia-bipolar-y",
+      "count": 2
+    },
+    {
+      "id": 374,
+      "nombre": "EPILEPSIA, MIGRAÑA",
+      "slug": "epilepsia-migrana",
+      "count": 2
+    },
+    {
+      "id": 249,
+      "nombre": "ESOFAGITIS",
+      "slug": "esofagitis",
+      "count": 2
+    },
+    {
+      "id": 182,
+      "nombre": "ESTERIL",
+      "slug": "esteril",
+      "count": 2
+    },
+    {
+      "id": 442,
+      "nombre": "EXPECTORANT",
+      "slug": "expectorant",
+      "count": 2
+    },
+    {
+      "id": 404,
+      "nombre": "FATIGA CRONICA",
+      "slug": "fatiga-cronica",
+      "count": 2
+    },
+    {
+      "id": 240,
+      "nombre": "GASTROINTESTINAL",
+      "slug": "gastrointestinal",
+      "count": 2
+    },
+    {
+      "id": 413,
+      "nombre": "GINECOLOGICO",
+      "slug": "ginecologico",
+      "count": 2
+    },
+    {
+      "id": 347,
+      "nombre": "HBP ANT ALF",
+      "slug": "hbp-ant-alf",
+      "count": 2
+    },
+    {
+      "id": 474,
+      "nombre": "HIDRATACIÓN CORPORAL PEIL SENSIBLE",
+      "slug": "hidratacion-corporal-peil-sensible",
+      "count": 2
+    },
+    {
+      "id": 366,
+      "nombre": "HIGIENE INTIMA",
+      "slug": "higiene-intima",
+      "count": 2
+    },
+    {
+      "id": 189,
+      "nombre": "INFECCIONES AGUDAS",
+      "slug": "infecciones-agudas",
+      "count": 2
+    },
+    {
+      "id": 431,
+      "nombre": "INFECCIONES VAGINALE",
+      "slug": "infecciones-vaginale",
+      "count": 2
+    },
+    {
+      "id": 351,
+      "nombre": "LIMPIA OSMO",
+      "slug": "limpia-osmo",
+      "count": 2
+    },
+    {
+      "id": 197,
+      "nombre": "LIMPIEZA PIEL SENSIBLE",
+      "slug": "limpieza-piel-sensible",
+      "count": 2
+    },
+    {
+      "id": 438,
+      "nombre": "OFTALMICA ESTERIL",
+      "slug": "oftalmica-esteril",
+      "count": 2
+    },
+    {
+      "id": 167,
+      "nombre": "OJO SECO",
+      "slug": "ojo-seco",
+      "count": 2
+    },
+    {
+      "id": 471,
+      "nombre": "OSTEOPOROSIS",
+      "slug": "osteoporosis",
+      "count": 2
+    },
+    {
+      "id": 228,
+      "nombre": "OT MEDICAM",
+      "slug": "ot-medicam",
+      "count": 2
+    },
+    {
+      "id": 238,
+      "nombre": "OTR PROD TO",
+      "slug": "otr-prod-to",
+      "count": 2
+    },
+    {
+      "id": 261,
+      "nombre": "OTR VIT SOL",
+      "slug": "otr-vit-sol",
+      "count": 2
+    },
+    {
+      "id": 267,
+      "nombre": "OTROS INMUN",
+      "slug": "otros-inmun",
+      "count": 2
+    },
+    {
+      "id": 461,
+      "nombre": "OTROS PRODU",
+      "slug": "otros-produ",
+      "count": 2
+    },
+    {
+      "id": 464,
+      "nombre": "PRESION INTRAOCULAR",
+      "slug": "presion-intraocular",
+      "count": 2
+    },
+    {
+      "id": 212,
+      "nombre": "PRINCIPIO ACTIVO FUM",
+      "slug": "principio-activo-fum",
+      "count": 2
+    },
+    {
+      "id": 259,
+      "nombre": "PROD ANTIPS",
+      "slug": "prod-antips",
+      "count": 2
+    },
+    {
+      "id": 469,
+      "nombre": "PROSTATA",
+      "slug": "prostata",
+      "count": 2
+    },
+    {
+      "id": 134,
+      "nombre": "REDUCCIÓN DE LA PRESIÓN INTRAOCULAR",
+      "slug": "reduccion-de-la-presion-intraocular",
+      "count": 2
+    },
+    {
+      "id": 242,
+      "nombre": "RELAJANTE MUSCULAR",
+      "slug": "relajante-muscular",
+      "count": 2
+    },
+    {
+      "id": 405,
+      "nombre": "REPARADOR CAPILAR",
+      "slug": "reparador-capilar",
+      "count": 2
+    },
+    {
+      "id": 138,
+      "nombre": "RETRASAR LAS CONTRAC",
+      "slug": "retrasar-las-contrac",
+      "count": 2
+    },
+    {
+      "id": 377,
+      "nombre": "RITMO CARDIACO",
+      "slug": "ritmo-cardiaco",
+      "count": 2
+    },
+    {
+      "id": 445,
+      "nombre": "SEQUEDAD OCULAR",
+      "slug": "sequedad-ocular",
+      "count": 2
+    },
+    {
+      "id": 392,
+      "nombre": "SUSPENSION OFTALMICA",
+      "slug": "suspension-oftalmica",
+      "count": 2
+    },
+    {
+      "id": 355,
+      "nombre": "TIAZIDAS Y",
+      "slug": "tiazidas-y",
+      "count": 2
+    },
+    {
+      "id": 338,
+      "nombre": "TONICOS/VIT",
+      "slug": "tonicos-vit",
+      "count": 2
+    },
+    {
+      "id": 139,
+      "nombre": "TRIPTANES A",
+      "slug": "triptanes-a",
+      "count": 2
+    },
+    {
+      "id": 419,
+      "nombre": "VITAMINA A",
+      "slug": "vitamina-a",
+      "count": 2
+    },
+    {
+      "id": 480,
+      "nombre": " ANTIINFLAMATORIO V",
+      "slug": "antiinflamatorio-v",
+      "count": 1
+    },
+    {
+      "id": 333,
+      "nombre": "ABSORCION DE GRASAS",
+      "slug": "absorcion-de-grasas",
+      "count": 1
+    },
+    {
+      "id": 203,
+      "nombre": "ACLARA Y EMPAREJA EL TONO DE PIEL",
+      "slug": "aclara-y-empareja-el-tono-de-piel",
+      "count": 1
+    },
+    {
+      "id": 215,
+      "nombre": "AFECCIONES INFLAMATORIAS OFTALMICAS",
+      "slug": "afecciones-inflamatorias-oftalmicas",
+      "count": 1
+    },
+    {
+      "id": 100,
+      "nombre": "AGENTES MODIFICADORE",
+      "slug": "agentes-modificadore",
+      "count": 1
+    },
+    {
+      "id": 216,
+      "nombre": "ALIVIA LA IRRITACIÓN POR SEQUEDAD",
+      "slug": "alivia-la-irritacion-por-sequedad",
+      "count": 1
+    },
+    {
+      "id": 526,
+      "nombre": "ANAGESICO",
+      "slug": "anagesico",
+      "count": 1
+    },
+    {
+      "id": 478,
+      "nombre": "ANEMIA",
+      "slug": "anemia",
+      "count": 1
+    },
+    {
+      "id": 409,
+      "nombre": "ANEMIA DURANTE EL EM",
+      "slug": "anemia-durante-el-em",
+      "count": 1
+    },
+    {
+      "id": 214,
+      "nombre": "ANOVULATORIO",
+      "slug": "anovulatorio",
+      "count": 1
+    },
+    {
+      "id": 123,
+      "nombre": "ANTAG CALC+",
+      "slug": "antag-calc",
+      "count": 1
+    },
+    {
+      "id": 256,
+      "nombre": "ANTIAGINOSO",
+      "slug": "antiaginoso",
+      "count": 1
+    },
+    {
+      "id": 420,
+      "nombre": "ANTIALERGICO",
+      "slug": "antialergico",
+      "count": 1
+    },
+    {
+      "id": 428,
+      "nombre": "ANTIANDROGE",
+      "slug": "antiandroge",
+      "count": 1
+    },
+    {
+      "id": 378,
+      "nombre": "ANTIBACTERIANO VAGIN",
+      "slug": "antibacteriano-vagin",
+      "count": 1
+    },
+    {
+      "id": 408,
+      "nombre": "ANTIC ONVULSIVANTE",
+      "slug": "antic-onvulsivante",
+      "count": 1
+    },
+    {
+      "id": 468,
+      "nombre": "ANTIDEPRESIVO",
+      "slug": "antidepresivo",
+      "count": 1
+    },
+    {
+      "id": 453,
+      "nombre": "ANTIEDAD FACIAL",
+      "slug": "antiedad-facial",
+      "count": 1
+    },
+    {
+      "id": 513,
+      "nombre": "ANTIESPASMODICO",
+      "slug": "antiespasmodico",
+      "count": 1
+    },
+    {
+      "id": 399,
+      "nombre": "ANTIFECCIOSO VAGINAL",
+      "slug": "antifeccioso-vaginal",
+      "count": 1
+    },
+    {
+      "id": 126,
+      "nombre": "ANTIFUNG DE",
+      "slug": "antifung-de",
+      "count": 1
+    },
+    {
+      "id": 515,
+      "nombre": "ANTIFUNGICO",
+      "slug": "antifungico",
+      "count": 1
+    },
+    {
+      "id": 244,
+      "nombre": "ANTIGLAUCOMA",
+      "slug": "antiglaucoma",
+      "count": 1
+    },
+    {
+      "id": 507,
+      "nombre": "ANTIGLAUCOMATOSA",
+      "slug": "antiglaucomatosa",
+      "count": 1
+    },
+    {
+      "id": 466,
+      "nombre": "ANTIHIPERPROLACTINEM",
+      "slug": "antihiperprolactinem",
+      "count": 1
+    },
+    {
+      "id": 517,
+      "nombre": "ANTIHISTAMICO",
+      "slug": "antihistamico",
+      "count": 1
+    },
+    {
+      "id": 523,
+      "nombre": "ANTIINFLAMATORIA",
+      "slug": "antiinflamatoria",
+      "count": 1
+    },
+    {
+      "id": 485,
+      "nombre": "ANTIMETABOL",
+      "slug": "antimetabol",
+      "count": 1
+    },
+    {
+      "id": 341,
+      "nombre": "ANTINEOP LI",
+      "slug": "antineop-li",
+      "count": 1
+    },
+    {
+      "id": 417,
+      "nombre": "ANTIRREUMATICO",
+      "slug": "antirreumatico",
+      "count": 1
+    },
+    {
+      "id": 518,
+      "nombre": "ANTIRREUMATICO ESPE",
+      "slug": "antirreumatico-espe",
+      "count": 1
+    },
+    {
+      "id": 487,
+      "nombre": "ANTISQUEMICO",
+      "slug": "antisquemico",
+      "count": 1
+    },
+    {
+      "id": 502,
+      "nombre": "ANTITUSIGEN",
+      "slug": "antitusigen",
+      "count": 1
+    },
+    {
+      "id": 356,
+      "nombre": "ANTIVIOTICO",
+      "slug": "antiviotico",
+      "count": 1
+    },
+    {
+      "id": 486,
+      "nombre": "ANTIVIRAL",
+      "slug": "antiviral",
+      "count": 1
+    },
+    {
+      "id": 470,
+      "nombre": "ARDOR ,RESEQUEDAD OC",
+      "slug": "ardor-resequedad-oc",
+      "count": 1
+    },
+    {
+      "id": 449,
+      "nombre": "ARTROSIS",
+      "slug": "artrosis",
+      "count": 1
+    },
+    {
+      "id": 415,
+      "nombre": "B2-AGONIST",
+      "slug": "b2-agonist",
+      "count": 1
+    },
+    {
+      "id": 483,
+      "nombre": "BIFOSFONA D",
+      "slug": "bifosfona-d",
+      "count": 1
+    },
+    {
+      "id": 161,
+      "nombre": "BRONQUITIS",
+      "slug": "bronquitis",
+      "count": 1
+    },
+    {
+      "id": 370,
+      "nombre": "CALCIO Y VITAMINA D",
+      "slug": "calcio-y-vitamina-d",
+      "count": 1
+    },
+    {
+      "id": 343,
+      "nombre": "CANCER DE MAMA",
+      "slug": "cancer-de-mama",
+      "count": 1
+    },
+    {
+      "id": 484,
+      "nombre": "CANCER DE PROSTATA",
+      "slug": "cancer-de-prostata",
+      "count": 1
+    },
+    {
+      "id": 477,
+      "nombre": "CARDIOVASCULAR",
+      "slug": "cardiovascular",
+      "count": 1
+    },
+    {
+      "id": 441,
+      "nombre": "CHAMPU ANTICASPA",
+      "slug": "champu-anticaspa",
+      "count": 1
+    },
+    {
+      "id": 447,
+      "nombre": "CICATRICES",
+      "slug": "cicatrices",
+      "count": 1
+    },
+    {
+      "id": 525,
+      "nombre": "CICATRIZANTE",
+      "slug": "cicatrizante",
+      "count": 1
+    },
+    {
+      "id": 268,
+      "nombre": "CORTIC NAS",
+      "slug": "cortic-nas",
+      "count": 1
+    },
+    {
+      "id": 250,
+      "nombre": "CORTICOSTEROIDE",
+      "slug": "corticosteroide",
+      "count": 1
+    },
+    {
+      "id": 482,
+      "nombre": "CUIDADO CAPILAR ANTICAIDA",
+      "slug": "cuidado-capilar-anticaida",
+      "count": 1
+    },
+    {
+      "id": 501,
+      "nombre": "DEFICIENCIA DE PROGE",
+      "slug": "deficiencia-de-proge",
+      "count": 1
+    },
+    {
+      "id": 211,
+      "nombre": "DEPRESION.",
+      "slug": "depresion",
+      "count": 1
+    },
+    {
+      "id": 494,
+      "nombre": "DERMATITIS SEBORREICA",
+      "slug": "dermatitis-seborreica",
+      "count": 1
+    },
+    {
+      "id": 349,
+      "nombre": "DESCONG OFT",
+      "slug": "descong-oft",
+      "count": 1
+    },
+    {
+      "id": 207,
+      "nombre": "DESCONGESTI",
+      "slug": "descongesti",
+      "count": 1
+    },
+    {
+      "id": 362,
+      "nombre": "DESODORANTE PIEL SENSIBLE",
+      "slug": "desodorante-piel-sensible",
+      "count": 1
+    },
+    {
+      "id": 488,
+      "nombre": "DESORDENES",
+      "slug": "desordenes",
+      "count": 1
+    },
+    {
+      "id": 245,
+      "nombre": "DIABETE",
+      "slug": "diabete",
+      "count": 1
+    },
+    {
+      "id": 516,
+      "nombre": "DIGESTIVOS",
+      "slug": "digestivos",
+      "count": 1
+    },
+    {
+      "id": 171,
+      "nombre": "DISMINUYE LA PRESION",
+      "slug": "disminuye-la-presion",
+      "count": 1
+    },
+    {
+      "id": 467,
+      "nombre": "DISURIA ARDOR.",
+      "slug": "disuria-ardor",
+      "count": 1
+    },
+    {
+      "id": 114,
+      "nombre": "ECTOPARAS.I",
+      "slug": "ectoparas-i",
+      "count": 1
+    },
+    {
+      "id": 519,
+      "nombre": "ENFERMEDADES RESPIRA",
+      "slug": "enfermedades-respira",
+      "count": 1
+    },
+    {
+      "id": 407,
+      "nombre": "ESPASMO MUSCULAR",
+      "slug": "espasmo-muscular",
+      "count": 1
+    },
+    {
+      "id": 372,
+      "nombre": "ESTOMATOLOG",
+      "slug": "estomatolog",
+      "count": 1
+    },
+    {
+      "id": 489,
+      "nombre": "ESTREÑIMIENTO",
+      "slug": "estrenimiento",
+      "count": 1
+    },
+    {
+      "id": 369,
+      "nombre": "FIBRATOS",
+      "slug": "fibratos",
+      "count": 1
+    },
+    {
+      "id": 233,
+      "nombre": "FLUORQUINOL",
+      "slug": "fluorquinol",
+      "count": 1
+    },
+    {
+      "id": 508,
+      "nombre": "GEL DE BAÑO PH NEUTRO",
+      "slug": "gel-de-bano-ph-neutro",
+      "count": 1
+    },
+    {
+      "id": 490,
+      "nombre": "GLUCAGON",
+      "slug": "glucagon",
+      "count": 1
+    },
+    {
+      "id": 460,
+      "nombre": "GONADOTROPI",
+      "slug": "gonadotropi",
+      "count": 1
+    },
+    {
+      "id": 262,
+      "nombre": "HBP AN-ALF",
+      "slug": "hbp-an-alf",
+      "count": 1
+    },
+    {
+      "id": 472,
+      "nombre": "HEMORRAGIAS",
+      "slug": "hemorragias",
+      "count": 1
+    },
+    {
+      "id": 265,
+      "nombre": "HEMOSTATICO",
+      "slug": "hemostatico",
+      "count": 1
+    },
+    {
+      "id": 495,
+      "nombre": "HIDRATACION DE MANOS",
+      "slug": "hidratacion-de-manos",
+      "count": 1
+    },
+    {
+      "id": 361,
+      "nombre": "HIDRATACIÓN PIEL SECA",
+      "slug": "hidratacion-piel-seca",
+      "count": 1
+    },
+    {
+      "id": 336,
+      "nombre": "HIDRATANTE",
+      "slug": "hidratante",
+      "count": 1
+    },
+    {
+      "id": 273,
+      "nombre": "HIDRATANTE CON FILTRO SOLAR",
+      "slug": "hidratante-con-filtro-solar",
+      "count": 1
+    },
+    {
+      "id": 452,
+      "nombre": "HIDRATATANTE FACIAL",
+      "slug": "hidratatante-facial",
+      "count": 1
+    },
+    {
+      "id": 360,
+      "nombre": "HIDTATANTE PIELES CON ROJECES",
+      "slug": "hidtatante-pieles-con-rojeces",
+      "count": 1
+    },
+    {
+      "id": 251,
+      "nombre": "HIERRO SOLO",
+      "slug": "hierro-solo",
+      "count": 1
+    },
+    {
+      "id": 375,
+      "nombre": "HIPERTENSION ARTERIA",
+      "slug": "hipertension-arteria",
+      "count": 1
+    },
+    {
+      "id": 227,
+      "nombre": "HORMONAS AN",
+      "slug": "hormonas-an",
+      "count": 1
+    },
+    {
+      "id": 198,
+      "nombre": "HUMECTANTE INTIMO",
+      "slug": "humectante-intimo",
+      "count": 1
+    },
+    {
+      "id": 376,
+      "nombre": "INFECCION INTESTINAL",
+      "slug": "infeccion-intestinal",
+      "count": 1
+    },
+    {
+      "id": 462,
+      "nombre": "INFECCION OCULAR",
+      "slug": "infeccion-ocular",
+      "count": 1
+    },
+    {
+      "id": 120,
+      "nombre": "INFLAMACION Y DOLOR",
+      "slug": "inflamacion-y-dolor",
+      "count": 1
+    },
+    {
+      "id": 119,
+      "nombre": "INFLAMACIONES OCULAR",
+      "slug": "inflamaciones-ocular",
+      "count": 1
+    },
+    {
+      "id": 520,
+      "nombre": "INHALACION",
+      "slug": "inhalacion",
+      "count": 1
+    },
+    {
+      "id": 271,
+      "nombre": "INHIB CYTOS",
+      "slug": "inhib-cytos",
+      "count": 1
+    },
+    {
+      "id": 354,
+      "nombre": "INHIB PLAQ",
+      "slug": "inhib-plaq",
+      "count": 1
+    },
+    {
+      "id": 239,
+      "nombre": "INSOMNIO",
+      "slug": "insomnio",
+      "count": 1
+    },
+    {
+      "id": 236,
+      "nombre": "INSUFICIENCIA VENOSA",
+      "slug": "insuficiencia-venosa",
+      "count": 1
+    },
+    {
+      "id": 136,
+      "nombre": "INSUL HUM+A",
+      "slug": "insul-huma",
+      "count": 1
+    },
+    {
+      "id": 165,
+      "nombre": "IRRITACION,",
+      "slug": "irritacion",
+      "count": 1
+    },
+    {
+      "id": 498,
+      "nombre": "IRRITACION, OJO SECO",
+      "slug": "irritacion-ojo-seco",
+      "count": 1
+    },
+    {
+      "id": 436,
+      "nombre": "LAXANTES OS",
+      "slug": "laxantes-os",
+      "count": 1
+    },
+    {
+      "id": 272,
+      "nombre": "LIMPIADOR FACIAL",
+      "slug": "limpiador-facial",
+      "count": 1
+    },
+    {
+      "id": 465,
+      "nombre": "LIMPIEZA DE PARPADOS",
+      "slug": "limpieza-de-parpados",
+      "count": 1
+    },
+    {
+      "id": 521,
+      "nombre": "LIMPIEZA PARPADOS.",
+      "slug": "limpieza-parpados",
+      "count": 1
+    },
+    {
+      "id": 457,
+      "nombre": "LOCION LIMPIADORA PIEL SENSIBLE",
+      "slug": "locion-limpiadora-piel-sensible",
+      "count": 1
+    },
+    {
+      "id": 439,
+      "nombre": "LUBRICANTE OCULAR",
+      "slug": "lubricante-ocular",
+      "count": 1
+    },
+    {
+      "id": 339,
+      "nombre": "LUBRICANTE OFTALMICO",
+      "slug": "lubricante-oftalmico",
+      "count": 1
+    },
+    {
+      "id": 509,
+      "nombre": "MEJORA FIRMEZA Y ELASTICIDAD DE LA PIEL",
+      "slug": "mejora-firmeza-y-elasticidad-de-la-piel",
+      "count": 1
+    },
+    {
+      "id": 190,
+      "nombre": "MIDRIATICOS",
+      "slug": "midriaticos",
+      "count": 1
+    },
+    {
+      "id": 510,
+      "nombre": "MIGRANA, EPILEPSIA",
+      "slug": "migrana-epilepsia",
+      "count": 1
+    },
+    {
+      "id": 154,
+      "nombre": "MIORRELAJ A",
+      "slug": "miorrelaj-a",
+      "count": 1
+    },
+    {
+      "id": 522,
+      "nombre": "MODUL SESOM",
+      "slug": "modul-sesom",
+      "count": 1
+    },
+    {
+      "id": 237,
+      "nombre": "MULTIVITAMINICO",
+      "slug": "multivitaminico",
+      "count": 1
+    },
+    {
+      "id": 226,
+      "nombre": "ORTEARTROSIS",
+      "slug": "orteartrosis",
+      "count": 1
+    },
+    {
+      "id": 358,
+      "nombre": "OTR ANTIANM",
+      "slug": "otr-antianm",
+      "count": 1
+    },
+    {
+      "id": 503,
+      "nombre": "OTR ANTIEME",
+      "slug": "otr-antieme",
+      "count": 1
+    },
+    {
+      "id": 514,
+      "nombre": "OTR ANTISEP",
+      "slug": "otr-antisep",
+      "count": 1
+    },
+    {
+      "id": 463,
+      "nombre": "OTR.HORM.SE",
+      "slug": "otr-horm-se",
+      "count": 1
+    },
+    {
+      "id": 269,
+      "nombre": "OTR.PRD.MUS",
+      "slug": "otr-prd-mus",
+      "count": 1
+    },
+    {
+      "id": 505,
+      "nombre": "OTROS ANTIV",
+      "slug": "otros-antiv",
+      "count": 1
+    },
+    {
+      "id": 427,
+      "nombre": "OTROS PREP.",
+      "slug": "otros-prep",
+      "count": 1
+    },
+    {
+      "id": 511,
+      "nombre": "PENIC MED/R",
+      "slug": "penic-med-r",
+      "count": 1
+    },
+    {
+      "id": 524,
+      "nombre": "PRD A-ALZ I",
+      "slug": "prd-a-alz-i",
+      "count": 1
+    },
+    {
+      "id": 191,
+      "nombre": "PRD INCONTI",
+      "slug": "prd-inconti",
+      "count": 1
+    },
+    {
+      "id": 443,
+      "nombre": "PREPAR SOLA",
+      "slug": "prepar-sola",
+      "count": 1
+    },
+    {
+      "id": 455,
+      "nombre": "PRESERVA EL EQUILIBRIO DEL CUERO CABELLU",
+      "slug": "preserva-el-equilibrio-del-cuero-cabellu",
+      "count": 1
+    },
+    {
+      "id": 365,
+      "nombre": "PRESION OCULAR",
+      "slug": "presion-ocular",
+      "count": 1
+    },
+    {
+      "id": 527,
+      "nombre": "PREVENCIÓN SIGNOS DE ENVEJECIMIENTO",
+      "slug": "prevencion-signos-de-envejecimiento",
+      "count": 1
+    },
+    {
+      "id": 254,
+      "nombre": "PROBIOTICO",
+      "slug": "probiotico",
+      "count": 1
+    },
+    {
+      "id": 345,
+      "nombre": "PRODUCTOS T",
+      "slug": "productos-t",
+      "count": 1
+    },
+    {
+      "id": 364,
+      "nombre": "PROFILAXIS DEL PLURITO",
+      "slug": "profilaxis-del-plurito",
+      "count": 1
+    },
+    {
+      "id": 423,
+      "nombre": "PROTECT.HEP",
+      "slug": "protect-hep",
+      "count": 1
+    },
+    {
+      "id": 402,
+      "nombre": "PSORIASIS",
+      "slug": "psoriasis",
+      "count": 1
+    },
+    {
+      "id": 454,
+      "nombre": "QUERATOCONJUNTIVITIS SECA",
+      "slug": "queratoconjuntivitis-seca",
+      "count": 1
+    },
+    {
+      "id": 456,
+      "nombre": "REDUCE SIGNOS DE FOTOENVEJECIMIENTO",
+      "slug": "reduce-signos-de-fotoenvejecimiento",
+      "count": 1
+    },
+    {
+      "id": 493,
+      "nombre": "REGULADOR DE LA PIGMENTACIÓN",
+      "slug": "regulador-de-la-pigmentacion",
+      "count": 1
+    },
+    {
+      "id": 437,
+      "nombre": "REGULADOR DIGESTIVO",
+      "slug": "regulador-digestivo",
+      "count": 1
+    },
+    {
+      "id": 247,
+      "nombre": "RENFERMEDADES HEPATI",
+      "slug": "renfermedades-hepati",
+      "count": 1
+    },
+    {
+      "id": 391,
+      "nombre": "RENOVADOR CUTANEO",
+      "slug": "renovador-cutaneo",
+      "count": 1
+    },
+    {
+      "id": 475,
+      "nombre": "REPARADOR CUTANEO",
+      "slug": "reparador-cutaneo",
+      "count": 1
+    },
+    {
+      "id": 403,
+      "nombre": "REPRODUCCION ASISTID",
+      "slug": "reproduccion-asistid",
+      "count": 1
+    },
+    {
+      "id": 458,
+      "nombre": "RESFRIADO",
+      "slug": "resfriado",
+      "count": 1
+    },
+    {
+      "id": 512,
+      "nombre": "RIESGO CARDIOVASCULA",
+      "slug": "riesgo-cardiovascula",
+      "count": 1
+    },
+    {
+      "id": 129,
+      "nombre": "SEQUEDAD O IRRITACIÓN OCULAR",
+      "slug": "sequedad-o-irritacion-ocular",
+      "count": 1
+    },
+    {
+      "id": 479,
+      "nombre": "SINDROME DE DISFUNCION LAGRIMAL",
+      "slug": "sindrome-de-disfuncion-lagrimal",
+      "count": 1
+    },
+    {
+      "id": 451,
+      "nombre": "SOLUCION NASAL ",
+      "slug": "solucion-nasal",
+      "count": 1
+    },
+    {
+      "id": 434,
+      "nombre": "SUPLEMENTO",
+      "slug": "suplemento",
+      "count": 1
+    },
+    {
+      "id": 500,
+      "nombre": "SUPLEMENTO DE CALCIO",
+      "slug": "suplemento-de-calcio",
+      "count": 1
+    },
+    {
+      "id": 450,
+      "nombre": "TETRACICLIN",
+      "slug": "tetraciclin",
+      "count": 1
+    },
+    {
+      "id": 205,
+      "nombre": "TONICO CAPILAR ANTICAIDA",
+      "slug": "tonico-capilar-anticaida",
+      "count": 1
+    },
+    {
+      "id": 395,
+      "nombre": "TOS",
+      "slug": "tos",
+      "count": 1
+    },
+    {
+      "id": 201,
+      "nombre": "TRATAMIENTO ACTICAIDA",
+      "slug": "tratamiento-acticaida",
+      "count": 1
+    },
+    {
+      "id": 414,
+      "nombre": "TRATAMIENTO DE ALERG",
+      "slug": "tratamiento-de-alerg",
+      "count": 1
+    },
+    {
+      "id": 352,
+      "nombre": "TRATAMIENTO DE ESPON",
+      "slug": "tratamiento-de-espon",
+      "count": 1
+    },
+    {
+      "id": 440,
+      "nombre": "TRATAMIENTO DE HONGO",
+      "slug": "tratamiento-de-hongo",
+      "count": 1
+    },
+    {
+      "id": 248,
+      "nombre": "TRATAMIENTO DE LA OS",
+      "slug": "tratamiento-de-la-os",
+      "count": 1
+    },
+    {
+      "id": 107,
+      "nombre": "TRATAMIENTO DIABETES",
+      "slug": "tratamiento-diabetes",
+      "count": 1
+    },
+    {
+      "id": 200,
+      "nombre": "TRATAMIENTO TOPICO ACNE VULGARIS",
+      "slug": "tratamiento-topico-acne-vulgaris",
+      "count": 1
+    },
+    {
+      "id": 496,
+      "nombre": "VAGINAL",
+      "slug": "vaginal",
+      "count": 1
+    },
+    {
+      "id": 529,
+      "nombre": "VAS CEREB/P",
+      "slug": "vas-cereb-p",
+      "count": 1
+    },
+    {
+      "id": 429,
+      "nombre": "VASOCONSTRICTOR LOCAL",
+      "slug": "vasoconstrictor-local",
+      "count": 1
+    },
+    {
+      "id": 481,
+      "nombre": "VERTIGO- TINNITUS",
+      "slug": "vertigo-tinnitus",
+      "count": 1
+    },
+    {
+      "id": 180,
+      "nombre": "VIAS RESPIRATORIOS",
+      "slug": "vias-respiratorios",
+      "count": 1
+    },
+    {
+      "id": 497,
+      "nombre": "VITAMINAS PRENATALES",
+      "slug": "vitaminas-prenatales",
+      "count": 1
+    },
+    {
+      "id": 459,
+      "nombre": "ZINC",
+      "slug": "zinc",
+      "count": 1
+    },
+    {
+      "id": 387,
+      "nombre": "actiacido-test",
+      "slug": "actiacido-test",
+      "count": 0
+    },
+    {
+      "id": 184,
+      "nombre": "AGENTES AHO",
+      "slug": "agentes-aho",
+      "count": 0
+    },
+    {
+      "id": 194,
+      "nombre": "ANALGESICO Y ANTIINF",
+      "slug": "analgesico-y-antiinf",
+      "count": 0
+    },
+    {
+      "id": 162,
+      "nombre": "ANGINA DE PECHO.",
+      "slug": "angina-de-pecho",
+      "count": 0
+    },
+    {
+      "id": 332,
+      "nombre": "ANTIANDROGENO",
+      "slug": "antiandrogeno",
+      "count": 0
+    },
+    {
+      "id": 204,
+      "nombre": "ANTICONCEPCIÓN ORAL",
+      "slug": "anticoncepcion-oral",
+      "count": 0
+    },
+    {
+      "id": 122,
+      "nombre": "ANTID COMB",
+      "slug": "antid-comb",
+      "count": 0
+    },
+    {
+      "id": 258,
+      "nombre": "ANTIHIP SOL",
+      "slug": "antihip-sol",
+      "count": 0
+    },
+    {
+      "id": 528,
+      "nombre": "BARRA LIMPIADORA PIEL GRASA",
+      "slug": "barra-limpiadora-piel-grasa",
+      "count": 0
+    },
+    {
+      "id": 241,
+      "nombre": "CANDIDIASIS VULVOVAG",
+      "slug": "candidiasis-vulvovag",
+      "count": 0
+    },
+    {
+      "id": 104,
+      "nombre": "DEGENERATIVOS CELEBR",
+      "slug": "degenerativos-celebr",
+      "count": 0
+    },
+    {
+      "id": 412,
+      "nombre": "DERMO COSMETICOS",
+      "slug": "dermo-cosmeticos",
+      "count": 0
+    },
+    {
+      "id": 206,
+      "nombre": "DIABETES TIPO 2",
+      "slug": "diabetes-tipo-2",
+      "count": 0
+    },
+    {
+      "id": 172,
+      "nombre": "DIABETICOS",
+      "slug": "diabeticos",
+      "count": 0
+    },
+    {
+      "id": 533,
+      "nombre": "dolor",
+      "slug": "dolor",
+      "count": 0
+    },
+    {
+      "id": 534,
+      "nombre": "fiebre",
+      "slug": "fiebre",
+      "count": 0
+    },
+    {
+      "id": 220,
+      "nombre": "GONAD CITOS",
+      "slug": "gonad-citos",
+      "count": 0
+    },
+    {
+      "id": 545,
+      "nombre": "hidratacion",
+      "slug": "hidratacion",
+      "count": 0
+    },
+    {
+      "id": 176,
+      "nombre": "HIPERLIPIDEMIAS",
+      "slug": "hiperlipidemias",
+      "count": 0
+    },
+    {
+      "id": 173,
+      "nombre": "HIPERURICEMIA CRONIC",
+      "slug": "hiperuricemia-cronic",
+      "count": 0
+    },
+    {
+      "id": 426,
+      "nombre": "HUMECTANTE Y LUBRIFI",
+      "slug": "humectante-y-lubrifi",
+      "count": 0
+    },
+    {
+      "id": 234,
+      "nombre": "INHIBIDORES",
+      "slug": "inhibidores",
+      "count": 0
+    },
+    {
+      "id": 159,
+      "nombre": "LECHES PARA",
+      "slug": "leches-para",
+      "count": 0
+    },
+    {
+      "id": 506,
+      "nombre": "LIMPIADOR",
+      "slug": "limpiador",
+      "count": 0
+    },
+    {
+      "id": 225,
+      "nombre": "NUTRICIONAL",
+      "slug": "nutricional",
+      "count": 0
+    },
+    {
+      "id": 178,
+      "nombre": "OSTEOARTROSIS",
+      "slug": "osteoartrosis",
+      "count": 0
+    },
+    {
+      "id": 373,
+      "nombre": "OTR HORM AN",
+      "slug": "otr-horm-an",
+      "count": 0
+    },
+    {
+      "id": 144,
+      "nombre": "OTROS ALIME",
+      "slug": "otros-alime",
+      "count": 0
+    },
+    {
+      "id": 359,
+      "nombre": "PEDIATRICO",
+      "slug": "pediatrico",
+      "count": 0
+    },
+    {
+      "id": 544,
+      "nombre": "piel-seca",
+      "slug": "piel-seca",
+      "count": 0
+    },
+    {
+      "id": 264,
+      "nombre": "PRODUCTOS A",
+      "slug": "productos-a",
+      "count": 0
+    },
+    {
+      "id": 274,
+      "nombre": "PROTECCIÓN SOLAR + HIDRATACIÓN",
+      "slug": "proteccion-solar-hidratacion",
+      "count": 0
+    },
+    {
+      "id": 536,
+      "nombre": "receta-medica",
+      "slug": "receta-medica",
+      "count": 0
+    },
+    {
+      "id": 108,
+      "nombre": "SINTOMAS DIGESTIVOS",
+      "slug": "sintomas-digestivos",
+      "count": 0
+    },
+    {
+      "id": 175,
+      "nombre": "SUPLEMENTO ALIMENTIC",
+      "slug": "suplemento-alimentic",
+      "count": 0
+    },
+    {
+      "id": 530,
+      "nombre": "test",
+      "slug": "test",
+      "count": 0
+    },
+    {
+      "id": 531,
+      "nombre": "test2",
+      "slug": "test2",
+      "count": 0
+    },
+    {
+      "id": 499,
+      "nombre": "TESTS DE DI",
+      "slug": "tests-de-di",
+      "count": 0
+    },
+    {
+      "id": 199,
+      "nombre": "TRATAMIENTO DE ENDOMETRIOSIS",
+      "slug": "tratamiento-de-endometriosis",
+      "count": 0
+    },
+    {
+      "id": 166,
+      "nombre": "VIRUS RESPIRATORIO",
+      "slug": "virus-respiratorio",
+      "count": 0
+    },
+    {
+      "id": 232,
+      "nombre": "VITAMINA C",
+      "slug": "vitamina-c",
+      "count": 0
+    }
+  ]
+}

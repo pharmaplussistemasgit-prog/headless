@@ -1,0 +1,422 @@
+[
+  {
+    "marca": "LAFRANCOL",
+    "cantidad_productos": 209
+  },
+  {
+    "marca": "PROCAPS FARMA RX",
+    "cantidad_productos": 160
+  },
+  {
+    "marca": "TECNOQUIMICAS MK",
+    "cantidad_productos": 155
+  },
+  {
+    "marca": "PERCOS",
+    "cantidad_productos": 141
+  },
+  {
+    "marca": "SESDERMA COLOMBIA SA",
+    "cantidad_productos": 131
+  },
+  {
+    "marca": "SIEGFRIED FARMA",
+    "cantidad_productos": 122
+  },
+  {
+    "marca": "BUSSIE FARMA",
+    "cantidad_productos": 106
+  },
+  {
+    "marca": "EUROFARMA",
+    "cantidad_productos": 104
+  },
+  {
+    "marca": "ISDIN COLOMBIA",
+    "cantidad_productos": 96
+  },
+  {
+    "marca": "SISCOL FARMA",
+    "cantidad_productos": 87
+  },
+  {
+    "marca": "ADIUM",
+    "cantidad_productos": 86
+  },
+  {
+    "marca": "PROCAPS GENERICOS COLMED",
+    "cantidad_productos": 85
+  },
+  {
+    "marca": "MEGALABS MEDIHEALT",
+    "cantidad_productos": 81
+  },
+  {
+    "marca": "PFIZER S.A.S",
+    "cantidad_productos": 74
+  },
+  {
+    "marca": "ABBOTT FORMAS NUTRICIONALES",
+    "cantidad_productos": 71
+  },
+  {
+    "marca": "HUMAX",
+    "cantidad_productos": 71
+  },
+  {
+    "marca": "BIOPAS LABORATORIES",
+    "cantidad_productos": 64
+  },
+  {
+    "marca": "NOVAMED",
+    "cantidad_productos": 62
+  },
+  {
+    "marca": "ASPEN",
+    "cantidad_productos": 61
+  },
+  {
+    "marca": "SIEGFRIED DERMA",
+    "cantidad_productos": 60
+  },
+  {
+    "marca": "LEGRAND",
+    "cantidad_productos": 58
+  },
+  {
+    "marca": "GALDERMA",
+    "cantidad_productos": 54
+  },
+  {
+    "marca": "SEVEN PHARMA",
+    "cantidad_productos": 52
+  },
+  {
+    "marca": "FAGRON",
+    "cantidad_productos": 48
+  },
+  {
+    "marca": "OPHTHA",
+    "cantidad_productos": 47
+  },
+  {
+    "marca": "EPIDERMIQUE S.A.",
+    "cantidad_productos": 44
+  },
+  {
+    "marca": "PHARMADERM",
+    "cantidad_productos": 44
+  },
+  {
+    "marca": "ASTRAZENECA COLOMBIA SAS",
+    "cantidad_productos": 42
+  },
+  {
+    "marca": "MEGALABS FARMA",
+    "cantidad_productos": 41
+  },
+  {
+    "marca": "PROCAPS FARMA OTC",
+    "cantidad_productos": 40
+  },
+  {
+    "marca": "TECNOQUIMICAS VISION",
+    "cantidad_productos": 40
+  },
+  {
+    "marca": "SKINDRUG S.A.",
+    "cantidad_productos": 38
+  },
+  {
+    "marca": "BIOHEALTHY SAS",
+    "cantidad_productos": 38
+  },
+  {
+    "marca": "FAES FARMA COLOMBIA S.A.S.",
+    "cantidad_productos": 37
+  },
+  {
+    "marca": "MSD",
+    "cantidad_productos": 37
+  },
+  {
+    "marca": "AXON PHARMA SAS",
+    "cantidad_productos": 36
+  },
+  {
+    "marca": "XINETIX PHARMA S.A.S",
+    "cantidad_productos": 36
+  },
+  {
+    "marca": "TECNOQUIMICAS",
+    "cantidad_productos": 34
+  },
+  {
+    "marca": "PROCAPS CONSUMO",
+    "cantidad_productos": 32
+  },
+  {
+    "marca": "ROCHE",
+    "cantidad_productos": 29
+  },
+  {
+    "marca": "PHARMALAB",
+    "cantidad_productos": 29
+  },
+  {
+    "marca": "HAIKO NATURAL SAS",
+    "cantidad_productos": 28
+  },
+  {
+    "marca": "SOPHIA LABORATORIO",
+    "cantidad_productos": 27
+  },
+  {
+    "marca": "ALCON LABORATORIOS",
+    "cantidad_productos": 24
+  },
+  {
+    "marca": "BARIATRIC AND NUTRITIONAL SUPPORTS S A S",
+    "cantidad_productos": 23
+  },
+  {
+    "marca": "ABBVIE EYE CARE",
+    "cantidad_productos": 23
+  },
+  {
+    "marca": "BOYDORR",
+    "cantidad_productos": 22
+  },
+  {
+    "marca": "VESALIUS PHARMA S.A.S.",
+    "cantidad_productos": 22
+  },
+  {
+    "marca": "HUMANCARE DERMA",
+    "cantidad_productos": 22
+  },
+  {
+    "marca": "AULEN PHARMA S.A.",
+    "cantidad_productos": 21
+  },
+  {
+    "marca": "SERVIER",
+    "cantidad_productos": 21
+  },
+  {
+    "marca": "CLOSTER DERMA",
+    "cantidad_productos": 20
+  },
+  {
+    "marca": "OFTALMOQUIMICA",
+    "cantidad_productos": 20
+  },
+  {
+    "marca": "EXELTIS",
+    "cantidad_productos": 20
+  },
+  {
+    "marca": "ANTIOXIDANTECH",
+    "cantidad_productos": 18
+  },
+  {
+    "marca": "GADOR DERMA",
+    "cantidad_productos": 18
+  },
+  {
+    "marca": "MEGALABS POEN",
+    "cantidad_productos": 17
+  },
+  {
+    "marca": "SUIPHAR DERMA",
+    "cantidad_productos": 16
+  },
+  {
+    "marca": "NOVONORDISK",
+    "cantidad_productos": 16
+  },
+  {
+    "marca": "NEWFOUNDLAND DIAGNOSTICS S.A.S",
+    "cantidad_productos": 14
+  },
+  {
+    "marca": "IPCA",
+    "cantidad_productos": 14
+  },
+  {
+    "marca": "TIES",
+    "cantidad_productos": 13
+  },
+  {
+    "marca": "ASTELLAS",
+    "cantidad_productos": 12
+  },
+  {
+    "marca": "HEEL",
+    "cantidad_productos": 12
+  },
+  {
+    "marca": "PROCAPS FARMIONI",
+    "cantidad_productos": 12
+  },
+  {
+    "marca": "GILEAD SCIENCES COLOMBIA S.A.S.",
+    "cantidad_productos": 11
+  },
+  {
+    "marca": "GEDEON RICHTER",
+    "cantidad_productos": 11
+  },
+  {
+    "marca": "QUIMIDERM S.A.S",
+    "cantidad_productos": 10
+  },
+  {
+    "marca": "NEILMED LATAM COLOMBIA S.A.S.",
+    "cantidad_productos": 10
+  },
+  {
+    "marca": "HUMANCARE FARMA",
+    "cantidad_productos": 10
+  },
+  {
+    "marca": "SUIPHAR FARMA",
+    "cantidad_productos": 10
+  },
+  {
+    "marca": "EPITHELIUM",
+    "cantidad_productos": 9
+  },
+  {
+    "marca": "DIABETRICS",
+    "cantidad_productos": 9
+  },
+  {
+    "marca": "MEGALABS DERMATOLOGIA",
+    "cantidad_productos": 9
+  },
+  {
+    "marca": "MEGALABS LINEA DS",
+    "cantidad_productos": 8
+  },
+  {
+    "marca": "CLOSTER FARMA",
+    "cantidad_productos": 8
+  },
+  {
+    "marca": "INTERPHARM",
+    "cantidad_productos": 8
+  },
+  {
+    "marca": "GADOR SALUD FEMENINA",
+    "cantidad_productos": 7
+  },
+  {
+    "marca": "NOVUM",
+    "cantidad_productos": 7
+  },
+  {
+    "marca": "ABBVIE FARMA",
+    "cantidad_productos": 6
+  },
+  {
+    "marca": "I-LAB",
+    "cantidad_productos": 6
+  },
+  {
+    "marca": "PHARMAPRIX DERMA",
+    "cantidad_productos": 6
+  },
+  {
+    "marca": "KAHAI SAS",
+    "cantidad_productos": 5
+  },
+  {
+    "marca": "FARMANEXO",
+    "cantidad_productos": 5
+  },
+  {
+    "marca": "BUSSIE DERMA",
+    "cantidad_productos": 5
+  },
+  {
+    "marca": "MEGALABS HIDRISAGE",
+    "cantidad_productos": 5
+  },
+  {
+    "marca": "PHARMAPRIX OFTA",
+    "cantidad_productos": 5
+  },
+  {
+    "marca": "LA SANTE",
+    "cantidad_productos": 4
+  },
+  {
+    "marca": "MEGA LIFESCIENCES COLOMBIA S.A.S.",
+    "cantidad_productos": 4
+  },
+  {
+    "marca": "ORGANON COLOMBIA S.A.S.",
+    "cantidad_productos": 3
+  },
+  {
+    "marca": "INMUNOPHARMA",
+    "cantidad_productos": 3
+  },
+  {
+    "marca": "MEDITEK ERGO",
+    "cantidad_productos": 3
+  },
+  {
+    "marca": "SUIPHAR NUTRICION",
+    "cantidad_productos": 3
+  },
+  {
+    "marca": "SIEGFRIED NUTRICION",
+    "cantidad_productos": 3
+  },
+  {
+    "marca": "DISTRIBUIDORA PASTEUR S.A",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "CLOSTER FARMA ESPECIAL",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "FRESENIUS KABI",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "GADOR SNC",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "RA COMPANY",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "PHARMA PLUS",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "BUSSIE OFTA",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "TECNOQUIMICAS ETIKOS",
+    "cantidad_productos": 2
+  },
+  {
+    "marca": "H C MEDICAL LTDA",
+    "cantidad_productos": 1
+  },
+  {
+    "marca": "MERCK S.A",
+    "cantidad_productos": 1
+  },
+  {
+    "marca": "MENARINI",
+    "cantidad_productos": 1
+  }
+]

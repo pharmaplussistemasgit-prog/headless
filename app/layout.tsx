@@ -15,6 +15,7 @@ import { getShippingRates } from "@/lib/shipping";
 import BottomNav from "@/components/layout/BottomNav";
 import { QuickViewProvider } from "@/context/QuickViewContext";
 import GlobalQuickView from "@/components/product/GlobalQuickView";
+import CookieBanner from "@/components/cookies/CookieBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,6 +58,7 @@ export default async function RootLayout({
                   <CartDrawer />
                   <GlobalQuickView />
                   <BottomNav />
+                  <CookieBanner />
                 </div>
                 <Toaster position="top-right" richColors />
               </QuickViewProvider>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useCookieConsent } from "@/hooks/useCookieConsent";
 
 interface LocationState {
     city: string | null;
@@ -13,8 +14,17 @@ export function useGeolocation(): LocationState {
     const [city, setCity] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { consent, hasConsented } = useCookieConsent();
 
     const requestLocation = () => {
+        // Si no han consentido cookies funcionales, podemos pedir los dos permisos:
+        // 1. Consentimiento de cookies (implicito o pedir que acepten)
+        // 2. Permiso del navegador
+
+        // Estrategia: Si el usuario hace clic explícitamente en "Localizarme", 
+        // asumimos interés y procedemos, pero idealmente deberíamos verificar 'functional'.
+        // Aquí procedemos a pedir permiso al navegador directamente.
+
         setLoading(true);
         setError(null);
 
@@ -79,12 +89,12 @@ export function useGeolocation(): LocationState {
         if (cached) {
             setCity(cached);
         } else {
-            // Optional: Auto-request on first visit?
-            // Usually better to wait for user interaction or request explicitly to obey UX best practices,
-            // but for "automatic" request per user wish:
-            requestLocation();
+            // Updated Logic: Only auto-request if 'functional' cookies are consented
+            if (hasConsented && consent.functional) {
+                requestLocation();
+            }
         }
-    }, []);
+    }, [hasConsented, consent.functional]); // Depend on consent changes
 
     return { city, loading, error, requestLocation };
 }

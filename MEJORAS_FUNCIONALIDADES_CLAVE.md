@@ -167,4 +167,33 @@ Se implementó un sistema de blog completo que consume contenido directamente de
 Cada artículo genera automáticamente sus etiquetas `<meta>`:
 *   **Title:** Título del Post | Blog PharmaPlus.
 *   **Description:** Extracto (Excerpt) limpio de HTML.
-*   **OpenGraph Image:** La imagen destacada del post se usa para las previsualizaciones en redes sociales (WhatsApp/Facebook).
+
+---
+
+## 10. Sistema de Gestión de Cookies y Privacidad 🍪
+**Estado Actual:** ✅ **IMPLEMENTADO** (Enero 2026)
+
+Se desarrolló un ecosistema completo para el cumplimiento de normativas de privacidad (GDPR style) y mejora de la confianza del usuario, integrando decisiones granulares sobre el uso de datos.
+
+### A. Arquitectura de Consentimiento (`hooks/useCookieConsent.ts`)
+*   **Estado Persistente:** Las decisiones del usuario se guardan en `localStorage` con una vigencia de **6 meses**.
+*   **Granularidad:** El sistema no es binario (Sí/No). Permite configurar 4 niveles:
+    *   **Esenciales:** Siempre `true` (Seguridad, Sesión).
+    *   **Funcionales:** Geolocalización, preferencias de UI.
+    *   **Analíticas:** Google Analytics (GTM).
+    *   **Marketing:** Pixeles de publicidad.
+
+### B. Componentes de UI ("Glassmorphism")
+*   **Banner No Intrusivo (`CookieBanner.tsx`):** Un panel flotante en la parte inferior con estética translúcida (Glassmorphism) que invita a la acción sin bloquear totalmente la navegación.
+*   **Panel de Preferencias (`CookiePreferencesModal.tsx`):** Un modal detallado donde el usuario puede activar/desactivar cada categoría con interruptores (toggles) claros y explicaciones de "Para qué sirve cada una".
+
+### C. Privacidad en Geolocalización
+Se modificó el hook crítico `useGeolocation.ts` para respetar la privacidad por diseño:
+*   **Antes:** La app pedía ubicación apenas cargaba (intrusivo).
+*   **Ahora:** La geolocalización automática **SOLO** se dispara si el usuario ha aceptado explícitamente las cookies **Funcionales**.
+*   **Fallback:** Si no hay consentimiento, el usuario aún puede usar la función manualmente, pero no se le rastrea silenciosamente.
+
+### D. Transparencia Legal
+*   **Nueva Página:** `/politicas/cookies`
+*   **Contenido:** Tabla detallada de cookies, proveedores y duraciones.
+*   **Control Total:** Botón permanente en esta página para "Re-configurar cookies" en cualquier momento.

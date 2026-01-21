@@ -437,29 +437,40 @@ export default function Header({ categories = [], shippingRules = [] }: HeaderPr
             {/* LEVEL 4: Category Strip (Optional - Hidden on Mobile) */}
             <div className="bg-[var(--color-bg-light)] border-b border-gray-100 hidden md:block">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-center py-2.5 gap-2">
-                        {/* Cold Chain Highlight */}
-                        <Link
-                            href="/categoria/cadena-de-frio"
-                            className="flex items-center gap-1.5 text-[13px] font-bold text-[#00AEEF] hover:text-[#0090C5] hover:scale-105 transition-all px-4 py-1 bg-[#00AEEF]/5 rounded-full border border-[#00AEEF]/20 mr-2"
-                        >
-                            <Snowflake className="w-4 h-4" />
-                            Cadena de Frío
+                    {/* Scrollable Container with Hide Scrollbar utility */}
+                    <div className="flex items-center overflow-x-auto no-scrollbar py-3 gap-6">
+
+                        {categories.map((cat) => {
+                            const isColdChain = cat.slug.includes('cadena-de-frio') || cat.name.toLowerCase().includes('cadena de frío');
+
+                            if (isColdChain) {
+                                return (
+                                    <Link
+                                        key={cat.id}
+                                        href={`/categoria/${cat.slug}`}
+                                        className="flex-shrink-0 flex items-center gap-2 text-[13px] font-bold font-outfit text-[#00AEEF] hover:text-[#0090C5] hover:scale-105 transition-all px-5 py-1.5 bg-[#00AEEF]/10 rounded-full border border-[#00AEEF]/20"
+                                    >
+                                        <Snowflake className="w-4 h-4" />
+                                        <span className="whitespace-nowrap">{cat.name}</span>
+                                    </Link>
+                                );
+                            }
+
+                            return (
+                                <Link
+                                    key={cat.id}
+                                    href={`/categoria/${cat.slug}`}
+                                    className="flex-shrink-0 text-[13px] font-medium font-outfit text-[#002040] hover:text-[var(--color-pharma-blue)] hover:font-bold transition-all whitespace-nowrap"
+                                >
+                                    {cat.name}
+                                </Link>
+                            );
+                        })}
+
+                        {/* 'Ver todas' at the end */}
+                        <Link href="/tienda" className="flex-shrink-0 text-[12px] font-bold font-outfit text-[var(--color-pharma-blue)] hover:underline whitespace-nowrap pl-2 border-l border-gray-200">
+                            Ver todas
                         </Link>
-                        {categories.slice(0, 7).map((cat) => (
-                            <Link
-                                key={cat.id}
-                                href={`/categoria/${cat.slug}`}
-                                className="text-[13px] font-medium text-[var(--color-pharma-blue)] hover:text-[#002040] hover:font-semibold transition-all px-3 truncate"
-                            >
-                                {cat.name}
-                            </Link>
-                        ))}
-                        {categories.length > 7 && (
-                            <Link href="/tienda" className="text-[12px] font-semibold text-[var(--color-pharma-blue)] hover:underline whitespace-nowrap ml-2">
-                                Ver todas
-                            </Link>
-                        )}
                     </div>
                 </div>
             </div>

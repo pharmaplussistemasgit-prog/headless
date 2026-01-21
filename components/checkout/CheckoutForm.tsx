@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/product/ProductCard';
@@ -17,47 +17,12 @@ interface CheckoutFormProps {
 
 
 
-// Lista de departamentos para el selector (Misma lista que en ShippingCalculator o importada)
-// Por simplicidad y consistencia, la defino aquí también o podría importarse si se centraliza.
-const COLOMBIA_STATES = [
-    { code: 'CO-AMA', name: 'Amazonas' },
-    { code: 'CO-ANT', name: 'Antioquia' },
-    { code: 'CO-ARA', name: 'Arauca' },
-    { code: 'CO-ATL', name: 'Atlántico' },
-    { code: 'CO-BOL', name: 'Bolívar' },
-    { code: 'CO-BOY', name: 'Boyacá' },
-    { code: 'CO-CAL', name: 'Caldas' },
-    { code: 'CO-CAQ', name: 'Caquetá' },
-    { code: 'CO-CAS', name: 'Casanare' },
-    { code: 'CO-CAU', name: 'Cauca' },
-    { code: 'CO-CES', name: 'Cesar' },
-    { code: 'CO-CHO', name: 'Chocó' },
-    { code: 'CO-COR', name: 'Córdoba' },
-    { code: 'CO-CUN', name: 'Cundinamarca' },
-    { code: 'CO-DC', name: 'Bogotá D.C.' },
-    { code: 'CO-GUA', name: 'Guainía' },
-    { code: 'CO-GUV', name: 'Guaviare' },
-    { code: 'CO-HUI', name: 'Huila' },
-    { code: 'CO-LAG', name: 'La Guajira' },
-    { code: 'CO-MAG', name: 'Magdalena' },
-    { code: 'CO-MET', name: 'Meta' },
-    { code: 'CO-NAR', name: 'Nariño' },
-    { code: 'CO-NSA', name: 'Norte de Santander' },
-    { code: 'CO-PUT', name: 'Putumayo' },
-    { code: 'CO-QUI', name: 'Quindío' },
-    { code: 'CO-RIS', name: 'Risaralda' },
-    { code: 'CO-SAP', name: 'San Andrés y Providencia' },
-    { code: 'CO-SAN', name: 'Santander' },
-    { code: 'CO-SUC', name: 'Sucre' },
-    { code: 'CO-TOL', name: 'Tolima' },
-    { code: 'CO-VAC', name: 'Valle del Cauca' },
-    { code: 'CO-VAU', name: 'Vaupés' },
-    { code: 'CO-VID', name: 'Vichada' }
-];
+import { COLOMBIA_STATES, COLOMBIA_CITIES } from '@/lib/colombia-data';
 
 export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     const { items, cartTotal, removeItem, updateQuantity, clearCart } = useCart();
     const [isLoading, setIsLoading] = useState(false);
+    const [isCompany, setIsCompany] = useState(false);
 
     // Shipping State
     const [selectedState, setSelectedState] = useState('');
@@ -73,10 +38,16 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
         address: '',
         city: '',
         state: '',
+        companyName: '',
     });
+
+    const [userRoles, setUserRoles] = useState<string[]>([]);
 
     // Update shipping cost when state changes
     useEffect(() => {
+        // Reset city when state changes
+        setCustomerData(prev => ({ ...prev, city: '' }));
+
         if (!selectedState) {
             setShippingCost(0);
             setShippingMethodName('');
@@ -116,14 +87,43 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                     lastName: user.name?.split(' ').slice(1).join(' ') || '',
                     email: user.email || '',
                 }));
+                if (user.roles) {
+                    setUserRoles(user.roles);
+                }
             }
         }
     }, []);
 
+    // Logic for Snippet #05 (Minimum Purchase)
+    // Adjusted: Only apply to Wholesale / Corporate customers.
+    // Roles: 'empresa', 'wholesale_customer'
+    const MIN_PURCHASE_AMOUNT = 50000;
+    const isWholesaleUser = userRoles.some(role => ['empresa', 'wholesale_customer'].includes(role));
+
+    // Only block if user IS wholesale AND amount is less than min
+    const isBelowMinAmount = isWholesaleUser && cartTotal < MIN_PURCHASE_AMOUNT;
+
     const finalTotal = cartTotal + shippingCost;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setCustomerData({ ...customerData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        // Snippet #09: Validation for Cedula (Numbers only)
+        if (name === 'documentId') {
+            // Allow only numbers
+            const numericValue = value.replace(/\D/g, '');
+            setCustomerData({ ...customerData, [name]: numericValue });
+            return;
+        }
+
+        setCustomerData({ ...customerData, [name]: value });
+    };
+
+    const toggleCompanyMode = (checked: boolean) => {
+        setIsCompany(checked);
+        if (!checked) {
+            setCustomerData(prev => ({ ...prev, companyName: '' }));
+        }
     };
 
     const handleCheckout = () => {
@@ -136,9 +136,15 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             return;
         }
 
+
         // ... validation continued
         if (!customerData.firstName || !customerData.email || !customerData.documentId) {
             toast.error("Completa tus datos personales");
+            return;
+        }
+
+        if (isCompany && !customerData.companyName) {
+            toast.error("Ingresa la Razón Social de la empresa");
             return;
         }
 
@@ -167,7 +173,28 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             params.append('billing_address_1', customerData.address);
             params.append('billing_city', customerData.city);
             params.append('billing_state', selectedState); // Important for Woo
+            params.append('billing_state', selectedState); // Important for Woo
             params.append('documentId', customerData.documentId);
+
+            // Snippet #09: Inject 'billing_cedula'
+            params.append('billing_cedula', customerData.documentId);
+            // Also append standard WP billing fields just in case
+            // Snippet #09: Inject 'billing_cedula'
+            params.append('billing_cedula', customerData.documentId);
+            // Also append standard WP billing fields just in case
+            params.append('billing_type_document', 'cedula'); // Legacy support
+
+            // Replaced Snippet #06, #07, #08: Handle Hidden/Default Fields
+            params.append('billing_country', 'CO'); // Hardcoded 'CO'
+            params.append('billing_postcode', '000000'); // Default Postcode
+            params.append('shipping_country', 'CO');
+
+            if (isCompany && customerData.companyName) {
+                params.append('billing_company', customerData.companyName);
+            }
+
+            // Address 2 (Apartment) - merged or empty
+            params.append('billing_address_2', '');
 
             const handoverUrl = `${baseUrl}?${params.toString()}`;
             toast.success("Redirigiendo a pasarela de pagos segura...");
@@ -231,6 +258,41 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                             <label className="text-xs font-bold uppercase text-gray-500">Email</label>
                             <input type="email" name="email" value={customerData.email} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
                         </div>
+
+                        {/* Company Toggle */}
+                        <div className="col-span-1 sm:col-span-2 pt-2 border-t border-gray-50 mt-2">
+                            <label className="flex items-center gap-3 cursor-pointer group">
+                                <div className="relative flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={isCompany}
+                                        onChange={(e) => toggleCompanyMode(e.target.checked)}
+                                        className="peer h-5 w-5 cursor-pointer appearance-none border-2 border-gray-300 rounded-md bg-white transition-all checked:border-[var(--color-pharma-blue)] checked:bg-[var(--color-pharma-blue)] hover:border-[var(--color-pharma-blue)]"
+                                    />
+                                    <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span className="text-sm font-bold text-gray-700">Comprar como Empresa (Requiere Factura Electrónica)</span>
+                            </label>
+                        </div>
+
+                        {isCompany && (
+                            <div className="col-span-1 sm:col-span-2 space-y-1 animate-in fade-in slide-in-from-top-1">
+                                <label className="text-xs font-bold uppercase text-gray-500">Razón Social</label>
+                                <input
+                                    type="text"
+                                    name="companyName"
+                                    value={customerData.companyName}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-blue-50/30"
+                                    placeholder="Nombre de la empresa"
+                                    required={isCompany}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -275,7 +337,23 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold uppercase text-gray-500">Ciudad / Municipio</label>
-                                    <input type="text" name="city" value={customerData.city} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg outline-none" placeholder="Ej: Medellín" required />
+                                    <div className="relative">
+                                        <select
+                                            name="city"
+                                            value={customerData.city}
+                                            onChange={handleInputChange}
+                                            className="w-full p-2 border border-gray-200 rounded-lg outline-none bg-white font-medium appearance-none"
+                                            required
+                                        >
+                                            <option value="">-- Seleccionar Ciudad --</option>
+                                            {selectedState && COLOMBIA_CITIES[selectedState]?.map((city) => (
+                                                <option key={city} value={city}>{city}</option>
+                                            ))}
+                                            {!COLOMBIA_CITIES[selectedState] && (
+                                                <option value="Otra">Otra</option>
+                                            )}
+                                        </select>
+                                    </div>
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold uppercase text-gray-500">Dirección Exacta</label>
@@ -329,9 +407,26 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         </div>
                     </div>
 
+
+                    {/* Snippet #05: Minimum Purchase Alert */}
+                    {isBelowMinAmount && (
+                        <div className="bg-orange-50 border-l-4 border-orange-500 p-4 mb-4 rounded-r-lg shadow-sm">
+                            <div className="flex items-start gap-3">
+                                <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                                <div>
+                                    <h4 className="text-sm font-bold text-orange-800">Monto Mínimo Requerido</h4>
+                                    <p className="text-xs text-orange-700 mt-1">
+                                        El pedido mínimo para tu cuenta es de <strong>${MIN_PURCHASE_AMOUNT.toLocaleString()}</strong>.
+                                        Por favor agrega más productos.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <button
                         onClick={handleCheckout}
-                        disabled={isLoading || !selectedState}
+                        disabled={isLoading || !selectedState || isBelowMinAmount}
                         className="w-full py-4 bg-[var(--color-pharma-green)] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
                         {isLoading ? 'Procesando...' : 'Pagar Ahora'}
@@ -344,6 +439,6 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

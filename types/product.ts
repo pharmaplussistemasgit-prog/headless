@@ -15,6 +15,7 @@ export interface WooProduct {
     attributes: { id: number; name: string; options: string[] }[];
     sku: string;
     categories: { id: number; name: string; slug: string }[];
+    tags: { id: number; name: string; slug: string }[];
 }
 
 export interface MappedProduct {
@@ -22,6 +23,7 @@ export interface MappedProduct {
     name: string;
     slug: string;
     sku: string | null;
+    type?: string;
     price: number;
     regularPrice: number;
     isOnSale: boolean;
@@ -30,6 +32,7 @@ export interface MappedProduct {
     showExactStock: boolean; // Si es < 10
     images: string[];
     categories: { id: number; name: string; slug: string }[];
+    tags: { id: number; name: string; slug: string }[];
     shortDescription: string; // HTML limpio o texto
     description?: string; // HTML completo
 

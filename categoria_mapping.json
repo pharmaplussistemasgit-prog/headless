@@ -1,0 +1,345 @@
+[
+  {
+    "id": 289,
+    "nombre": "SALUD Y MEDICAMENTOS",
+    "slug": "salud-y-medicamentos",
+    "cantidad_productos": 2168,
+    "parent": 0
+  },
+  {
+    "id": 299,
+    "nombre": "CUIDADO FACIAL",
+    "slug": "cuidado-facial",
+    "cantidad_productos": 444,
+    "parent": 0
+  },
+  {
+    "id": 309,
+    "nombre": "VITAMINAS Y SUPLEMENTOS",
+    "slug": "vitaminas-y-suplementos",
+    "cantidad_productos": 147,
+    "parent": 0
+  },
+  {
+    "id": 306,
+    "nombre": "PROTECCION SOLAR",
+    "slug": "proteccion-solar",
+    "cantidad_productos": 119,
+    "parent": 0
+  },
+  {
+    "id": 3402,
+    "nombre": "ANTIEDAD",
+    "slug": "antiedad-facial",
+    "cantidad_productos": 115,
+    "parent": 299
+  },
+  {
+    "id": 3391,
+    "nombre": "OTROS PRODUCTOS",
+    "slug": "otros-productos",
+    "cantidad_productos": 106,
+    "parent": 0
+  },
+  {
+    "id": 3368,
+    "nombre": "CADENA DE FRIO",
+    "slug": "cadena-de-frio",
+    "cantidad_productos": 96,
+    "parent": 0
+  },
+  {
+    "id": 3405,
+    "nombre": "HIDRATANTES",
+    "slug": "hidratantes-facial",
+    "cantidad_productos": 90,
+    "parent": 299
+  },
+  {
+    "id": 323,
+    "nombre": "LIMPIADORES Y DESMAQUILLANTES",
+    "slug": "limpiadores-y-desmaquillantes",
+    "cantidad_productos": 82,
+    "parent": 299
+  },
+  {
+    "id": 3399,
+    "nombre": "HIDRATANTES",
+    "slug": "hidratantes-corporal",
+    "cantidad_productos": 76,
+    "parent": 297
+  },
+  {
+    "id": 300,
+    "nombre": "KITS",
+    "slug": "kits",
+    "cantidad_productos": 66,
+    "parent": 0
+  },
+  {
+    "id": 3403,
+    "nombre": "REPARADOR Y CICATRIZANTE",
+    "slug": "reparador-y-cicatrizante-facial",
+    "cantidad_productos": 52,
+    "parent": 299
+  },
+  {
+    "id": 3397,
+    "nombre": "MAQUILLAJE",
+    "slug": "maquillaje-protector",
+    "cantidad_productos": 50,
+    "parent": 306
+  },
+  {
+    "id": 297,
+    "nombre": "CUIDADO CORPORAL",
+    "slug": "cuidado-corporal",
+    "cantidad_productos": 46,
+    "parent": 0
+  },
+  {
+    "id": 322,
+    "nombre": "LIMPIADORES",
+    "slug": "limpiadores",
+    "cantidad_productos": 46,
+    "parent": 297
+  },
+  {
+    "id": 3410,
+    "nombre": "ANTICAIDA",
+    "slug": "anticaida-capilar",
+    "cantidad_productos": 43,
+    "parent": 3419
+  },
+  {
+    "id": 318,
+    "nombre": "DESPIGMENTANTES",
+    "slug": "despigmentantes-facial",
+    "cantidad_productos": 41,
+    "parent": 299
+  },
+  {
+    "id": 3393,
+    "nombre": "OJOS Y PESTAÑAS",
+    "slug": "ojos-y-pestanas",
+    "cantidad_productos": 39,
+    "parent": 299
+  },
+  {
+    "id": 3366,
+    "nombre": "ALIMENTACION ESPECIAL",
+    "slug": "alimentacion-especial",
+    "cantidad_productos": 37,
+    "parent": 0
+  },
+  {
+    "id": 3408,
+    "nombre": "NIÑOS",
+    "slug": "ninos-vitaminas",
+    "cantidad_productos": 36,
+    "parent": 309
+  },
+  {
+    "id": 3384,
+    "nombre": "PIEL GRASA Y ACNE",
+    "slug": "piel-grasa-y-acne",
+    "cantidad_productos": 27,
+    "parent": 300
+  },
+  {
+    "id": 3400,
+    "nombre": "ANTICASPA",
+    "slug": "anticaspa-capilar",
+    "cantidad_productos": 23,
+    "parent": 3419
+  },
+  {
+    "id": 3414,
+    "nombre": "FORTALECIMIENTO Y REPARACION",
+    "slug": "fortalecimiento-y-reparacion-capilar",
+    "cantidad_productos": 21,
+    "parent": 3419
+  },
+  {
+    "id": 3398,
+    "nombre": "NIÑOS",
+    "slug": "ninos-protector",
+    "cantidad_productos": 15,
+    "parent": 306
+  },
+  {
+    "id": 3409,
+    "nombre": "OTROS",
+    "slug": "otros-corporal",
+    "cantidad_productos": 11,
+    "parent": 297
+  },
+  {
+    "id": 298,
+    "nombre": "DISPOSITIVOS E INSUMOS MEDICOS",
+    "slug": "dispositivos-e-insumos-medicos",
+    "cantidad_productos": 10,
+    "parent": 289
+  },
+  {
+    "id": 319,
+    "nombre": "EXFOLIANTES",
+    "slug": "exfoliantes",
+    "cantidad_productos": 9,
+    "parent": 299
+  },
+  {
+    "id": 3411,
+    "nombre": "DESODORANTES",
+    "slug": "desodorantes-corporal",
+    "cantidad_productos": 8,
+    "parent": 297
+  },
+  {
+    "id": 3370,
+    "nombre": "FORTALECIMIENTO Y REPARACION",
+    "slug": "fortalecimiento-y-reparacion-anticaida",
+    "cantidad_productos": 8,
+    "parent": 3410
+  },
+  {
+    "id": 3416,
+    "nombre": "MAQUILLAJE",
+    "slug": "maquillaje-facial",
+    "cantidad_productos": 8,
+    "parent": 299
+  },
+  {
+    "id": 3401,
+    "nombre": "NIÑOS",
+    "slug": "ninos-alimentacion",
+    "cantidad_productos": 8,
+    "parent": 3366
+  },
+  {
+    "id": 3415,
+    "nombre": "DESPIGMENTANTES",
+    "slug": "despigmentantes-corporal",
+    "cantidad_productos": 5,
+    "parent": 297
+  },
+  {
+    "id": 3412,
+    "nombre": "PIEL GRASA",
+    "slug": "piel-grasa-capilar",
+    "cantidad_productos": 5,
+    "parent": 3419
+  },
+  {
+    "id": 3404,
+    "nombre": "NIÑOS",
+    "slug": "ninos-cuidado",
+    "cantidad_productos": 4,
+    "parent": 297
+  },
+  {
+    "id": 3372,
+    "nombre": "PIEL SENSIBLE",
+    "slug": "piel-sensible",
+    "cantidad_productos": 4,
+    "parent": 3419
+  },
+  {
+    "id": 302,
+    "nombre": "MEDICAMENTOS",
+    "slug": "medicamentos",
+    "cantidad_productos": 3,
+    "parent": 289
+  },
+  {
+    "id": 328,
+    "nombre": "OTROS",
+    "slug": "otros-facial",
+    "cantidad_productos": 3,
+    "parent": 299
+  },
+  {
+    "id": 3418,
+    "nombre": "MAQUILLAJE",
+    "slug": "maquillaje-hidratante",
+    "cantidad_productos": 2,
+    "parent": 3405
+  },
+  {
+    "id": 3407,
+    "nombre": "NIÑOS",
+    "slug": "ninos-facial",
+    "cantidad_productos": 2,
+    "parent": 299
+  },
+  {
+    "id": 313,
+    "nombre": "PIEL GRASA",
+    "slug": "piel-grasa-anticaida",
+    "cantidad_productos": 1,
+    "parent": 3410
+  },
+  {
+    "id": 3417,
+    "nombre": "PIEL SECA",
+    "slug": "piel-seca-capilar",
+    "cantidad_productos": 1,
+    "parent": 3410
+  },
+  {
+    "id": 3413,
+    "nombre": "PIEL SECA",
+    "slug": "piel-seca-cuidado",
+    "cantidad_productos": 1,
+    "parent": 3419
+  },
+  {
+    "id": 3406,
+    "nombre": "PROTECCION SOLAR",
+    "slug": "proteccion-solar-facial",
+    "cantidad_productos": 1,
+    "parent": 299
+  },
+  {
+    "id": 330,
+    "nombre": "REPARADOR Y CICRATIZANTE",
+    "slug": "reparador-y-cicratizante-kits",
+    "cantidad_productos": 1,
+    "parent": 300
+  },
+  {
+    "id": 3388,
+    "nombre": "ANTICAIDA VITAMINAS",
+    "slug": "anticaida-vitaminas-y-suplementos",
+    "cantidad_productos": 0,
+    "parent": 309
+  },
+  {
+    "id": 3419,
+    "nombre": "CUIDADO CAPILAR",
+    "slug": "cuidado-capilar",
+    "cantidad_productos": 0,
+    "parent": 0
+  },
+  {
+    "id": 539,
+    "nombre": "Ninguna",
+    "slug": "ninguna",
+    "cantidad_productos": 0,
+    "parent": 0
+  },
+  {
+    "id": 3394,
+    "nombre": "PIEL GRASA Y ACNE",
+    "slug": "piel-grasa-y-acne-cuidado-facial",
+    "cantidad_productos": 0,
+    "parent": 299
+  },
+  {
+    "id": 307,
+    "nombre": "SALUD VISUAL",
+    "slug": "salud-visual-salud-y-medicamentos",
+    "cantidad_productos": 0,
+    "parent": 289
+  }
+]

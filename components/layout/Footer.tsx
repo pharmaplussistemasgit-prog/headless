@@ -54,24 +54,22 @@ export default function Footer() {
             </div>
 
             {/* Form */}
-            <form className="max-w-xl mx-auto flex flex-col sm:flex-row gap-3 pt-2">
-              <input
-                type="email"
-                placeholder="tucorreo@ejemplo.com"
-                className="flex-1 bg-white/10 border-2 border-white/20 rounded-full px-6 py-4 text-sm focus:outline-none focus:border-white focus:bg-white/20 shadow-sm text-white placeholder-blue-200 transition-all font-medium"
-              />
-              <button
-                type="submit"
-                className="bg-[var(--color-pharma-green)] text-white px-8 py-4 rounded-full font-bold hover:bg-green-500 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+            {/* CTA Button */}
+            <div className="pt-6 flex justify-center">
+              <Link
+                href="/pastillero"
+                className="bg-[var(--color-pharma-green)] text-white text-lg px-10 py-4 rounded-full font-extrabold hover:bg-green-500 transition-all shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-3 group border-2 border-green-400/30"
               >
-                Suscribirme Ahora
-                <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </form>
+                Ingresar a mi Pastillero
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+            </div>
 
             {/* Privacy Note */}
-            <p className="text-xs text-blue-200 pt-2 opacity-80">
-              🔒 Tus datos están protegidos. Puedes cancelar tu suscripción en cualquier momento.
+            <p className="text-xs text-blue-200 pt-4 opacity-80">
+              🔒 Acceso seguro y privado. Tus datos de salud están protegidos.
             </p>
           </div>
         </div>
@@ -173,6 +171,7 @@ export default function Footer() {
                   <li><Link href="/politicas/politicas-devolucion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas de Devoluciones</Link></li>
                   <li><Link href="/politicas/proteccion-datos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Política de Protección de Datos</Link></li>
                   <li><Link href="/politicas/aviso-privacidad" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Aviso de Privacidad</Link></li>
+                  <li><Link href="/politicas/preferencias-cookies" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preferencias de Cookies</Link></li>
                 </ul>
               </div>
             </div>

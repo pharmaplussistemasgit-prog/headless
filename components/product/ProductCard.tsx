@@ -80,6 +80,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Snowflake className="w-3 h-3" /> Cadena de Frío
             </span>
           )}
+          {product.isOnSale && (
+            <span className="bg-[#EF4444] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow-sm flex items-center gap-1 animate-pulse">
+              ¡OFERTA!
+            </span>
+          )}
         </div>
 
         <CardContent className="p-0 flex flex-col flex-grow relative">
@@ -135,13 +140,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 )}
               </div>
 
-              {/* Exclusive Price Label */}
-              <div className="text-[11px] text-gray-400 font-light mb-1">
-                Precio exclusivo web
-              </div>
             </div>
-
-            {/* Action Button - 0 Radius */}
             <div className="mt-auto">
               {/* Stop Propagation on Button to allow direct Add To Cart if needed, OR just open modal too. User requested Open Modal. */}
               <Button
@@ -170,8 +169,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               </Button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </CardContent >
+      </Card >
     </>
   );
 }
