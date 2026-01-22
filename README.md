@@ -1,36 +1,162 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💊 PharmaPlus Headless E-commerce
 
-## Getting Started
+Aplicación **Headless Commerce** construida con Next.js 15 para PharmaPlus, separando el frontend moderno del backend WordPress/WooCommerce.
 
-First, run the development server:
+---
+
+## 🚀 Inicio Rápido
+
+### Desarrollo Local
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Ejecutar servidor de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build de Producción
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Crear build optimizado
+npm run build
 
-## Learn More
+# Ejecutar build en producción
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📚 Documentación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+La documentación completa del proyecto está organizada en la carpeta [`/docs`](./docs/):
 
-## Deploy on Vercel
+- **[📘 Technical](./docs/technical/)** - Arquitectura, integraciones y sistemas técnicos
+- **[✨ Features](./docs/features/)** - Funcionalidades implementadas
+- **[💡 Proposals](./docs/proposals/)** - Propuestas de diseño y arquitectura
+- **[📖 Guides](./docs/guides/)** - Guías de desarrollo y onboarding
+- **[📝 Work Logs](./docs/work-logs/)** - Registros de trabajo diarios
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+👉 **[Ver índice completo de documentación](./docs/README.md)**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🛠️ Scripts de Utilidad
+
+El proyecto incluye **38 scripts** para mantenimiento, auditoría y migración:
+
+```bash
+# Auditar categorías
+npx tsx scripts/audit-categories.ts
+
+# Verificar cadena de frío
+npx tsx scripts/verify-cold-chain.ts
+
+# Generar reporte de inventario
+npx tsx scripts/generate-inventory-report.ts
+```
+
+👉 **[Ver documentación completa de scripts](./scripts/README.md)**
+
+---
+
+## 📊 Estructura del Proyecto
+
+```
+pharma-headless-1a Netlify/
+├── app/                    # Rutas y páginas (Next.js App Router)
+├── components/             # Componentes React reutilizables
+├── lib/                    # Lógica de negocio y utilidades
+├── hooks/                  # React hooks personalizados
+├── docs/                   # 📚 Documentación completa
+├── scripts/                # 🛠️ Scripts de utilidad
+├── data/                   # 📊 Datos y configuración
+│   ├── mappings/          # Mapeos de WooCommerce
+│   ├── audit/             # Resultados de auditorías
+│   └── cache/             # Caché de productos
+├── public/                 # Archivos estáticos
+└── types/                  # Definiciones TypeScript
+```
+
+---
+
+## 🔧 Tecnologías Principales
+
+- **Framework:** Next.js 15 (App Router)
+- **Lenguaje:** TypeScript
+- **Estilos:** Tailwind CSS v4
+- **Backend:** WordPress + WooCommerce (Headless)
+- **Base de Datos:** Supabase (funcionalidades adicionales)
+- **Estado:** React Context API
+- **Despliegue:** Vercel
+
+---
+
+## 🌟 Funcionalidades Destacadas
+
+- 🛒 **E-commerce Completo** - Catálogo, carrito, checkout
+- 🔍 **Búsqueda en Tiempo Real** - Con debounce y filtros inteligentes
+- 💊 **Pastillero Virtual** - Gestión de medicamentos y recordatorios
+- ❄️ **Cadena de Frío** - Sistema especial para productos refrigerados
+- 💳 **Múltiples Pasarelas** - Integración con Wompi, Bancolombia
+- 📱 **PWA Ready** - Optimizado para móviles
+- 🚀 **ISR & Performance** - Caché inteligente y optimizaciones
+
+---
+
+## ⚙️ Variables de Entorno
+
+Copia `.env.example` a `.env.local` y configura:
+
+```bash
+# WooCommerce API
+NEXT_PUBLIC_WORDPRESS_API_URL=https://tu-sitio.com/wp-json
+NEXT_PUBLIC_WOOCOMMERCE_KEY=ck_xxxxx
+WOOCOMMERCE_SECRET=cs_xxxxx
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=xxxxx
+SUPABASE_SERVICE_ROLE_KEY=xxxxx
+
+# Otros servicios
+NEXT_PUBLIC_MAPBOX_TOKEN=xxxxx
+RESEND_API_KEY=re_xxxxx
+```
+
+---
+
+## 📖 Guías Rápidas
+
+### Para Nuevos Desarrolladores
+1. Lee **[Handover](./docs/guides/handover.md)** para entender el proyecto
+2. Revisa **[Arquitectura](./docs/technical/architecture.md)** para la estructura técnica
+3. Consulta **[Funcionalidades Recientes](./docs/features/recent-features.md)**
+
+### Para Cambiar Contenido
+- **Productos:** Editar en WordPress/WooCommerce (no tocar código)
+- **Textos estáticos:** Editar componentes en `/components`
+- **Colores de marca:** Modificar variables en `app/globals.css`
+
+---
+
+## 🔗 Enlaces Útiles
+
+- **[Sitio en Producción](https://headless-one-sigma.vercel.app/)**
+- **[Panel WordPress](https://tienda.pharmaplus.com.co/wp-admin)**
+- **[Documentación Next.js](https://nextjs.org/docs)**
+- **[WooCommerce REST API](https://woocommerce.github.io/woocommerce-rest-api-docs/)**
+
+---
+
+## 📞 Soporte
+
+Para cambios estructurales, nuevas funcionalidades o errores críticos, contactar al equipo de desarrollo.
+
+---
+
+**Versión:** 1.0.0  
+**Última actualización:** 21 de enero de 2026
