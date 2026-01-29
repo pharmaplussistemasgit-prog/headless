@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getCategoryBySlug, getProductsByCategory } from '@/app/actions/products';
-import { getCategoryTreeData, getAllProductCategories } from '@/lib/woocommerce';
+import { getCategoryTreeData, getAllProductCategories, getCategoryGlobalFacets } from '@/lib/woocommerce';
 import CategorySidebar from '@/components/category/CategorySidebar';
 import ProductCard from '@/components/product/ProductCard';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
@@ -52,14 +52,12 @@ export default async function CategoryPage({
     }
 
     // START: OPTIMIZATION FOR SMART FILTERS
-    // Limit to 24 items as requested by user to prevent page overload
-    // Filters will apply to the loaded 24 items (Visual Filtering)
-    const [{ products, totalPages }, categoryTree] = await Promise.all([
+    // We now fetch Global Facets (cached) to populate the sidebar with ALL options (not just page 1)
+    const [{ products, totalPages }, categoryTree, facets] = await Promise.all([
         getProductsByCategory(category.id, { minPrice, maxPrice, page, perPage: 12 }),
-        getCategoryTreeData()
+        getCategoryTreeData(),
+        getCategoryGlobalFacets(category.id)
     ]);
-
-
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -81,6 +79,7 @@ export default async function CategoryPage({
                 totalPages={totalPages}
                 searchParams={resolvedSearchParams}
                 categoryTree={categoryTree}
+                facets={facets}
             />
         </div>
     );

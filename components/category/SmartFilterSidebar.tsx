@@ -4,6 +4,7 @@ import { FilterState } from '@/lib/filterUtils';
 import { CategoryTree } from '@/types/woocommerce';
 import CategorySidebar from './CategorySidebar';
 import FilterAccordion from './FilterAccordion';
+import { PriceSlider } from '@/components/ui/price-slider';
 
 interface SmartFilterSidebarProps {
     filters: FilterState;
@@ -50,10 +51,31 @@ export default function SmartFilterSidebar({
         onFilterChange({ ...filters, conditions: newCond });
     };
 
+    // New: Toggle Tag
+    const toggleTag = (tagSlug: string) => {
+        // Handle filterUtils having 'tags' property now
+        if (!filters.tags) return;
+        const newTags = filters.tags.map(t =>
+            t.slug === tagSlug ? { ...t, active: !t.active } : t
+        );
+        onFilterChange({ ...filters, tags: newTags });
+    };
+
+    // Handle Price
+    const handlePriceChange = ([min, max]: [number, number]) => {
+        onFilterChange({
+            ...filters,
+            activePriceRange: { min, max }
+        });
+    };
+
     const hasActiveFilters =
         filters.brands.some(b => b.active) ||
         filters.usage.some(u => u.active) ||
-        filters.conditions.some(c => c.active);
+        filters.conditions.some(c => c.active) ||
+        (filters.tags && filters.tags.some(t => t.active)) ||
+        filters.activePriceRange.min > filters.priceRange.min ||
+        filters.activePriceRange.max < filters.priceRange.max;
 
     const clearAll = () => {
         onFilterChange({
@@ -61,6 +83,8 @@ export default function SmartFilterSidebar({
             brands: filters.brands.map(b => ({ ...b, active: false })),
             usage: filters.usage.map(u => ({ ...u, active: false })),
             conditions: filters.conditions.map(c => ({ ...c, active: false })),
+            tags: filters.tags ? filters.tags.map(t => ({ ...t, active: false })) : [],
+            activePriceRange: { ...filters.priceRange }
         });
     };
 
@@ -69,12 +93,22 @@ export default function SmartFilterSidebar({
     const usageItems = filters.usage.map(u => ({ id: u.id, label: u.label, count: u.count, active: u.active }));
     const conditionItems = filters.conditions.map(c => ({ id: c.id, label: c.label, count: c.count, active: c.active }));
 
+    // Safety check for tags
+    const tagItems = filters.tags
+        ? filters.tags.map(t => ({ id: t.slug, label: t.name, count: t.count, active: t.active }))
+        : [];
+
+    // Helper for Currency
+    const fmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+
     // Calculate if there are ANY available filters to show (even if not active)
     const hasAnyFilters =
         brandItems.length > 0 ||
         usageItems.length > 0 ||
         conditionItems.length > 0 ||
-        hasActiveFilters;
+        tagItems.length > 0 ||
+        hasActiveFilters ||
+        filters.priceRange.max > filters.priceRange.min;
 
     if (!hasAnyFilters && !hasChildren && !isColdChain) {
         return null; // Don't render anything if completely empty
@@ -84,7 +118,7 @@ export default function SmartFilterSidebar({
         <div className={`space-y-6 ${className}`}>
 
             {/* MODULE 1: ADAPTIVE NAVIGATION */}
-            {hasChildren && !isColdChain && (
+            {hasChildren && (
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                     <div className="p-4 bg-gray-50/50 border-b border-gray-100">
                         <h3 className="font-outfit font-bold text-[var(--color-primary-blue)] text-sm flex items-center gap-2">
@@ -133,6 +167,23 @@ export default function SmartFilterSidebar({
 
                     {/* SMART MENUS */}
                     <div className="space-y-4 pt-2">
+
+                        {/* 0. PRICE SLIDER */}
+                        {filters.priceRange.max > filters.priceRange.min && (
+                            <div className="bg-white px-2 py-4 rounded-xl border border-gray-100 shadow-sm">
+                                <h4 className="font-outfit font-bold text-gray-700 text-sm mb-4 flex items-center gap-2">
+                                    💰 Rango de Precio
+                                </h4>
+                                <PriceSlider
+                                    min={filters.priceRange.min}
+                                    max={filters.priceRange.max}
+                                    value={[filters.activePriceRange.min, filters.activePriceRange.max]}
+                                    onChange={handlePriceChange}
+                                    formatLabel={(v) => fmt.format(v)}
+                                />
+                            </div>
+                        )}
+
                         {/* 1. LABORATORIOS */}
                         {brandItems.length > 0 && (
                             <FilterAccordion
@@ -144,8 +195,8 @@ export default function SmartFilterSidebar({
                             />
                         )}
 
-                        {/* 2. FORMA DE USO (Excluir en cadena de frío si se desea, o mantener si es útil) */}
-                        {usageItems.length > 0 && !isColdChain && (
+                        {/* 2. FORMA DE USO */}
+                        {usageItems.length > 0 && (
                             <FilterAccordion
                                 title="Forma de Uso"
                                 items={usageItems}
@@ -161,6 +212,17 @@ export default function SmartFilterSidebar({
                                 items={conditionItems}
                                 onToggle={toggleCondition}
                                 icon={<span className="text-lg">🩺</span>}
+                            />
+                        )}
+
+                        {/* 4. OTRAS ETIQUETAS (All Tags) */}
+                        {tagItems.length > 0 && (
+                            <FilterAccordion
+                                title="Etiquetas"
+                                items={tagItems}
+                                onToggle={toggleTag}
+                                searchable={true}
+                                icon={<span className="text-lg">🏷️</span>}
                             />
                         )}
                     </div>

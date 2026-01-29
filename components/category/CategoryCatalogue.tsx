@@ -16,6 +16,8 @@ interface CategoryCatalogueProps {
     totalPages: number;
     searchParams?: { [key: string]: string | string[] | undefined };
     categoryTree: CategoryTree[];
+    customHeader?: React.ReactNode;
+    facets?: FilterState | null; // New: Global Facets from Server Cache
 }
 
 export default function CategoryCatalogue({
@@ -25,7 +27,9 @@ export default function CategoryCatalogue({
     page,
     totalPages,
     searchParams,
-    categoryTree
+    categoryTree,
+    customHeader,
+    facets
 }: CategoryCatalogueProps) {
 
     // Helper to build pagination links
@@ -37,14 +41,20 @@ export default function CategoryCatalogue({
         return `/categoria/${categorySlug}?${params.toString()}`;
     };
 
-    // Initialize filters based on the loaded products
-    const initialFilterState = useMemo(() => analyzeProductsForFilters(initialProducts), [initialProducts]);
+    // Initialize filters: Prefer Global Facets (server) -> Local Analysis (client fallback)
+    const initialFilterState = useMemo(() => {
+        if (facets) return facets;
+        return analyzeProductsForFilters(initialProducts);
+    }, [initialProducts, facets]);
+
     const [filters, setFilters] = useState<FilterState>(initialFilterState);
 
-    // Recalculate filters if initialProducts changes (e.g. pagination)
+    // Recalculate filters if initialProducts changes (pagination), BUT ONLY if not using Global Facets
     useEffect(() => {
-        setFilters(analyzeProductsForFilters(initialProducts));
-    }, [initialProducts]);
+        if (!facets) {
+            setFilters(analyzeProductsForFilters(initialProducts));
+        }
+    }, [initialProducts, facets]);
 
     // Apply active filters to the product list
     const filteredProducts = useMemo(() => {
@@ -95,15 +105,19 @@ export default function CategoryCatalogue({
 
             {/* Main Content */}
             <main className="flex-1">
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-[var(--color-primary-blue)] mb-2 capitalize">
-                        {categoryName}
-                    </h1>
-                    <p className="text-sm text-gray-400 mt-2">
-                        Mostrando {filteredProducts.length} de {initialProducts.length} productos cargados
-                    </p>
-                </div>
+                {/* Custom Header or Default Header */}
+                {customHeader ? (
+                    customHeader
+                ) : (
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-[var(--color-primary-blue)] mb-2 capitalize">
+                            {categoryName}
+                        </h1>
+                        <p className="text-sm text-gray-400 mt-2">
+                            Mostrando {filteredProducts.length} de {initialProducts.length} productos cargados
+                        </p>
+                    </div>
+                )}
 
                 {/* Products Grid */}
                 {filteredProducts.length > 0 ? (

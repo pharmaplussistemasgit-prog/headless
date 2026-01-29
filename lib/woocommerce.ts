@@ -12,6 +12,8 @@ import type {
   AttributeWithTerms,
   CategoryTree
 } from "@/types/woocommerce";
+import { mapWooProduct } from "@/lib/mappers";
+import { analyzeProductsForFilters, FilterState } from "@/lib/filterUtils";
 
 let _api: API | null = null;
 
@@ -228,9 +230,13 @@ async function wcFetchAll<T>(endpoint: string, params: Record<string, unknown> =
   return all;
 }
 
+// Cache duration for structural data (Categories, Tags, Attributes)
+// 24 Hours - This data changes very rarely
+const CATEGORY_CACHE_TTL = 86400;
+
 export async function getAllProductCategories(): Promise<Category[]> {
   try {
-    const categories = await wcFetchAll<Category>("products/categories", { per_page: 100 }, 600);
+    const categories = await wcFetchAll<Category>("products/categories", { per_page: 100 }, CATEGORY_CACHE_TTL);
     // Filter out system/miscellaneous categories that should not appear in navigation
     const excludedSlugs = [
       'uncategorized',
@@ -247,7 +253,7 @@ export async function getAllProductCategories(): Promise<Category[]> {
 
 export async function getAllProductTags(): Promise<Tag[]> {
   try {
-    return await wcFetchAll<Tag>("products/tags", { per_page: 100 }, 600);
+    return await wcFetchAll<Tag>("products/tags", { per_page: 100 }, CATEGORY_CACHE_TTL);
   } catch (error) {
     console.error("Error fetching tags:", error);
     return [];
@@ -256,7 +262,7 @@ export async function getAllProductTags(): Promise<Tag[]> {
 
 export async function getAllProductAttributes(): Promise<ProductAttribute[]> {
   try {
-    return await wcFetchAll<ProductAttribute>("products/attributes", { per_page: 100 }, 600);
+    return await wcFetchAll<ProductAttribute>("products/attributes", { per_page: 100 }, CATEGORY_CACHE_TTL);
   } catch (error) {
     console.error("Error fetching attributes:", error);
     return [];
@@ -265,7 +271,7 @@ export async function getAllProductAttributes(): Promise<ProductAttribute[]> {
 
 export async function getAttributeTerms(attributeId: number): Promise<AttributeTerm[]> {
   try {
-    return await wcFetchAll<AttributeTerm>(`products/attributes/${attributeId}/terms`, { per_page: 100 }, 600);
+    return await wcFetchAll<AttributeTerm>(`products/attributes/${attributeId}/terms`, { per_page: 100 }, CATEGORY_CACHE_TTL);
   } catch (error) {
     console.error(`Error fetching terms for attribute ${attributeId}:`, error);
     return [];
@@ -399,3 +405,26 @@ export async function getProducts(params: {
 }
 
 
+
+/**
+ * Obtiene las facetas (filtros globales) de una categoría
+ * Cacheado por 24 horas para evitar carga masiva.
+ * Analiza TODOS los productos de la categoría, no solo la página actual.
+ */
+export async function getCategoryGlobalFacets(categoryId: number): Promise<FilterState | null> {
+  try {
+    console.log(`[Cache] Generando facetas globales para categoría ${categoryId}...`);
+    const products = await wcFetchAll<Product>("products", {
+      category: categoryId.toString(),
+      per_page: 50,
+      status: 'publish',
+      stock_status: 'instock' // Only filter available products ? Or all? usually all visible.
+    }, CATEGORY_CACHE_TTL);
+
+    const mapped = products.map((p: any) => mapWooProduct(p));
+    return analyzeProductsForFilters(mapped);
+  } catch (error) {
+    console.error(`Error calculating facets for category ${categoryId}:`, error);
+    return null;
+  }
+}

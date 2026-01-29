@@ -36,12 +36,14 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                             const isActive = hoveredCategoryId === cat.id;
 
                             return (
-                                <div
+                                <Link
                                     key={cat.id}
+                                    href={`/categoria/${cat.slug}`}
                                     onMouseEnter={() => {
                                         setHoveredCategoryId(cat.id);
                                         setHoveredSubCategoryId(null);
                                     }}
+                                    onClick={onClose}
                                     className={`
                                         group relative px-4 py-2.5 cursor-pointer flex items-center justify-between transition-all duration-200 border-l-[3px]
                                         ${isActive
@@ -66,7 +68,7 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                                         w-3.5 h-3.5 transition-all duration-200 
                                         ${isActive ? `${catStyle.iconColor} translate-x-0 opacity-100` : 'text-slate-400 opacity-50 group-hover:opacity-100 group-hover:text-slate-500'}
                                     `} />
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>
@@ -106,14 +108,16 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                                             const isChildActive = hoveredSubCategoryId === child.id;
                                             const parentStyle = getCategoryStyle(parentCat.slug);
                                             return (
-                                                <div
+                                                <Link
                                                     key={child.id}
+                                                    href={`/categoria/${child.slug}`}
                                                     onMouseEnter={() => setHoveredSubCategoryId(child.id)}
+                                                    onClick={onClose}
                                                     className={`
                                                         px-3 py-2 rounded-md cursor-pointer flex items-center justify-between transition-all duration-150 border border-transparent
                                                         ${isChildActive
                                                             ? 'bg-white shadow-xs border-gray-100'
-                                                            : 'hover:bg-white hover:border-gray-50'
+                                                            : 'hover:bg-white hover:border-gray-50' // Light hover effect
                                                         }
                                                     `}
                                                 >
@@ -123,7 +127,7 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                                                     {child.children && child.children.length > 0 && (
                                                         <ChevronRight className={`w-3 h-3 transition-transform ${isChildActive ? `${parentStyle.iconColor} translate-x-0.5` : 'text-slate-300'}`} />
                                                     )}
-                                                </div>
+                                                </Link>
                                             );
                                         })
                                     ) : (
@@ -146,7 +150,7 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                             if (!hoveredCategoryId) return null;
 
                             if (!activeChild) {
-                                // Empty State
+                                // Empty State when no subcategory is hovered
                                 return (
                                     <div className="h-full flex flex-col items-center justify-center text-slate-300 p-10 bg-white">
                                         <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 opacity-20 ${getCategoryStyle(activeParent?.slug || '').bgColor}`}>
@@ -165,11 +169,18 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                                     {/* Header */}
                                     <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 px-6 py-4 border-b border-gray-50 flex justify-between items-end">
                                         <div>
-                                            <h3 className="text-[16px] font-semibold text-[var(--color-text-dark)] mb-0.5 leading-none">
-                                                {activeChild.name}
-                                            </h3>
+                                            <Link
+                                                href={`/categoria/${activeChild.slug}`}
+                                                className="hover:underline"
+                                                onClick={onClose}
+                                            >
+                                                <h3 className="text-[16px] font-semibold text-[var(--color-text-dark)] mb-0.5 leading-none">
+                                                    {activeChild.name}
+                                                </h3>
+                                            </Link>
                                             <p className="text-[11px] font-light text-slate-500">Explora las opciones disponibles</p>
                                         </div>
+                                        {/* "Ver todo" small link kept as auxiliary, but not as big button */}
                                         <Link
                                             href={`/categoria/${activeChild.slug}`}
                                             className={`text-[11px] font-medium hover:underline flex items-center gap-1 ${getCategoryStyle(activeParent?.slug || '').textColor}`}
@@ -180,6 +191,7 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                                         </Link>
                                     </div>
 
+                                    {/* Content (Grandchildren or Empty) */}
                                     <div className="p-6">
                                         {activeChild.children && activeChild.children.length > 0 ? (
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-1">
@@ -196,15 +208,11 @@ export default function MegaMenu({ isOpen, categories, onClose }: MegaMenuProps)
                                                 ))}
                                             </div>
                                         ) : (
-                                            <div className="flex flex-col items-center justify-center py-12">
-                                                <Link
-                                                    href={`/categoria/${activeChild.slug}`}
-                                                    className={`px-5 py-2 text-white text-[13px] font-medium rounded-full shadow-md hover:scale-105 transition-all ${getCategoryStyle(activeParent?.slug || '').bgColor.replace('bg-', 'bg-').replace('50', '500')}`}
-                                                    style={{ backgroundColor: 'var(--color-pharma-blue)' }} // Fallback
-                                                    onClick={onClose}
-                                                >
-                                                    Ver todos los productos
-                                                </Link>
+                                            // NO BUTTON. Just a subtle message or nothing.
+                                            <div className="flex flex-col items-center justify-center py-12 text-center">
+                                                <p className="text-sm text-gray-400 italic">
+                                                    Navega a la categoría para ver productos
+                                                </p>
                                             </div>
                                         )}
                                     </div>
