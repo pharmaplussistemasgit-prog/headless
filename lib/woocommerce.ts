@@ -231,11 +231,14 @@ async function wcFetchAll<T>(endpoint: string, params: Record<string, unknown> =
 export async function getAllProductCategories(): Promise<Category[]> {
   try {
     const categories = await wcFetchAll<Category>("products/categories", { per_page: 100 }, 600);
-    return categories.filter(cat =>
-      cat.slug !== 'uncategorized' &&
-      cat.slug !== 'sin-categorizar' &&
-      cat.slug !== 'ninguna'
-    );
+    // Filter out system/miscellaneous categories that should not appear in navigation
+    const excludedSlugs = [
+      'uncategorized',
+      'sin-categorizar',
+      'ninguna',
+      'otros-productos',  // Contains misclassified products pending reorganization
+    ];
+    return categories.filter(cat => !excludedSlugs.includes(cat.slug));
   } catch (error) {
     console.error("Error fetching categories:", error);
     return [];
