@@ -19,7 +19,8 @@ import { ShippingRule } from '@/lib/shipping';
 import { ShippingRate } from '@/lib/shipping-rates';
 import { ALL_BRANDS_SLIDER } from '@/lib/brands-data';
 import { getCategoryStyle } from '@/lib/category-styles';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Wallet } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 interface HeaderProps {
     categories?: CategoryTree[];
@@ -39,6 +40,7 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
     const [hoveredSubCategoryId, setHoveredSubCategoryId] = useState<number | null>(null); // Level 2 (Child)
     const [searchTerm, setSearchTerm] = useState('');
     const { city, loading, requestLocation } = useGeolocation();
+    const { toggleCart } = useCart();
 
     const categoryRef = useRef<HTMLDivElement>(null);
     const financiamientoRef = useRef<HTMLDivElement>(null);
@@ -146,13 +148,13 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
 
                             <AccountButton />
 
-                            {/* Cart */}
-                            <Link href="/carrito" className="relative group p-2" aria-label="Ver carrito de compras">
+                            {/* Cart - Opens Drawer */}
+                            <button onClick={toggleCart} className="relative group p-2" aria-label="Ver carrito de compras">
                                 <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 flex items-center justify-center text-slate-600 group-hover:text-[var(--color-pharma-blue)] transition-all duration-300">
                                     <ShoppingCart className="w-5 h-5" />
                                 </div>
                                 <CartBadge />
-                            </Link>
+                            </button>
                         </div>
 
                         {/* Mobile Financiamiento Dropdown (Visible only on mobile) */}
@@ -281,6 +283,16 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
                                                 <div>
                                                     <span className="block text-sm font-bold text-slate-800 group-hover:text-[var(--color-pharma-green)] transition-colors">Crédito Libre Inversión</span>
                                                     <span className="text-xs text-slate-500">Para no clientes</span>
+                                                </div>
+                                            </Link>
+
+                                            <Link href="/financiamiento/wompi" className="group flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-slate-50 transition-all cursor-pointer border border-transparent hover:border-slate-100">
+                                                <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0 group-hover:bg-purple-600 transition-all shadow-sm">
+                                                    <Wallet className="w-5 h-5 text-purple-600 group-hover:text-white transition-colors" />
+                                                </div>
+                                                <div>
+                                                    <span className="block text-sm font-bold text-slate-800 group-hover:text-purple-600 transition-colors">Pagar con Wompi</span>
+                                                    <span className="text-xs text-slate-500">Pasarela segura Bancolombia</span>
                                                 </div>
                                             </Link>
                                         </div>
