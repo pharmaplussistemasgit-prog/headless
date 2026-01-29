@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getCategoryBySlug, getProductsByCategory } from '@/app/actions/products';
-import { getCategoryTreeData } from '@/lib/woocommerce';
+import { getCategoryTreeData, getAllProductCategories } from '@/lib/woocommerce';
 import CategorySidebar from '@/components/category/CategorySidebar';
 import ProductCard from '@/components/product/ProductCard';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
@@ -11,6 +11,15 @@ import CategoryCatalogue from '@/components/category/CategoryCatalogue';
 
 // Enable ISR (Incremental Static Regeneration) - revalidate every 5 minutes
 export const revalidate = 300;
+
+// This function pre-builds all category pages at build time
+// Solves the "First Load" slowness issue
+export async function generateStaticParams() {
+    const categories = await getAllProductCategories();
+    return categories.map((category) => ({
+        slug: category.slug,
+    }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
@@ -46,7 +55,7 @@ export default async function CategoryPage({
     // Limit to 24 items as requested by user to prevent page overload
     // Filters will apply to the loaded 24 items (Visual Filtering)
     const [{ products, totalPages }, categoryTree] = await Promise.all([
-        getProductsByCategory(category.id, { minPrice, maxPrice, page, perPage: 24 }),
+        getProductsByCategory(category.id, { minPrice, maxPrice, page, perPage: 12 }),
         getCategoryTreeData()
     ]);
 

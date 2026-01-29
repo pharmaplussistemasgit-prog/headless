@@ -148,12 +148,13 @@ export default function LoginPage() {
                         </div>
 
                         <div className="mt-6 grid gap-3">
-                            <Link
-                                href="/registro"
-                                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                            <a
+                                href={`${process.env.NEXT_PUBLIC_WORDPRESS_URL?.replace(/\/$/, '') || 'https://tienda.pharmaplus.com.co'}/mi-cuenta`}
+                                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                             >
                                 Crear cuenta nueva
-                            </Link>
+                                <ArrowRight className="w-4 h-4 -rotate-45" />
+                            </a>
                         </div>
                     </div>
                 </div>

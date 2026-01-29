@@ -1,3 +1,53 @@
+/**
+ * Mapeo entre códigos ISO de departamentos y códigos DANE
+ * ISO Code (usado en COLOMBIA_STATES) -> DANE Code (usado en CSV de fletes)
+ * 
+ * IMPORTANTE: Bogotá D.C. en el CSV está bajo el código 25 (Cundinamarca)
+ * porque en el sistema de fletes se maneja como parte de Cundinamarca.
+ */
+export const ISO_TO_DANE_MAP: Record<string, string> = {
+    'CO-AMA': '91',  // Amazonas
+    'CO-ANT': '05',  // Antioquia
+    'CO-ARA': '81',  // Arauca
+    'CO-ATL': '08',  // Atlántico
+    'CO-BOL': '13',  // Bolívar
+    'CO-BOY': '15',  // Boyacá
+    'CO-CAL': '17',  // Caldas
+    'CO-CAQ': '18',  // Caquetá
+    'CO-CAS': '85',  // Casanare
+    'CO-CAU': '19',  // Cauca
+    'CO-CES': '20',  // Cesar
+    'CO-CHO': '27',  // Chocó
+    'CO-COR': '23',  // Córdoba
+    'CO-CUN': '25',  // Cundinamarca
+    'CO-DC': '25',   // Bogotá D.C. (en CSV está bajo código 25 - Cundinamarca)
+    'CO-GUA': '94',  // Guainía
+    'CO-GUV': '95',  // Guaviare
+    'CO-HUI': '41',  // Huila
+    'CO-LAG': '44',  // La Guajira
+    'CO-MAG': '47',  // Magdalena
+    'CO-MET': '50',  // Meta
+    'CO-NAR': '52',  // Nariño
+    'CO-NSA': '54',  // Norte de Santander
+    'CO-PUT': '86',  // Putumayo
+    'CO-QUI': '63',  // Quindío
+    'CO-RIS': '66',  // Risaralda
+    'CO-SAP': '88',  // San Andrés y Providencia
+    'CO-SAN': '68',  // Santander
+    'CO-SUC': '70',  // Sucre
+    'CO-TOL': '73',  // Tolima
+    'CO-VAC': '76',  // Valle del Cauca
+    'CO-VAU': '97',  // Vaupés
+    'CO-VID': '99',  // Vichada
+};
+
+/**
+ * Mapeo inverso: DANE Code -> ISO Code
+ */
+export const DANE_TO_ISO_MAP: Record<string, string> = Object.fromEntries(
+    Object.entries(ISO_TO_DANE_MAP).map(([iso, dane]) => [dane, iso])
+);
+
 export const COLOMBIA_CITIES: Record<string, string[]> = {
     'CO-AMA': ['Leticia', 'Puerto Nariño'],
     'CO-ANT': ['Medellín', 'Bello', 'Itagüí', 'Envigado', 'Apartadó', 'Rionegro', 'Turbo', 'Caucasia', 'Sabaneta', 'Chigorodó', 'Caldas', 'Copacabana', 'La Estrella', 'La Ceja', 'Marinilla', 'Guarne', 'Carmen de Viboral', 'Girardota', 'Yarumal', 'Santa Rosa de Osos'],

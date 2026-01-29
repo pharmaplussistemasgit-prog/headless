@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Minus, Plus, ShoppingCart, Check, Info, ShieldCheck, MessageCircle, Facebook, Twitter } from 'lucide-react';
+import { Minus, Plus, ShoppingCart, Check, Info, ShieldCheck, MessageCircle, Facebook, Twitter, AlertCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
 import { MappedProduct } from '@/types/product';
@@ -140,6 +140,23 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                     <span className="text-xs text-gray-500 mt-1 font-medium">
                                         Unitarios a ${(product.price / 1).toLocaleString('es-CO')}
                                     </span>
+
+                                    {/* T22: Stock Status Badges */}
+                                    <div className="mt-3">
+                                        {!product.isInStock ? (
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wide">
+                                                <AlertCircle size={14} /> Agotado
+                                            </span>
+                                        ) : (product.stock && product.stock <= 5) ? (
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wide animate-pulse">
+                                                <AlertCircle size={14} /> ¡Solo quedan {product.stock} unidades!
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wide">
+                                                <Check size={14} /> En Stock
+                                            </span>
+                                        )}
+                                    </div>
 
                                     {/* Snippet #32: Short Description near price */}
                                     {product.shortDescription && (

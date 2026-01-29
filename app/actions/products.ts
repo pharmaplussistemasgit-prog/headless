@@ -1,6 +1,6 @@
 'use server';
 
-import { getWooApi } from "@/lib/woocommerce";
+import { getWooApi, wcFetchRaw } from "@/lib/woocommerce";
 import { mapWooProduct } from "@/lib/mappers";
 import { MappedProduct, MappedCategory, WooCategory } from "@/types/product";
 
@@ -43,13 +43,13 @@ export async function getProductBySlug(slug: string): Promise<MappedProduct | nu
 // category logic
 export async function getCategoryBySlug(slug: string): Promise<MappedCategory | null> {
     try {
-        const api = getWooApi();
-        const response = await api.get("products/categories", {
+        // Optimizing with wcFetchRaw for ISR Caching
+        const { data } = await wcFetchRaw<WooCategory[]>("products/categories", {
             slug: slug
         });
 
-        if (response.status === 200 && response.data.length > 0) {
-            const cat = response.data[0] as WooCategory;
+        if (data && data.length > 0) {
+            const cat = data[0];
             return {
                 id: cat.id,
                 name: cat.name,
@@ -73,7 +73,6 @@ export async function getProductsByCategory(categoryId: number, options: {
     perPage?: number;
 } = {}): Promise<{ products: MappedProduct[], totalPages: number }> {
     try {
-        const api = getWooApi();
         const params: any = {
             category: categoryId.toString(),
             per_page: options.perPage || 12,
@@ -84,16 +83,15 @@ export async function getProductsByCategory(categoryId: number, options: {
         if (options.minPrice) params.min_price = options.minPrice;
         if (options.maxPrice) params.max_price = options.maxPrice;
 
-        const response = await api.get("products", params);
+        // Use wcFetchRaw to enable Next.js ISR Caching (default 10 mins)
+        // This fixes the slow 4s loading time on repeated visits
+        const { data, headers } = await wcFetchRaw<any[]>("products", params);
 
-        if (response.status === 200) {
-            const totalPages = parseInt(response.headers["x-wp-totalpages"] as string || "1");
-            return {
-                products: response.data.map((p: any) => mapWooProduct(p)),
-                totalPages
-            };
-        }
-        return { products: [], totalPages: 0 };
+        const totalPages = parseInt(headers.get("x-wp-totalpages") || "1");
+        return {
+            products: data.map((p: any) => mapWooProduct(p)),
+            totalPages
+        };
     } catch (error) {
         console.error(`Error fetching products for category ${categoryId}:`, error);
         return { products: [], totalPages: 0 };

@@ -1,8 +1,11 @@
 import HeroSection, { HeroSlide } from "@/components/home/HeroSection";
 import CategoryIconsSection from "@/components/home/CategoryIconsSection";
+import BrandCarousel from '@/components/home/BrandCarousel';
+import FeaturedBrands from "@/components/home/FeaturedBrands";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import ColdChainSection from "@/components/home/ColdChainSection";
 import RecommendedSection from "@/components/home/RecommendedSection";
+import ValueProposition from "@/components/home/ValueProposition";
 import { getProducts } from "@/lib/woocommerce";
 import { getShippingRates } from '@/lib/shipping';
 import dynamic from 'next/dynamic';
@@ -152,6 +155,13 @@ export default async function HomePage() {
 
 
 
+
+
+      {/* Brand Carousel (All Labs - T21) */}
+      <BrandCarousel />
+
+
+
       {/* Recommended Section (Complementa tu bienestar) */}
       <RecommendedSection
         products={featuredResult.products}
@@ -175,6 +185,9 @@ export default async function HomePage() {
           products={featuredResult.products}
         />
       )}
+
+      {/* Featured Brands (Highlight - T21) Moved here as requested */}
+      <FeaturedBrands />
 
       {/* Cold Chain Section */}
       <ColdChainSection products={coldChainResult.products} />
@@ -200,6 +213,9 @@ export default async function HomePage() {
 
       {/* FAQ Section */}
       <FAQSection />
+
+      {/* Value Proposition (Moved to bottom as requested) */}
+      <ValueProposition />
     </div>
   );
 }

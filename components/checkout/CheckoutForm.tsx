@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/product/ProductCard';
@@ -17,17 +17,31 @@ interface CheckoutFormProps {
 
 
 
-import { COLOMBIA_STATES, COLOMBIA_CITIES } from '@/lib/colombia-data';
+import { COLOMBIA_STATES, COLOMBIA_CITIES, ISO_TO_DANE_MAP } from '@/lib/colombia-data';
+
+import { CreditCard, Building, CheckCircle, Loader2 } from 'lucide-react';
+import PrescriptionUploader from './PrescriptionUploader';
 
 export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
-    const { items, cartTotal, removeItem, updateQuantity, clearCart } = useCart();
+    const { items, cartTotal, removeItem, updateQuantity, clearCart, requiresColdChain, coldChainFee, requiresPrescription } = useCart();
     const [isLoading, setIsLoading] = useState(false);
     const [isCompany, setIsCompany] = useState(false);
+
+    const [deliveryMethod, setDeliveryMethod] = useState<'shipping' | 'pickup'>('shipping');
+    const [deliveryDate, setDeliveryDate] = useState('');
+    const [prescriptionConfirmed, setPrescriptionConfirmed] = useState(false);
+    const [prescriptionFileUrl, setPrescriptionFileUrl] = useState<string | null>(null);
+
+
 
     // Shipping State
     const [selectedState, setSelectedState] = useState('');
     const [shippingCost, setShippingCost] = useState(0);
+    const [deliveryDays, setDeliveryDays] = useState(0);
     const [shippingMethodName, setShippingMethodName] = useState('');
+    const [loadingShipping, setLoadingShipping] = useState(false);
+    const [cityCode, setCityCode] = useState('');
+    const [availableCities, setAvailableCities] = useState<Array<{ code: string, name: string }>>([]);
 
     const [customerData, setCustomerData] = useState({
         firstName: '',
@@ -43,38 +57,91 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
     const [userRoles, setUserRoles] = useState<string[]>([]);
 
-    // Update shipping cost when state changes
+    // Load cities when state changes
+    useEffect(() => {
+        if (deliveryMethod === 'pickup') {
+            setShippingCost(0);
+            setShippingMethodName('Retiro en Tienda');
+        } else if (customerData.city && selectedState) {
+            // Re-calculate standard shipping if switching back to shipping
+            // We need cityCode here. It's in state 'cityCode'.
+            const stateName = COLOMBIA_STATES.find(s => s.code === selectedState)?.name || '';
+            calculateShipping(cityCode, customerData.city, stateName);
+        }
+    }, [deliveryMethod]);
+
     useEffect(() => {
         // Reset city when state changes
         setCustomerData(prev => ({ ...prev, city: '' }));
+        setCityCode('');
+        setShippingCost(0);
+        setDeliveryDays(0);
+        setShippingMethodName('');
 
         if (!selectedState) {
-            setShippingCost(0);
-            setShippingMethodName('');
+            setAvailableCities([]);
+            setDeliveryMethod('shipping'); // Reset method
             return;
         }
 
-        // 1. Find matched zone
-        let zone = shippingRules.find(r => r.locations.includes(selectedState));
+        // Load cities for selected state from API
+        const loadCities = async () => {
+            try {
+                const response = await fetch(`/api/shipping/cities?stateCode=${selectedState}`);
+                const data = await response.json();
 
-        // 2. Default zone fallback
-        if (!zone) {
-            zone = shippingRules.find(r => r.zoneId === 0 || r.locations.length === 0);
-            if (zone) console.log("Using Default Zone:", zone.zoneName);
-        }
+                if (data.success) {
+                    setAvailableCities(data.data);
+                } else {
+                    console.error('Error loading cities:', data.message);
+                    setAvailableCities([]);
+                }
+            } catch (error) {
+                console.error('Error loading cities:', error);
+                setAvailableCities([]);
+            }
+        };
 
-        if (zone && zone.methods.length > 0) {
-            // Select first method by default (Logic can be improved to allow selection)
-            const method = zone.methods[0];
-            setShippingCost(method.cost);
-            setShippingMethodName(method.title);
-        } else {
-            // No shipping available
+        loadCities();
+    }, [selectedState]);
+
+    // Calculate shipping when city changes
+    const calculateShipping = async (cityCodeParam: string, cityNameParam: string, stateNameParam: string) => {
+        if (!cityCodeParam || !cityNameParam) return;
+
+        setLoadingShipping(true);
+        try {
+            const response = await fetch('/api/shipping/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cityCode: cityCodeParam,
+                    cityName: cityNameParam,
+                    stateName: stateNameParam
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setShippingCost(data.data.shippingCost);
+                setDeliveryDays(data.data.deliveryDays);
+                setShippingMethodName(`Envío a ${data.data.cityName}`);
+            } else {
+                toast.error('No se pudo calcular el costo de envío');
+                setShippingCost(0);
+                setDeliveryDays(0);
+                setShippingMethodName('Sin cobertura');
+            }
+        } catch (error) {
+            console.error('Error calculating shipping:', error);
+            toast.error('Error al calcular el envío');
             setShippingCost(0);
-            setShippingMethodName('Sin cobertura');
-            toast.error("No hay envíos disponibles para esta zona");
+            setDeliveryDays(0);
+        } finally {
+            setLoadingShipping(false);
         }
-    }, [selectedState, shippingRules]);
+    };
 
     // Pre-fill data if logged in
     useEffect(() => {
@@ -116,6 +183,22 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             return;
         }
 
+        // Handle city selection
+        if (name === 'city') {
+            setCustomerData({ ...customerData, [name]: value });
+
+            // Find the selected city to get its code
+            const selectedCity = availableCities.find(c => c.name === value);
+            if (selectedCity) {
+                setCityCode(selectedCity.code);
+                // Get state name from COLOMBIA_STATES
+                const stateName = COLOMBIA_STATES.find(s => s.code === selectedState)?.name || '';
+                // Calculate shipping
+                calculateShipping(selectedCity.code, value, stateName);
+            }
+            return;
+        }
+
         setCustomerData({ ...customerData, [name]: value });
     };
 
@@ -143,10 +226,23 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             return;
         }
 
+        if (deliveryMethod === 'shipping' && !customerData.address) {
+            toast.error("Ingresa la dirección de envío");
+            return;
+        }
+
         if (isCompany && !customerData.companyName) {
             toast.error("Ingresa la Razón Social de la empresa");
             return;
         }
+
+        // T25: Prescription Validation
+        if (requiresPrescription && !prescriptionConfirmed) {
+            toast.error("Debes confirmar que tienes la fórmula médica");
+            return;
+        }
+
+
 
         setIsLoading(true);
         try {
@@ -164,21 +260,27 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
             // Send selected state as shipping zone context
             params.append('shipping_zone', selectedState); // We send the state code now
-            params.append('shipping_method', shippingMethodName); // Optional: inform backend
+            params.append('shipping_method', deliveryMethod === 'pickup' ? 'local_pickup' : shippingMethodName); // Pickup flag
 
             params.append('billing_first_name', customerData.firstName);
             params.append('billing_last_name', customerData.lastName);
             params.append('billing_email', customerData.email);
             params.append('billing_phone', customerData.phone);
-            params.append('billing_address_1', customerData.address);
-            params.append('billing_city', customerData.city);
-            params.append('billing_state', selectedState); // Important for Woo
-            params.append('billing_state', selectedState); // Important for Woo
+
+            // T24: If Pickup, use Store Address as Shipping Address (Billing remains user's generally, but for simplicity we set both)
+            if (deliveryMethod === 'pickup') {
+                params.append('billing_address_1', 'Calle 86 # 27-54 (RETIRO EN TIENDA)');
+                params.append('billing_city', 'Bogotá D.C.');
+                params.append('billing_state', 'CO-DC');
+                params.append('shipping_method_title', 'Retiro en Tienda'); // Extra hint
+            } else {
+                params.append('billing_address_1', customerData.address);
+                params.append('billing_city', customerData.city);
+                params.append('billing_state', selectedState);
+            }
+
             params.append('documentId', customerData.documentId);
 
-            // Snippet #09: Inject 'billing_cedula'
-            params.append('billing_cedula', customerData.documentId);
-            // Also append standard WP billing fields just in case
             // Snippet #09: Inject 'billing_cedula'
             params.append('billing_cedula', customerData.documentId);
             // Also append standard WP billing fields just in case
@@ -191,6 +293,32 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
             if (isCompany && customerData.companyName) {
                 params.append('billing_company', customerData.companyName);
+            }
+
+            // T23: Cold Chain Fee
+            if (requiresColdChain) {
+                params.append('fee_name', 'Nevera de Icopor + Gel Refrigerante');
+                params.append('fee_amount', coldChainFee.toString());
+            }
+
+            // T25: Delivery Date & Prescription
+            let orderComments = '';
+            if (deliveryDate) orderComments += `Fecha de entrega preferida: ${deliveryDate}. `;
+
+
+
+            if (orderComments) {
+                params.append('order_comments', orderComments);
+            }
+
+            if (requiresPrescription) {
+                params.append('meta_has_prescription', 'yes');
+                if (prescriptionFileUrl) {
+                    params.append('meta_prescription_url', prescriptionFileUrl);
+                    orderComments += " [FÓRMULA ADJUNTA]";
+                } else {
+                    orderComments += " [FÓRMULA PENDIENTE/DECLARACIÓN]";
+                }
             }
 
             // Address 2 (Apartment) - merged or empty
@@ -322,18 +450,93 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
                         {selectedState && (
                             <>
-                                <div className="p-3 bg-blue-50/50 rounded-lg border border-blue-100 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <Truck className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                                        <div>
-                                            <p className="text-sm font-bold text-gray-800">{shippingMethodName || 'Calculando...'}</p>
-                                            <p className="text-xs text-gray-500">Tarifa oficial</p>
+                                {/* T24: Pickup Store Logic */}
+                                {(selectedState === 'CO-DC' || customerData.city === 'Bogotá D.C.') && (
+                                    <div className="mb-4 bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                                        <p className="text-xs font-bold uppercase text-gray-500 mb-2">Método de Entrega</p>
+                                        <div className="flex gap-2">
+                                            <label className={`
+                                                flex-1 cursor-pointer p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 text-center
+                                                ${deliveryMethod === 'shipping'
+                                                    ? 'bg-white border-[var(--color-pharma-blue)] shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
+                                                    : 'bg-transparent border-transparent hover:bg-white hover:border-gray-200'
+                                                }
+                                            `}>
+                                                <input
+                                                    type="radio"
+                                                    name="deliveryMethod"
+                                                    value="shipping"
+                                                    checked={deliveryMethod === 'shipping'}
+                                                    onChange={() => setDeliveryMethod('shipping')}
+                                                    className="hidden"
+                                                />
+                                                <Truck className={`w-5 h-5 ${deliveryMethod === 'shipping' ? 'text-[var(--color-pharma-blue)]' : 'text-gray-400'}`} />
+                                                <span className={`text-xs font-bold ${deliveryMethod === 'shipping' ? 'text-[var(--color-pharma-blue)]' : 'text-gray-500'}`}>Domicilio</span>
+                                            </label>
+
+                                            <label className={`
+                                                flex-1 cursor-pointer p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 text-center
+                                                ${deliveryMethod === 'pickup'
+                                                    ? 'bg-white border-[var(--color-pharma-green)] shadow-sm ring-1 ring-[var(--color-pharma-green)]'
+                                                    : 'bg-transparent border-transparent hover:bg-white hover:border-gray-200'
+                                                }
+                                            `}>
+                                                <input
+                                                    type="radio"
+                                                    name="deliveryMethod"
+                                                    value="pickup"
+                                                    checked={deliveryMethod === 'pickup'}
+                                                    onChange={() => setDeliveryMethod('pickup')}
+                                                    className="hidden"
+                                                />
+                                                <MapPin className={`w-5 h-5 ${deliveryMethod === 'pickup' ? 'text-[var(--color-pharma-green)]' : 'text-gray-400'}`} />
+                                                <span className={`text-xs font-bold ${deliveryMethod === 'pickup' ? 'text-[var(--color-pharma-green)]' : 'text-gray-500'}`}>Retiro en Tienda</span>
+                                            </label>
                                         </div>
                                     </div>
-                                    <div className="font-bold text-[var(--color-pharma-blue)]">
-                                        {shippingCost === 0 ? 'Gratis' : `$${shippingCost.toLocaleString()}`}
+                                )}
+
+                                {deliveryMethod === 'pickup' ? (
+                                    <div className="p-4 bg-green-50 rounded-lg border border-green-100 animate-in fade-in slide-in-from-top-2 mb-4">
+                                        <div className="flex gap-3">
+                                            <div className="bg-white p-2 rounded-full h-fit shadow-sm text-green-600">
+                                                <MapPin className="w-5 h-5" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-green-800 text-sm">Punto de Retiro: Sede Principal</h4>
+                                                <p className="text-xs text-green-700 mt-1">
+                                                    Calle 86 # 27-54, Bogotá D.C.<br />
+                                                    Horario: Lunes a Viernes 7am - 7pm
+                                                </p>
+                                                <div className="flex items-center gap-1 mt-2 text-[10px] font-bold text-green-600 uppercase">
+                                                    <span className="bg-green-100 px-2 py-0.5 rounded">Envío Gratis</span>
+                                                    <span className="bg-green-100 px-2 py-0.5 rounded">Entrega Inmediata</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="p-3 bg-blue-50/50 rounded-lg border border-blue-100 mb-4">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <div className="flex items-center gap-2">
+                                                <Truck className="w-5 h-5 text-[var(--color-pharma-blue)]" />
+                                                <div>
+                                                    <p className="text-sm font-bold text-gray-800">
+                                                        {loadingShipping ? 'Calculando...' : (shippingMethodName || 'Selecciona una ciudad')}
+                                                    </p>
+                                                    {deliveryDays > 0 && (
+                                                        <p className="text-xs text-gray-500">
+                                                            Entrega: {deliveryDays} {deliveryDays === 1 ? 'día' : 'días'}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="font-bold text-[var(--color-pharma-blue)]">
+                                                {loadingShipping ? '...' : (shippingCost === 0 ? 'Selecciona ciudad' : `$${shippingCost.toLocaleString()}`)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold uppercase text-gray-500">Ciudad / Municipio</label>
@@ -344,22 +547,98 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                                             onChange={handleInputChange}
                                             className="w-full p-2 border border-gray-200 rounded-lg outline-none bg-white font-medium appearance-none"
                                             required
+                                            disabled={!selectedState || availableCities.length === 0}
                                         >
                                             <option value="">-- Seleccionar Ciudad --</option>
-                                            {selectedState && COLOMBIA_CITIES[selectedState]?.map((city) => (
-                                                <option key={city} value={city}>{city}</option>
+                                            {availableCities.map((city) => (
+                                                <option key={city.code} value={city.name}>{city.name}</option>
                                             ))}
-                                            {!COLOMBIA_CITIES[selectedState] && (
-                                                <option value="Otra">Otra</option>
-                                            )}
                                         </select>
                                     </div>
+                                    {selectedState && availableCities.length === 0 && (
+                                        <p className="text-xs text-gray-500 mt-1">Cargando ciudades...</p>
+                                    )}
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold uppercase text-gray-500">Dirección Exacta</label>
-                                    <input type="text" name="address" value={customerData.address} onChange={handleInputChange} placeholder="Calle 123 # 45 - 67, Apto 101" className="w-full p-2 border border-gray-200 rounded-lg outline-none" required />
-                                </div>
+
+                                {deliveryMethod === 'shipping' && (
+                                    <div className="space-y-1 animate-in fade-in">
+                                        <label className="text-xs font-bold uppercase text-gray-500">Dirección Exacta</label>
+                                        <input type="text" name="address" value={customerData.address} onChange={handleInputChange} placeholder="Calle 123 # 45 - 67, Apto 101" className="w-full p-2 border border-gray-200 rounded-lg outline-none" required />
+                                    </div>
+                                )}
                             </>
+                        )}
+
+                        {/* T25: Delivery Schedule */}
+                        <div className="pt-4 border-t border-gray-100">
+                            <label className="text-xs font-bold uppercase text-gray-500 mb-1 flex items-center gap-2">
+                                <Calendar className="w-4 h-4" />
+                                ¿Cuándo quieres recibir tu pedido?
+                            </label>
+                            <input
+                                type="date"
+                                className="w-full p-2 border border-gray-200 rounded-lg outline-none text-gray-700 bg-white"
+                                min={new Date().toISOString().split('T')[0]} // Min today
+                                value={deliveryDate}
+                                onChange={(e) => setDeliveryDate(e.target.value)}
+                            />
+                            <p className="text-[10px] text-gray-400 mt-1">
+                                * Sujeto a disponibilidad y horarios de ruta. Domingos y festivos pueden variar.
+                            </p>
+                        </div>
+
+                        {/* T25: Prescription Check */}
+                        {requiresPrescription && (
+                            <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 animate-in fade-in slide-in-from-top-2">
+                                <div className="flex items-start gap-3">
+                                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <h4 className="font-bold text-amber-800 text-sm">Medicamento bajo Fórmula Médica</h4>
+                                        <p className="text-xs text-amber-700 mt-2 mb-3 leading-relaxed">
+                                            Algunos productos de tu carrito requieren prescripción médica vigente. Por normativa, adjunta una foto de tu fórmula o firma la declaración.
+                                        </p>
+
+                                        {/* T25: File Uploader */}
+                                        <div className="mb-4">
+                                            <PrescriptionUploader
+                                                onUploadComplete={(url) => {
+                                                    setPrescriptionFileUrl(url);
+                                                    setPrescriptionConfirmed(true); // Auto-confirm on upload
+                                                }}
+                                                onRemove={() => {
+                                                    setPrescriptionFileUrl(null);
+                                                    setPrescriptionConfirmed(false);
+                                                }}
+                                                currentUrl={prescriptionFileUrl || undefined}
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">O firma manualmente</span>
+                                            <div className="h-px bg-gray-200 flex-1"></div>
+                                        </div>
+
+                                        <label className="flex items-start gap-3 cursor-pointer group p-3 bg-white/50 rounded-lg hover:bg-white transition-colors border border-amber-100">
+                                            <div className="relative flex items-center mt-0.5">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={prescriptionConfirmed}
+                                                    onChange={(e) => setPrescriptionConfirmed(e.target.checked)}
+                                                    className="peer h-5 w-5 cursor-pointer appearance-none border-2 border-gray-400 rounded bg-white transition-all checked:border-amber-600 checked:bg-amber-600 hover:border-amber-600"
+                                                />
+                                                <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <span className="text-xs font-semibold text-gray-700">
+                                                No tengo el archivo a la mano, pero declaro bajo juramento tener la fórmula vigente.
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -390,9 +669,20 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
                     <div className="border-t border-gray-100 pt-4 space-y-2 mb-6">
                         <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Subtotal</span>
-                            <span className="font-bold">${cartTotal.toLocaleString()}</span>
+                            <span className="text-gray-600">Subtotal Productos</span>
+                            {/* cartTotal includes fee, so subtract it for display */}
+                            <span className="font-bold">${(cartTotal - (requiresColdChain ? coldChainFee : 0)).toLocaleString()}</span>
                         </div>
+
+                        {requiresColdChain && (
+                            <div className="flex justify-between text-sm text-blue-600 bg-blue-50 p-2 rounded-lg">
+                                <span className="flex items-center gap-1">
+                                    <ThermometerSnowflake className="w-4 h-4" />
+                                    Nevera + Gel
+                                </span>
+                                <span className="font-bold">${coldChainFee.toLocaleString()}</span>
+                            </div>
+                        )}
                         <div className="flex justify-between text-sm">
                             <span className="text-gray-600">Envío</span>
                             {shippingCost === 0 ? (

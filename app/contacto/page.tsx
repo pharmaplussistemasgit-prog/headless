@@ -1,189 +1,210 @@
 'use client';
 
-import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState } from 'react';
+import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulación de envío
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    setSuccess(true);
+    setLoading(false);
+    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+
+    // Reset success message after 5 seconds
+    setTimeout(() => setSuccess(false), 5000);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 pb-20">
-      {/* Header */}
-      <div className="bg-[var(--color-pharma-blue)] text-white py-16 mb-12">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contáctanos</h1>
-          <p className="text-blue-100 text-lg max-w-2xl mx-auto">
-            Estamos aquí para ayudarte. Si tienes alguna pregunta, duda o sugerencia, no dudes en escribirnos.
+    <div className="min-h-screen bg-gray-50">
+      {/* HERO SECTION */}
+      <div className="bg-[var(--color-pharma-blue)] py-16 px-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="relative max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Contáctanos</h1>
+          <p className="text-blue-100 max-w-2xl mx-auto text-lg">
+            Estamos aquí para ayudarte. Escríbenos y nuestro equipo te responderá lo antes posible.
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-12 -mt-8 relative z-10">
+        <div className="grid lg:grid-cols-3 gap-8">
 
-          {/* Contact Info Cards */}
+          {/* INFORMACIÓN DE CONTACTO */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                <Phone className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                Información de Contacto
-              </h3>
-
-              <div className="space-y-6">
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Dirección Principal</h4>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                      Calle 86 # 27-54, Barrio Polo Club<br />
-                      Bogotá D.C., Colombia
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Teléfonos</h4>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                      PBX: (601) 593 4005<br />
-                      Móvil: (+57) 300 123 4567
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Correo Electrónico</h4>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                      servicioalcliente@pharmaplus.com.co<br />
-                      ventas@pharmaplus.com.co
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Horario de Atención</h4>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                      Lunes a Viernes: 8:00 AM - 6:00 PM<br />
-                      Sábados: 8:00 AM - 1:00 PM
-                    </p>
-                  </div>
-                </div>
+            {/* Card 1: Atención al Cliente */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
+                <Phone className="w-6 h-6 text-[var(--color-pharma-blue)]" />
               </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Línea Nacional</h3>
+              <p className="text-gray-600 mb-4 text-sm">Lunes a Viernes 7:00 am - 6:00 pm<br />Sábados 8:00 am - 12:00 pm</p>
+              <a href="tel:6015934005" className="text-2xl font-bold text-[var(--color-pharma-blue)] hover:underline">
+                (601) 593 4005
+              </a>
+            </div>
 
-              <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-700">
-                <Link
-                  href="https://wa.me/573001234567"
-                  target="_blank"
-                  className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-500/20"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  Chatea con nosotros
-                </Link>
+            {/* Card 2: Correo */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
+                <Mail className="w-6 h-6 text-[var(--color-pharma-green)]" />
               </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Correo Electrónico</h3>
+              <p className="text-gray-600 mb-4 text-sm">Para consultas generales y soporte.</p>
+              <a href="mailto:atencionalusuario@pharmaplus.com.co" className="text-[var(--color-pharma-green)] font-semibold hover:underline break-words">
+                atencionalusuario@pharmaplus.com.co
+              </a>
+            </div>
+
+            {/* Card 3: Ubicación */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
+                <MapPin className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Sede Principal</h3>
+              <p className="text-gray-600 text-sm">
+                Calle 86 # 27-54<br />
+                Bogotá D.C., Colombia
+              </p>
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* FORMULARIO */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 h-full">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Envíanos un mensaje</h3>
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">Nombre Completo</label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[var(--color-pharma-blue)] outline-none transition-all"
-                      placeholder="Tu nombre"
-                    />
+            <div className="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <MessageCircle className="w-6 h-6 text-[var(--color-pharma-blue)]" />
+                Envíanos un mensaje
+              </h2>
+
+              {success ? (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center animate-in fade-in zoom-in duration-300">
+                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Send className="w-8 h-8" />
                   </div>
+                  <h3 className="text-xl font-bold text-green-800 mb-2">¡Mensaje Enviado!</h3>
+                  <p className="text-green-700">
+                    Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad posible.
+                  </p>
+                  <button
+                    onClick={() => setSuccess(false)}
+                    className="mt-6 px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                  >
+                    Enviar otro mensaje
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700">Nombre Completo *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                        placeholder="Tu nombre"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700">Teléfono / Celular</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                        placeholder="300 123 4567"
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">Correo Electrónico</label>
+                    <label className="text-sm font-semibold text-gray-700">Correo Electrónico *</label>
                     <input
                       type="email"
-                      id="email"
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[var(--color-pharma-blue)] outline-none transition-all"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                       placeholder="tucorreo@ejemplo.com"
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="phone" className="text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[var(--color-pharma-blue)] outline-none transition-all"
-                      placeholder="(+57) 300..."
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="subject" className="text-sm font-medium text-gray-700 dark:text-gray-300">Asunto</label>
+                    <label className="text-sm font-semibold text-gray-700">Asunto *</label>
                     <select
-                      id="subject"
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[var(--color-pharma-blue)] outline-none transition-all text-gray-600"
+                      name="subject"
+                      required
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all bg-white"
                     >
                       <option value="">Selecciona un asunto</option>
-                      <option value="pedido">Consulta sobre pedido</option>
-                      <option value="producto">Información de producto</option>
-                      <option value="reclamo">Peticiones, Quejas y Reclamos (PQR)</option>
-                      <option value="otro">Otro</option>
+                      <option value="Servicio al Cliente">Servicio al Cliente</option>
+                      <option value="Pedidos y Domicilios">Pedidos y Domicilios</option>
+                      <option value="Convenios">Convenios Empresariales</option>
+                      <option value="Reclamos">Quejas y Reclamos (PQRS)</option>
+                      <option value="Otro">Otro</option>
                     </select>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-gray-700 dark:text-gray-300">Mensaje</label>
-                  <textarea
-                    id="message"
-                    rows={6}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[var(--color-pharma-blue)] outline-none transition-all resize-none"
-                    placeholder="¿En qué podemos ayudarte?"
-                  ></textarea>
-                </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700">Mensaje *</label>
+                    <textarea
+                      name="message"
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
+                      placeholder="¿En qué podemos ayudarte?"
+                    ></textarea>
+                  </div>
 
-                <div className="pt-4">
                   <button
-                    type="button"
-                    className="px-8 py-4 bg-[var(--color-pharma-blue)] hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-[var(--color-pharma-blue)] text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
                   >
-                    <Send className="w-5 h-5" />
-                    Enviar Mensaje
+                    {loading ? (
+                      'Enviando...'
+                    ) : (
+                      <>
+                        Enviar Mensaje
+                        <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
                   </button>
-                </div>
-              </form>
+                </form>
+              )}
             </div>
-          </div>
-        </div>
-
-        {/* Map Section */}
-        <div className="mt-12 rounded-2xl overflow-hidden border border-gray-200 shadow-sm h-96 bg-gray-100 relative group">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.621287959082!2d-74.0620666241324!3d4.671501995304001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9a5f7f3d8e2d%3A0x7e8f5c8b7a4d4e3f!2sCl.%2086%20%2327-54%2C%20Barrios%20Unidos%2C%20Bogot%C3%A1!5e0!3m2!1ses!2sco!4v1709664531234!5m2!1ses!2sco"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="grayscale hover:grayscale-0 transition-all duration-700"
-          >
-          </iframe>
-          <div className="absolute bottom-4 right-4 bg-white px-4 py-2 rounded-lg shadow-md text-sm font-bold text-gray-700">
-            PharmaPlus Principal
           </div>
         </div>
       </div>

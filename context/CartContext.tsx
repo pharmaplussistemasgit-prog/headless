@@ -2,6 +2,9 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
+import { isRefrigerated, requiresMedicalPrescription, COLD_CHAIN_FEE } from "@/lib/product-logic";
+import { calculateCartTotal } from '@/lib/promotions';
+
 export interface CartItem {
     id: number;
     name: string;
@@ -23,6 +26,15 @@ interface CartContextType {
     cartCount: number;
     isOpen: boolean;
     toggleCart: () => void;
+    // T23: Cold Chain
+    requiresColdChain: boolean;
+    coldChainFee: number;
+    // T25: Prescription
+    requiresPrescription: boolean;
+    // T19: Promotions
+    discountTotal: number;
+    appliedPromos: string[];
+    subtotal: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -92,7 +104,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const toggleCart = () => setIsOpen((prev) => !prev);
 
-    const cartTotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
+    // T23: Calculate Cold Chain
+    const requiresColdChain = items.some(item => isRefrigerated(item));
+    const currentColdFee = requiresColdChain ? COLD_CHAIN_FEE : 0;
+
+    // T25: Calculate Prescription
+    const requiresPrescription = items.some(item => requiresMedicalPrescription(item));
+
+    // T19: Calculate Promotions & Totals
+    const { subtotal, discount, total: promoTotal, appliedPromos } = calculateCartTotal(items);
+
+    // Final Total (Products + Cold Fee) - Promo Logic already handles product total, add fee on top
+    const cartTotal = promoTotal + currentColdFee;
+
     const cartCount = items.reduce((count, item) => count + item.quantity, 0);
 
     return (
@@ -107,6 +131,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 cartCount,
                 isOpen,
                 toggleCart,
+                requiresColdChain,
+                coldChainFee: COLD_CHAIN_FEE,
+                requiresPrescription,
+                discountTotal: discount,
+                appliedPromos,
+                subtotal,
             }}
         >
             {children}

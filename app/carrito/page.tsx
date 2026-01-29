@@ -1,14 +1,14 @@
 'use client';
 
 import { useCart } from '@/context/CartContext';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SmartCrossSell from '@/components/checkout/SmartCrossSell';
 
 export default function CartPage() {
-    const { items, removeItem, updateQuantity, cartTotal } = useCart();
+    const { items, removeItem, updateQuantity, cartTotal, subtotal, discountTotal, appliedPromos } = useCart();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -141,8 +141,16 @@ export default function CartPage() {
                                 <div className="space-y-4 mb-8">
                                     <div className="flex justify-between text-gray-600">
                                         <span>Subtotal</span>
-                                        <span className="font-medium text-gray-900">${cartTotal.toLocaleString()}</span>
+                                        <span className="font-medium text-gray-900">${(subtotal || 0).toLocaleString()}</span>
                                     </div>
+
+                                    {discountTotal > 0 && (
+                                        <div className="flex justify-between text-[var(--color-pharma-green)]">
+                                            <span className="flex items-center gap-1 font-bold"><Tag size={14} /> Ahorro Promo</span>
+                                            <span className="font-bold">-${(discountTotal || 0).toLocaleString()}</span>
+                                        </div>
+                                    )}
+
                                     <div className="flex justify-between text-gray-600">
                                         <span>Envío</span>
                                         <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold uppercase">Calculado en Checkout</span>
@@ -151,7 +159,7 @@ export default function CartPage() {
                                     <div className="flex justify-between items-end">
                                         <span className="text-lg font-bold text-gray-900">Total Estimado</span>
                                         <span className="text-3xl font-bold text-[var(--color-pharma-blue)]">
-                                            ${cartTotal.toLocaleString()}
+                                            ${(cartTotal || 0).toLocaleString()}
                                         </span>
                                     </div>
                                 </div>

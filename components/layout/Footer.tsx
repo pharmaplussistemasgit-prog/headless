@@ -115,15 +115,20 @@ export default function Footer() {
                   </Link>
                 </div>
 
-                <div className="flex gap-3 pt-2">
-                  <Link href="#" className="text-blue-200 hover:text-white transition-colors" aria-label="Síguenos en Facebook">
-                    <Facebook className="w-5 h-5" />
+                <div className="flex gap-4 pt-2 items-center">
+                  <Link href="https://web.facebook.com/profile.php?id=61573973515459" target="_blank" className="text-blue-200 hover:text-white transition-colors hover:scale-110" aria-label="Síguenos en Facebook">
+                    <Facebook className="w-6 h-6" />
                   </Link>
-                  <Link href="#" className="text-blue-200 hover:text-white transition-colors" aria-label="Síguenos en Instagram">
-                    <Instagram className="w-5 h-5" />
+                  <Link href="https://www.instagram.com/pharmapluscolombia/" target="_blank" className="text-blue-200 hover:text-white transition-colors hover:scale-110" aria-label="Síguenos en Instagram">
+                    <Instagram className="w-6 h-6" />
                   </Link>
-                  <Link href="#" className="text-blue-200 hover:text-white transition-colors" aria-label="Escríbenos por WhatsApp">
-                    <MessageCircle className="w-5 h-5" />
+                  <Link href="/contacto" className="hover:scale-110 transition-transform" aria-label="Escríbenos por WhatsApp">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://tienda.pharmaplus.com.co/wp-content/uploads/elementor/thumbs/Whatsapp-rd7cxj0k3c24bqbqf6c65a5tulhs2kwxhcpb8hbib8.png"
+                      alt="Whatsapp"
+                      className="w-8 h-8 object-contain"
+                    />
                   </Link>
                 </div>
               </div>
@@ -166,7 +171,7 @@ export default function Footer() {
                   </Link>
                 </h3>
                 <ul className="space-y-3 w-full">
-                  <li><Link href="/politicas/preguntas-frecuentes" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preguntas Frecuentes</Link></li>
+                  <li><Link href="/preguntas-frecuentes" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preguntas Frecuentes</Link></li>
                   <li><Link href="/politicas/terminos-condiciones" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Términos y Condiciones</Link></li>
                   <li><Link href="/politicas/politicas-devolucion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas de Devoluciones</Link></li>
                   <li><Link href="/politicas/proteccion-datos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Política de Protección de Datos</Link></li>
@@ -186,9 +191,42 @@ export default function Footer() {
                   <li><Link href="/mi-cuenta" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Panel de control</Link></li>
                   <li><Link href="/mi-cuenta/pedidos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Mis pedidos</Link></li>
                   <li><Link href="/carrito" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Carrito de compras</Link></li>
-                  <li><Link href="/lista-deseos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Lista de deseos</Link></li>
+                  <li><Link href="/wishlist" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Lista de deseos</Link></li>
                   <li><Link href="/reversion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Reversión de pago</Link></li>
                 </ul>
+
+                {/* PAYMENT METHODS SECTION - GRID */}
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--color-pharma-green)] uppercase tracking-wider mb-4 text-center md:text-left">
+                    Medios de Pago
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Visa.png" alt="Visa" className="max-h-full max-w-full" />
+                    </div>
+                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Mastercard.png" alt="Mastercard" className="max-h-full max-w-full" />
+                    </div>
+                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/PSE.png" alt="PSE" className="max-h-full max-w-full" />
+                    </div>
+                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Diners.png" alt="Diners" className="max-h-full max-w-full" />
+                    </div>
+                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Contra-Entrega.png" alt="Contra Entrega" className="max-h-full max-w-full" />
+                    </div>
+                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Transferencia_Bancaria.png" alt="Transferencia" className="max-h-full max-w-full" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -198,20 +236,10 @@ export default function Footer() {
 
       {/* 3. BOTTOM BAR - DARKEST BLUE */}
       <div className="bg-[#002661] py-8 border-t border-white/10">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+        <div className="container mx-auto px-4 text-center">
           <p className="text-base font-bold text-white leading-relaxed">
-            © 2025 PharmaPlus S.A.S. Todos los derechos reservados.<br className="md:hidden" /> Desarrollado por iAnGo - Agencia de Desarrollo e Implementaciones con IA
+            © 2025 PharmaPlus S.A.S. Todos los derechos reservados. | Desarrollado por iAnGo - Agencia de Desarrollo e Implementaciones con IA
           </p>
-
-          <div className="flex items-center justify-center gap-4 opacity-90 hover:opacity-100 transition-all">
-            {/* Payment Icons Placeholder */}
-            <div className="flex gap-2">
-              <span className="text-[10px] font-bold text-[#1A1F71] bg-white px-2 py-1 rounded shadow-sm">VISA</span>
-              <span className="text-[10px] font-bold text-[#EB001B] bg-white px-2 py-1 rounded shadow-sm">MC</span>
-              <span className="text-[10px] font-bold text-[#006FCF] bg-white px-2 py-1 rounded shadow-sm">AMEX</span>
-              <span className="text-[10px] font-bold text-[var(--color-pharma-blue)] bg-white px-2 py-1 rounded shadow-sm">PSE</span>
-            </div>
-          </div>
         </div>
       </div>
     </footer>

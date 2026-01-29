@@ -4,14 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Truck } from 'lucide-react';
 import ShippingCalculator from './ShippingCalculator';
 import { ShippingRule } from '@/lib/shipping';
+import { ShippingRate } from '@/lib/shipping-rates';
 
 interface ShippingModalProps {
     isOpen: boolean;
     onClose: () => void;
     rules: ShippingRule[];
+    rates: ShippingRate[];
 }
 
-export default function ShippingModal({ isOpen, onClose, rules }: ShippingModalProps) {
+export default function ShippingModal({ isOpen, onClose, rules, rates }: ShippingModalProps) {
     if (!isOpen) return null;
 
     return (
@@ -48,7 +50,7 @@ export default function ShippingModal({ isOpen, onClose, rules }: ShippingModalP
                                 {/* Since ShippingCalculator has its own header, we can just render it. 
                                     However, ShippingCalculator has a shadow/border we might want to reset? 
                                     Let's just wrap it cleanly. The calculator component is designed as a Card. */}
-                                <ShippingCalculator rules={rules} />
+                                <ShippingCalculator rules={rules} rates={rates} />
                             </div>
                         </motion.div>
                     </div>

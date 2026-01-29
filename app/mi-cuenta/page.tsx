@@ -3,82 +3,118 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { User, Package, LogOut, MapPin, CreditCard, Pill, Play } from 'lucide-react';
+import { LogOut, Package, MapPin, User, ChevronRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function MiCuentaPage() {
+export default function MyAccountPage() {
     const router = useRouter();
-    const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+    const [user, setUser] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const userData = auth.getUser();
-        if (userData) {
-            setUser(userData);
+        // Auth Guard
+        if (!auth.isAuthenticated()) {
+            router.push('/login');
+            return;
         }
-    }, []);
+
+        const userData = auth.getUser();
+        setUser(userData);
+        setLoading(false);
+    }, [router]);
 
     const handleLogout = () => {
         auth.logout();
-        router.push('/login');
+        // auth.logout handles redirection to /login
     };
 
-    if (!user) return null;
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <Loader2 className="w-8 h-8 text-[var(--color-pharma-blue)] animate-spin" />
+            </div>
+        );
+    }
 
     return (
-        <div className="space-y-8">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Mi Cuenta</h1>
-                    <p className="text-gray-500 mt-1">Hola, <span className="font-semibold text-[var(--color-pharma-blue)]">{user.name}</span></p>
-                </div>
-                <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors self-start md:self-auto"
-                >
-                    <LogOut className="w-4 h-4" />
-                    Cerrar Sesión
-                </button>
-            </div>
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
 
-            {/* Dashboard Grid - Quick Glace */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">Bienvenido de nuevo</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">
-                        Desde el panel de control de tu cuenta puedes ver tus <Link href="/mi-cuenta/pedidos" className="text-[var(--color-pharma-blue)] font-bold hover:underline">pedidos recientes</Link>, gestionar tus <Link href="/mi-cuenta/direcciones" className="text-[var(--color-pharma-blue)] font-bold hover:underline">direcciones</Link> y <Link href="/mi-cuenta/detalles" className="text-[var(--color-pharma-blue)] font-bold hover:underline">editar tu cuenta</Link>.
-                    </p>
-                </div>
-
-                {/* Pillbox Card */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center">
-                    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                        <Pill className="w-6 h-6 text-[var(--color-pharma-blue)]" />
+                {/* Header Profile */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-3xl font-bold text-[var(--color-pharma-blue)]">
+                        {user?.name?.charAt(0) || <User />}
                     </div>
-                    <h3 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-2">Tu Pastillero Virtual</h3>
-                    <p className="text-gray-500 text-sm mb-6">
-                        Organiza tus medicamentos, recibe recordatorios y nunca olvides una toma.
-                    </p>
-                    <Link
-                        href="/pastillero"
-                        className="w-full py-3 bg-[var(--color-pharma-blue)] text-white font-bold rounded-xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    <div className="flex-1 text-center md:text-left space-y-1">
+                        <h1 className="text-2xl font-bold text-gray-900">Hola, {user?.name || 'Cliente'}</h1>
+                        <p className="text-gray-500">{user?.email}</p>
+                        <div className="pt-2">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Cliente Verificado
+                            </span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 text-red-600 hover:text-red-700 font-medium px-4 py-2 hover:bg-red-50 rounded-lg transition-colors"
                     >
-                        <Play className="w-4 h-4 fill-current" />
-                        Ingresar al Pastillero
-                    </Link>
+                        <LogOut className="w-4 h-4" />
+                        Cerrar Sesión
+                    </button>
                 </div>
 
-                <div className="bg-[var(--color-pharma-blue)] p-6 rounded-2xl text-white shadow-md relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h3 className="text-lg font-bold mb-1">¿Necesitas ayuda?</h3>
-                        <p className="text-blue-100 text-sm mb-4">Estamos aquí para asistirte con tus compras.</p>
-                        <a href="https://wa.me/573000000000" target="_blank" className="inline-block px-4 py-2 bg-white text-[var(--color-pharma-blue)] text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors">
-                            Contactar Soporte
-                        </a>
+                {/* Dashboard Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    {/* Pedidos */}
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Package className="w-24 h-24 text-[var(--color-pharma-blue)]" />
+                        </div>
+                        <div className="relative z-10">
+                            <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-[var(--color-pharma-blue)] mb-4 group-hover:scale-110 transition-transform">
+                                <Package className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">Mis Pedidos</h3>
+                            <p className="text-sm text-gray-500 mb-4">Revisa el estado de tus compras y descarga tus facturas.</p>
+                            <Link href="/mi-cuenta/pedidos" className="inline-flex items-center text-[var(--color-pharma-blue)] font-bold text-sm hover:underline">
+                                Ver historial <ChevronRight className="w-4 h-4 ml-1" />
+                            </Link>
+                        </div>
                     </div>
-                    {/* Decorative circle */}
-                    <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white opacity-10 rounded-full"></div>
+
+                    {/* Direcciones - Placeholder functionality for now */}
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <MapPin className="w-24 h-24 text-[var(--color-pharma-green)]" />
+                        </div>
+                        <div className="relative z-10">
+                            <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-[var(--color-pharma-green)] mb-4 group-hover:scale-110 transition-transform">
+                                <MapPin className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">Mis Direcciones</h3>
+                            <p className="text-sm text-gray-500 mb-4">Administra tus lugares de entrega para un checkout más rápido.</p>
+                            <button className="inline-flex items-center text-[var(--color-pharma-green)] font-bold text-sm hover:underline" onClick={() => alert('Próximamente: Gestión de direcciones')}>
+                                Gestionar direcciones <ChevronRight className="w-4 h-4 ml-1" />
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
+
+                {/* Coming Soon Section */}
+                <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-white rounded-full shadow-sm">
+                            <User className="w-6 h-6 text-blue-400" />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-blue-900">¿Necesitas actualizar tus datos?</h4>
+                            <p className="text-sm text-blue-700">Por seguridad, para cambios de correo o cédula, por favor contáctanos.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     );

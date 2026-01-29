@@ -1,15 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pill, Stethoscope, Baby, Sparkles, Tag, Apple, Heart, MapPin, FileText } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
 
 interface CategoryBubble {
     id: string;
     name: string;
     slug: string;
-    emoji: string;
+    icon: React.ElementType;
     bgColor: string;
+    iconColor: string;
 }
 
 const CATEGORIES: CategoryBubble[] = [
@@ -17,64 +18,73 @@ const CATEGORIES: CategoryBubble[] = [
         id: '1',
         name: 'Medicamentos',
         slug: 'medicamentos',
-        emoji: '💊',
+        icon: Pill,
         bgColor: 'bg-blue-50',
+        iconColor: 'text-blue-600',
     },
     {
         id: '2',
-        name: 'Cuidado Piel',
-        slug: 'cuidado-piel',
-        emoji: '🧴',
+        name: 'Dermocosmética',
+        slug: 'dermocosmetica',
+        icon: Sparkles,
         bgColor: 'bg-purple-50',
+        iconColor: 'text-purple-600',
     },
     {
         id: '3',
-        name: 'Bebés',
+        name: 'Mamá y Bebé',
         slug: 'bebes',
-        emoji: '🍼',
+        icon: Baby,
         bgColor: 'bg-pink-50',
+        iconColor: 'text-pink-600',
     },
     {
         id: '4',
-        name: 'Aseo Personal',
+        name: 'Cuidado Personal',
         slug: 'aseo',
-        emoji: '🧼',
+        icon: Stethoscope,
         bgColor: 'bg-cyan-50',
+        iconColor: 'text-cyan-600',
     },
     {
         id: '5',
         name: 'Ofertas',
         slug: 'ofertas',
-        emoji: '🏷️',
+        icon: Tag,
         bgColor: 'bg-red-50',
+        iconColor: 'text-red-600',
     },
     {
         id: '6',
         name: 'Nutrición',
         slug: 'nutricion',
-        emoji: '🍎',
+        icon: Apple,
         bgColor: 'bg-green-50',
+        iconColor: 'text-green-600',
     },
     {
         id: '7',
         name: 'Salud Sexual',
         slug: 'salud-sexual',
-        emoji: '❤️',
+        icon: Heart,
         bgColor: 'bg-rose-50',
+        iconColor: 'text-rose-600',
     },
     {
         id: '8',
         name: 'Tiendas',
         slug: 'tiendas',
-        emoji: '🏪',
+        icon: MapPin,
         bgColor: 'bg-orange-50',
+        iconColor: 'text-orange-600',
     },
     {
         id: '9',
-        name: 'Blog',
+        name: 'Blog Salud',
         slug: 'blog',
-        emoji: '📝',
-        bgColor: 'bg-yellow-50',
+        icon: FileText,
+        bgColor: 'bg-indigo-50',
+        iconColor: 'text-indigo-600',
     },
 ];
 
@@ -158,9 +168,9 @@ export default function CategoryIconsSection() {
                                     href={`/categoria/${category.slug}`}
                                     className="flex flex-col items-center gap-3 group cursor-pointer animate-fadeIn"
                                 >
-                                    {/* Emoji Icon Container - Larger */}
-                                    <div className={`w-20 h-20 rounded-full ${category.bgColor} group-hover:bg-white group-hover:shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 text-5xl`}>
-                                        {category.emoji}
+                                    {/* Icon Container - Larger */}
+                                    <div className={`w-20 h-20 rounded-full ${category.bgColor} group-hover:bg-white group-hover:shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110`}>
+                                        <category.icon className={`w-8 h-8 ${category.iconColor}`} strokeWidth={1.5} />
                                     </div>
 
                                     {/* Category Name */}

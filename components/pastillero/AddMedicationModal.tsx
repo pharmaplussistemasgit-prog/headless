@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { X, Plus, Clock, Search, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { searchProducts } from "@/app/actions/products";
+import { scheduleSMSReminder } from "@/lib/sms";
 
 interface AddMedicationModalProps {
     isOpen: boolean;
@@ -90,7 +91,14 @@ export default function AddMedicationModal({ isOpen, onClose, onSave }: AddMedic
         const finalName = formData.productName || query;
         if (!finalName) return;
 
-        onSave({ ...formData, productName: finalName });
+        const payload = { ...formData, productName: finalName };
+        onSave(payload);
+
+        // T20: Simulate SMS Scheduling
+        if (payload.notify) {
+            scheduleSMSReminder(payload);
+        }
+
         onClose();
         setStep(1); // Reset
         setQuery("");

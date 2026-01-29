@@ -12,10 +12,12 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { Toaster } from "sonner";
 import { getCategoryTreeData } from "@/lib/woocommerce";
 import { getShippingRates } from "@/lib/shipping";
+import { getAllCities } from "@/lib/shipping-rates";
 import BottomNav from "@/components/layout/BottomNav";
 import { QuickViewProvider } from "@/context/QuickViewContext";
 import GlobalQuickView from "@/components/product/GlobalQuickView";
 import CookieBanner from "@/components/cookies/CookieBanner";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -52,13 +54,14 @@ export default async function RootLayout({
             <WishlistProvider>
               <QuickViewProvider>
                 <div className="flex flex-col min-h-screen">
-                  <Header categories={categories} shippingRules={shippingRules} />
+                  <Header categories={categories} shippingRules={shippingRules} shippingRates={getAllCities()} />
                   <main className="flex-grow">{children}</main>
                   <Footer />
                   <CartDrawer />
                   <GlobalQuickView />
                   <BottomNav />
                   <CookieBanner />
+                  <WhatsAppButton />
                 </div>
                 <Toaster position="top-right" richColors />
               </QuickViewProvider>
