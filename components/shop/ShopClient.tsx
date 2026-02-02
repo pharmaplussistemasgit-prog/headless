@@ -8,51 +8,11 @@ import {
     SlidersHorizontal,
     X,
     ArrowRight,
-    Filter,
-    ChevronDown,
     ChevronLeft,
     ChevronRight,
-    Heart,
-    Sparkles,
-    Baby,
-    Apple,
-    Dumbbell,
-    Sun,
-    Cross,
-    BriefcaseMedical,
-    SprayCan,
-    Smile,
-    Zap,
-    Flame
 } from "lucide-react";
 import { Category, Product, Tag, AttributeWithTerms } from '@/types/woocommerce';
-import { ProductAttribute } from '@/types/woocommerce';
-
-// Helper to get category styles
-const getCategoryStyle = (slug: string) => {
-    switch (slug.toLowerCase()) {
-        case 'salud-y-medicamentos':
-        case 'medicamentos':
-            return { icon: Heart, color: 'text-red-500', bg: 'bg-red-100' };
-        case 'dermocosmetico':
-        case 'belleza':
-            return { icon: Sparkles, color: 'text-purple-500', bg: 'bg-purple-100' };
-        case 'cuidado-personal':
-            return { icon: SprayCan, color: 'text-blue-500', bg: 'bg-blue-100' };
-        case 'bebe':
-        case 'maternidad':
-            return { icon: Baby, color: 'text-pink-500', bg: 'bg-pink-100' };
-        case 'nutricion':
-        case 'alimentos':
-            return { icon: Apple, color: 'text-green-500', bg: 'bg-green-100' };
-        case 'salud-visual':
-            return { icon: Sun, color: 'text-orange-500', bg: 'bg-orange-100' };
-        case 'bienestar-sexual':
-            return { icon: Flame, color: 'text-rose-500', bg: 'bg-rose-100' };
-        default:
-            return { icon: Cross, color: 'text-[var(--color-primary-blue)]', bg: 'bg-blue-50' };
-    }
-};
+import { getCategoryStyle } from '@/lib/category-styles';
 
 interface ShopClientProps {
     initialProducts: Product[];
@@ -148,6 +108,23 @@ export function ShopClient({ initialProducts, categories, tags, attributes, tota
         return extracted;
     }, [attributes, initialProducts]);
 
+    // Same logic for TAGS: If no global tags passed, extract them from the current products
+    const finalTags = useMemo(() => {
+        if (tags && tags.length > 0) return tags;
+
+        const tagMap = new Map<string, Tag>();
+        initialProducts.forEach(p => {
+            if (p.tags) {
+                p.tags.forEach(t => {
+                    if (!tagMap.has(t.slug)) {
+                        tagMap.set(t.slug, { ...t, count: 0 }); // count 0 for now
+                    }
+                });
+            }
+        });
+        return Array.from(tagMap.values());
+    }, [tags, initialProducts]);
+
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900">
             {/* Header / Top Bar */}
@@ -187,7 +164,7 @@ export function ShopClient({ initialProducts, categories, tags, attributes, tota
                 <div className="hidden md:block w-64 flex-shrink-0 sticky top-24 h-fit">
                     <FiltersSidebar
                         categories={categories}
-                        tags={tags}
+                        tags={finalTags}
                         attributes={finalAttributes}
                         selected={selectedFilters}
                         currentParams={currentParams}

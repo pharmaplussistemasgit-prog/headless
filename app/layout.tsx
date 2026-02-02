@@ -18,6 +18,7 @@ import { QuickViewProvider } from "@/context/QuickViewContext";
 import GlobalQuickView from "@/components/product/GlobalQuickView";
 import CookieBanner from "@/components/cookies/CookieBanner";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import { PromotionsProvider } from "@/components/providers/PromotionsProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,23 +51,25 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CartProvider>
-            <WishlistProvider>
-              <QuickViewProvider>
-                <div className="flex flex-col min-h-screen">
-                  <Header categories={categories} shippingRules={shippingRules} shippingRates={getAllCities()} />
-                  <main className="flex-grow">{children}</main>
-                  <Footer />
-                  <CartDrawer />
-                  <GlobalQuickView />
-                  <BottomNav />
-                  <CookieBanner />
-                  <WhatsAppButton />
-                </div>
-                <Toaster position="top-right" richColors />
-              </QuickViewProvider>
-            </WishlistProvider>
-          </CartProvider>
+          <PromotionsProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <QuickViewProvider>
+                  <div className="flex flex-col min-h-screen">
+                    <Header categories={categories} shippingRules={shippingRules} shippingRates={getAllCities()} />
+                    <main className="flex-grow">{children}</main>
+                    <Footer />
+                    <CartDrawer />
+                    <GlobalQuickView />
+                    <BottomNav />
+                    <CookieBanner />
+                    <WhatsAppButton />
+                  </div>
+                  <Toaster position="top-right" richColors />
+                </QuickViewProvider>
+              </WishlistProvider>
+            </CartProvider>
+          </PromotionsProvider>
         </ThemeProvider>
       </body>
     </html>

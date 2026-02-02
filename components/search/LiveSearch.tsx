@@ -34,7 +34,8 @@ export default function LiveSearch() {
             price: product.price,
             image: product.images[0],
             quantity: 1,
-            attributes: {} // Simple add for now
+            attributes: {}, // Simple add for now
+            categories: product.categories // Pass categories for cold chain logic
         });
 
         // Show feedback

@@ -168,21 +168,7 @@ export default function SmartFilterSidebar({
                     {/* SMART MENUS */}
                     <div className="space-y-4 pt-2">
 
-                        {/* 0. PRICE SLIDER */}
-                        {filters.priceRange.max > filters.priceRange.min && (
-                            <div className="bg-white px-2 py-4 rounded-xl border border-gray-100 shadow-sm">
-                                <h4 className="font-outfit font-bold text-gray-700 text-sm mb-4 flex items-center gap-2">
-                                    💰 Rango de Precio
-                                </h4>
-                                <PriceSlider
-                                    min={filters.priceRange.min}
-                                    max={filters.priceRange.max}
-                                    value={[filters.activePriceRange.min, filters.activePriceRange.max]}
-                                    onChange={handlePriceChange}
-                                    formatLabel={(v) => fmt.format(v)}
-                                />
-                            </div>
-                        )}
+
 
                         {/* 1. LABORATORIOS */}
                         {brandItems.length > 0 && (

@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "d19e56a3-b654-403f-9619-f91d11d85946",
+		"name": "Developer WebServise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29212140",
+		"_collection_link": "https://na4444-6921.postman.co/workspace/340c45aa-9f3e-42e4-808b-00fa484716a4/collection/29212140-d19e56a3-b654-403f-9619-f91d11d85946?action=share&source=collection_link&creator=29212140"
+	},
+	"item": [
+		{
+			"name": "Developer WS",
+			"item": [
+				{
+					"name": "setTransactionInit",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "4AD42EC77114956F33B16AC27D136F85",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "ApiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardnumber\": \"5010000000011\",\r\n    \"storeid\": \"9999\",\r\n    \"posid\": \"9999\",\r\n    \"employeeid\": \"origis\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://posdeveloper.orbisfarma.com.mx/setTransactionInit",
+							"protocol": "https",
+							"host": [
+								"posdeveloper",
+								"orbisfarma",
+								"com",
+								"mx"
+							],
+							"path": [
+								"setTransactionInit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setTransactionQuote",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "4AD42EC77114956F33B16AC27D136F85",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "ApiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardnumber\": \"5010000000011\",\r\n    \"storeid\": \"9999\",\r\n    \"posid\": \"9999\",\r\n    \"employeeid\": \"origis\",\r\n    \"transactionid\": \"14846307871844\",\r\n    \"transactionitems\": \"7501082243642,1,1,1|7501082243635,3,1,1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://posdeveloper.orbisfarma.com.mx/setTransactionQuote",
+							"protocol": "https",
+							"host": [
+								"posdeveloper",
+								"orbisfarma",
+								"com",
+								"mx"
+							],
+							"path": [
+								"setTransactionQuote"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setTransactionSale",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "4AD42EC77114956F33B16AC27D136F85",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "ApiKey",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardnumber\": \"5010000000011\",\r\n    \"storeid\": \"9999\",\r\n    \"posid\": \"9999\",\r\n    \"employeeid\": \"origis\",\r\n    \"transactionid\": \"14846307871844\",\r\n    \"transactionitems\": \"7501082243642,1,1,1|7501082243635,3,1,1\",\r\n    \"transactionwithdrawal\": \"0\",\r\n    \"invoicenumber\": \"t1\",\r\n    \"invoicedate\": \"20251218\",\r\n    \"invoiceamount\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://posdeveloper.orbisfarma.com.mx/setTransactionSale",
+							"protocol": "https",
+							"host": [
+								"posdeveloper",
+								"orbisfarma",
+								"com",
+								"mx"
+							],
+							"path": [
+								"setTransactionSale"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

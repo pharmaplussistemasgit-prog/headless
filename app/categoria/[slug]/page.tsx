@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getCategoryBySlug, getProductsByCategory } from '@/app/actions/products';
-import { getCategoryTreeData, getAllProductCategories, getCategoryGlobalFacets } from '@/lib/woocommerce';
+import { getCategoryTreeData, getAllProductCategories } from '@/lib/woocommerce';
+import { analyzeProductsForFilters } from '@/lib/filterUtils';
 import CategorySidebar from '@/components/category/CategorySidebar';
 import ProductCard from '@/components/product/ProductCard';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
@@ -53,11 +54,18 @@ export default async function CategoryPage({
 
     // START: OPTIMIZATION FOR SMART FILTERS
     // We now fetch Global Facets (cached) to populate the sidebar with ALL options (not just page 1)
-    const [{ products, totalPages }, categoryTree, facets] = await Promise.all([
+    // START: OPTIMIZATION FOR SMART FILTERS
+    // We now fetch Global Facets (cached) to populate the sidebar with ALL options (not just page 1)
+    const [{ products, totalPages }, categoryTree] = await Promise.all([
         getProductsByCategory(category.id, { minPrice, maxPrice, page, perPage: 12 }),
         getCategoryTreeData(),
-        getCategoryGlobalFacets(category.id)
     ]);
+
+    // OPTIMIZATION: Generate filters dynamically from the products we just loaded.
+    // This avoids an extra API call (getCategoryGlobalFacets) that was causing 4s+ load times.
+    // Trade-off: Filters only show brands/tags present in the current page (or initial load).
+    // This aligns with user request: "cargar solo los 12 iniciales".
+    const facets = analyzeProductsForFilters(products);
 
     return (
         <div className="container mx-auto px-4 py-8">

@@ -102,17 +102,23 @@ export default function MyAccountPage() {
 
                 </div>
 
-                {/* Coming Soon Section */}
-                <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                {/* Account Settings */}
+                <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-white rounded-full shadow-sm">
-                            <User className="w-6 h-6 text-blue-400" />
+                        <div className="p-3 bg-blue-50 rounded-full text-[var(--color-pharma-blue)]">
+                            <User className="w-6 h-6" />
                         </div>
                         <div>
-                            <h4 className="font-bold text-blue-900">¿Necesitas actualizar tus datos?</h4>
-                            <p className="text-sm text-blue-700">Por seguridad, para cambios de correo o cédula, por favor contáctanos.</p>
+                            <h4 className="font-bold text-gray-900">Datos Personales y Seguridad</h4>
+                            <p className="text-sm text-gray-500">Actualiza tu nombre, correo o cambia tu contraseña.</p>
                         </div>
                     </div>
+                    <Link
+                        href="/mi-cuenta/editar-perfil"
+                        className="whitespace-nowrap inline-flex items-center justify-center px-6 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    >
+                        Editar mis datos
+                    </Link>
                 </div>
 
             </div>

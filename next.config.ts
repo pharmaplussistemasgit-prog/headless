@@ -54,6 +54,11 @@ const nextConfig: NextConfig = {
         destination: '/categoria/:slug',
         permanent: true,
       },
+      {
+        source: '/pastillero',
+        destination: '/mi-cuenta/pastillero',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

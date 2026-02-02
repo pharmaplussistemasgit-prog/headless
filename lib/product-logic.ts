@@ -1,4 +1,4 @@
-import { CartItem } from "@/context/CartContext";
+import { CartItem } from "@/types/cart";
 import { Product } from "@/types/woocommerce";
 import { WooProduct } from "@/types/product";
 
@@ -9,7 +9,14 @@ import { WooProduct } from "@/types/product";
 export function isRefrigerated(product: Product | WooProduct | CartItem): boolean {
     if (!product) return false;
 
-    // 1. Check explicit meta (if available in Product/WooProduct)
+    // 1. Check Categories (Primary Source of Truth as per user request)
+    // Works for both WooProduct/Product (has 'categories') and CartItem (now has 'categories')
+    if ('categories' in product && Array.isArray(product.categories)) {
+        const hasCategory = product.categories.some((c: any) => c.slug === 'cadena-de-frio');
+        if (hasCategory) return true;
+    }
+
+    // 2. Check explicit meta (Legacy/Backup)
     if ('meta_data' in product && product.meta_data) {
         const coldMeta = product.meta_data.find((m: any) => m.key === '_cadena_de_frio' || m.key === 'cadena_frio');
         if (coldMeta && (coldMeta.value === 'yes' || coldMeta.value === 'true' || coldMeta.value === 'on' || coldMeta.value === '1' || coldMeta.value === true)) {
@@ -17,16 +24,8 @@ export function isRefrigerated(product: Product | WooProduct | CartItem): boolea
         }
     }
 
-    // 2. Keyword fallback (Name or Description)
-    // Note: CartItem only has 'name' and 'slug', usually enough.
-    const name = product.name || '';
-    const description = 'short_description' in product ? product.short_description || '' : '';
-
-    // Keywords for cold chain
-    const keywords = ['refriger', 'frio', 'frío', 'never', 'insulina', 'vacuna', 'pen', 'vial', 'ampolla'];
-    const searchStr = (name + ' ' + description).toLowerCase();
-
-    return keywords.some(k => searchStr.includes(k));
+    // 3. Keywords Removed as per user request ("nos basamos netamente en la categoria")
+    return false;
 }
 
 /**
@@ -37,8 +36,12 @@ export function requiresMedicalPrescription(product: Product | WooProduct | Cart
 
     // 1. Check explicit meta (if available) - Assuming 'requires_prescription' or similar
     if ('meta_data' in product && product.meta_data) {
-        const rxMeta = product.meta_data.find((m: any) => m.key === '_requires_prescription' || m.key === 'requires_prescription');
-        if (rxMeta && (rxMeta.value === 'yes' || rxMeta.value === 'true' || rxMeta.value === '1')) {
+        const rxMeta = product.meta_data.find((m: any) =>
+            m.key === '_requires_prescription' ||
+            m.key === 'requires_prescription' ||
+            m.key === '_needs_rx' // Match with mappers.ts
+        );
+        if (rxMeta && (rxMeta.value === 'yes' || rxMeta.value === 'true' || rxMeta.value === '1' || rxMeta.value === 'on')) {
             return true;
         }
     }
@@ -54,4 +57,4 @@ export function requiresMedicalPrescription(product: Product | WooProduct | Cart
     return keywords.some(k => searchStr.includes(k));
 }
 
-export const COLD_CHAIN_FEE = 6500;
+export const COLD_CHAIN_FEE = 12000;

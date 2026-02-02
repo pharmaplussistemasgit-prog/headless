@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { ShopClient } from '@/components/shop/ShopClient';
-import { getAllProductCategories, getProducts, getAllProductTags, getAllProductAttributesWithTerms } from '@/lib/woocommerce';
+import { getAllProductCategories, getProducts } from '@/lib/woocommerce';
 
 export const metadata = {
   title: 'Tienda - PharmaPlus',
@@ -22,17 +22,17 @@ export default async function TiendaPage(props: {
   const maxPrice = searchParams?.max_price;
 
   // 1. Fetch metadata first (needed to resolve slugs to IDs)
-  const [categories, tags, attributes] = await Promise.all([
+  // OPTIMIZATION: Removed getAllProductTags and attributes to speed up load time.
+  // ShopClient now derives filters from the loaded products.
+  const [categories] = await Promise.all([
     getAllProductCategories(),
-    getAllProductTags(),
-    getAllProductAttributesWithTerms(),
   ]);
 
   // 2. Resolve category slug to ID
   let categoryId: string | undefined;
   if (categorySlug) {
     const matchedCat = categories.find(c => c.slug.toLowerCase() === categorySlug.toLowerCase());
-    // If found, use ID. If not found, use '-1' to force empty result (customer filters for non-existent category)
+    // If found, use ID. If not found, use '-1' to force empty result
     categoryId = matchedCat ? matchedCat.id.toString() : '-1';
   }
 
@@ -53,8 +53,8 @@ export default async function TiendaPage(props: {
       <ShopClient
         initialProducts={productsData.products}
         categories={categories}
-        tags={tags}
-        attributes={attributes}
+        tags={[]} // Pass empty, let client derive
+        attributes={[]} // Pass empty, let client derive
         totalPages={productsData.totalPages}
         currentPage={page}
       />

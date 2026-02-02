@@ -323,51 +323,7 @@ export function FiltersSidebar({
           </SidebarSection>
         )}
 
-        {/* Precio */}
-        <SidebarSection title="Precio" id="precio" isOpen={openSections['precio']} onToggle={toggleSection}>
-          <div className="px-2 pt-4 pb-2">
 
-            <PriceSlider
-              min={SLIDER_MIN}
-              max={SLIDER_MAX}
-              valueMin={priceMin ? Number(priceMin) : SLIDER_MIN}
-              valueMax={priceMax ? Number(priceMax) : SLIDER_MAX}
-              onChange={(newMin, newMax) => {
-                setPriceMin(newMin.toString());
-                setPriceMax(newMax.toString());
-              }}
-            />
-
-            <div className="flex items-center justify-between text-gray-600 font-bold text-sm mb-4">
-              <span>${priceMin ? parseInt(priceMin).toLocaleString('es-CO') : SLIDER_MIN.toLocaleString('es-CO')}</span>
-              <span>${priceMax ? parseInt(priceMax).toLocaleString('es-CO') : SLIDER_MAX.toLocaleString('es-CO')}+</span>
-            </div>
-
-            <div className="flex gap-2 mb-2">
-              <input
-                type="number"
-                value={priceMin}
-                onChange={e => setPriceMin(e.target.value)}
-                placeholder="Min"
-                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-[var(--color-pharma-blue)] outline-none transition-shadow"
-              />
-              <input
-                type="number"
-                value={priceMax}
-                onChange={e => setPriceMax(e.target.value)}
-                placeholder="Max"
-                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-[var(--color-pharma-blue)] outline-none transition-shadow"
-              />
-            </div>
-
-            <button
-              onClick={handlePriceApply}
-              className="w-full mt-2 bg-[var(--color-pharma-blue)] text-white py-2 rounded-lg text-sm font-bold hover:bg-[var(--color-blue-classic)] transition-colors shadow-md active:scale-95 transform"
-            >
-              Aplicar Precio
-            </button>
-          </div>
-        </SidebarSection>
 
       </div>
 

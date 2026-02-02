@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Minus, Plus, ShoppingCart, Check, Info, ShieldCheck, MessageCircle, Facebook, Twitter, AlertCircle } from 'lucide-react';
+import { Minus, Plus, ShoppingCart, Check, Info, ShieldCheck, MessageCircle, Facebook, Twitter, AlertCircle, FileText } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
 import { MappedProduct } from '@/types/product';
@@ -43,6 +43,8 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
             image: getImgSrc(product.images[0]),
             quantity: quantity,
             slug: product.slug,
+            sku: product.sku || undefined, // T19: ERP Support
+            categories: product.categories, // T23: Cold Chain
         });
         toast.success(`Agregado al carrito: ${product.name}`);
     };
@@ -168,6 +170,24 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
 
                                     <div className="mt-4">
                                         <ColdChainAlert categories={product.categories || []} product={product} />
+
+                                        {product.requiresRx && (
+                                            <div className="mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 animate-in fade-in slide-in-from-top-1">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="bg-amber-100 p-2 rounded-full text-amber-600 shrink-0">
+                                                        <FileText size={20} />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-amber-800 text-sm">Requiere Fórmula Médica</h4>
+                                                        <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                                                            Este es un medicamento de venta bajo fórmula médica.
+                                                            <br />
+                                                            <span className="font-semibold text-amber-900">Deberás adjuntar una foto de la receta al finalizar la compra.</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -202,8 +222,17 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                         disabled={!product.isInStock}
                                         className="w-full bg-[var(--color-pharma-blue)] text-white h-14 rounded-xl font-bold text-lg hover:bg-blue-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0 uppercase tracking-wider"
                                     >
-                                        <ShoppingCart size={20} />
-                                        <span>Agregar al Carrito</span>
+                                        {product.isInStock ? (
+                                            <>
+                                                <ShoppingCart size={20} />
+                                                <span>Agregar al Carrito</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <AlertCircle size={20} />
+                                                <span>Agotado</span>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
 

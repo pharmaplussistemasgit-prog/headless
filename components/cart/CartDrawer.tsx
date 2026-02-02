@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function CartDrawer() {
-    const { items, removeItem, updateQuantity, cartTotal, isOpen, toggleCart } = useCart();
+    const { items, removeItem, updateQuantity, cartTotal, isOpen, toggleCart, requiresColdChain, coldChainFee, subtotal } = useCart();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -184,8 +184,19 @@ export default function CartDrawer() {
                                 <div className="bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-2xl p-4 space-y-2">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-slate-500 font-medium">Subtotal</span>
-                                        <span className="text-slate-700 font-semibold">{fmt.format(cartTotal)}</span>
+                                        <span className="text-slate-700 font-semibold">{fmt.format(subtotal)}</span>
                                     </div>
+
+                                    {/* T23: Cold Chain Fee Line Item */}
+                                    {requiresColdChain && (
+                                        <div className="flex items-center justify-between text-sm bg-blue-50 p-2 rounded-lg border border-blue-100">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-blue-600 font-bold">❄️ Nevera + Geles</span>
+                                            </div>
+                                            <span className="text-blue-700 font-bold">{fmt.format(coldChainFee)}</span>
+                                        </div>
+                                    )}
+
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-slate-500 font-medium">Envío</span>
                                         <span className="text-slate-400 text-xs italic">Calculado al pagar</span>

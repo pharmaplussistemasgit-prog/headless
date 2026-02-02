@@ -1,0 +1,49 @@
+N° Documento,Tarea,Comentario,Observaciones,Status,Observaciones 
+1,Quienes somos,"Politica de Calidad, no es la misma de la anterior pagina, ver tienda.pharmaplus.com.co",,En proceso,
+2,Trabaje con Nosotros y Contactenos,"Incluir formularios de envio, contactenos y trabaje con nosotros, con los mismos campos que tenia tienda.pharmaplus.com.co",,En proceso,
+3,Horarios de atencion y Direccion,"Horarios de atención: Lunes a Viernes de 7: AM a 6 PM, sadados de 8:00 AM a 12 PM  / Direccion Calle 86 27-54",,Pendiente,Corregir Horario y Direccion pagina principal
+4,Ver ubicaciones en Mapa,,,Pendiente,
+5,Preferencias en Cockies,,,Pendiente,
+6,Propuesta de valor,Agregar los mismos iconos que estan en tienda.pharmaplus.com.co,,Pendiente,
+7,Garantias y devoluciones,,,En proceso,Falta incluir en no se aceptan devoluciones la de cadena de frío
+8,Politicas,"Actualizar, Aplicar un formulario que contanga todas la politicas, como esta en tienda.pharmaplus.com.co",,En proceso,Archivos enviado adjuntos actualizados
+9,Poltica de coockies,Agregar link a documento de politica de cookies y opcion para aceptar o rechazar la politica,,En proceso,Archivo de Polticas enviado adjunmto
+10,Terminos y condiciones,Aplicar y unificar un mejor diseño,,En proceso,Archivo actualizado Adjunto
+11,Cotizar envio,Formulario de consulta de valor del envio y dias de entrega,Un formulario de consulta en donde se pueda seleccionar la ciudad e informe vallor del domicilio y dias de entrega,En proceso,Falta tarifas y días de entrega 
+12,Reversion de pago electronico,Revisar el que esta en tienda.pharmaplus.com.co,,Pendiente,Falta agregar el procedimiento de devoluciones de pagos
+13,Peticiones quejas y reclamos,Realizar formato de PQRS,"Tomar las preguntas que estan en el formato y adaptarlo al diseño de la pagina, los datos registrados deben llegar al correo atencionalusuario@pharmaplus.com.co",Pendiente,Agregar el formulario y el link
+14,Registrese,"Nombre, apellido, número de identificación, dirección, ciudad y departamento, número de contacto y opcional la fecha de nacimiento ",,Pendiente,Preguntar si ya esta hecho (no se puede acceder)
+15, Configuracion de cuenta,"Cambio de contraseña, Actualizacion de datos, Eliminar cuenta",,Pendiente,Preguntar si ya esta hecho (no se puede acceder)
+16,Revisar Iconos de Categorias para que sea de acuerdo con las Categorias Codificadas,,,,
+17,Tiendas,"Por ahora solo tenemos un punti de venta, agregar una plantilla con los datos de Pharmaplus, direccion, ciudad, telefonos, horarios de atencion, y vista de mapa de Google",,,
+18,Opcion Menu Categorias,,,En proceso,Esta muy lento el acceso a las categorias
+19,Mundo ofertas,"Mostrar promociones de paga una cantidad y lleva otra y tarelo al momento de la cotizacion y check out, ","- Por ejemplo compra 2 y lleva 3, compra 1 y lleva 2, en algunos casos las compras se pueden acumular, por ejemplo compre 3 y lleve 4, puede ir comprando de a 1 y cuando cumpla las tres se le entrega la 4.
+- Ya se habia creado una tabla de item_ptc y se creo una api para ello",Pendiente,Tener en cuanta cuando se ingresa a ver la información de cada producto.
+,,Configurar tope por cada compra,,Pendiente,
+,,Rango de fecha de la promocion tanto para descuentos en precio como para promociones en unidades,,Pendiente,
+,,Mostrar unicamente lo que tiene existencias,,Pendiente,Por parte de Digix
+20,Pastillero Virtual,"Formulario de diligenciamento de dosis de medicamento diaria por cada producto, la idea es enviar un recordatorio a traves de mensaje de texto para recordar la toma y alerta apenas se vaya a acabar el medicamento ",Ver pastillero virtual de la pagina farmatodo.com.co,En proceso,Activar el SMS
+21,Compar por marca,"En la parte inferior traer el listado de los laboratorios codificados y traer el listado de productos que pertenecen a la marca seleccionada cuando se de click encima de cada uno,como estaba en tienda.pharmaplus.com.co",,Pendiente,
+22,Pagina Infomacion cuando se abre el producto,Agregar unidades disponibles,,Pendiente,
+,,Si no hay existencias que muestre un mensaje debajo o un popup que indicara que no hay producto disponible,,Pendiente,
+,,Rango de fecha de la promocion tanto para descuentos en precio como para promociones en unidades,,Pendiente,
+,,"Quitar mensaje de ""precio exclusivo en tienda""",,Pendiente,
+23,Productos de cadena de frio,"Hay productos que manejan cadena de frio, tener la opción de marcar productos como cadena de frio y al momento de seleccionarlos que muestre el mensaje de “Nuestra cadena de frio tiene una duración de 24 horas”, adicionalmente en el detalle debe agregar un item de Nevera, el cual tiene un costo inicial de $12,000 o se agrega el item de Nevera al listado de productos, lo que parezca mejor",,Pendiente,
+24,Opcion de retiro en tienda unicamente cuando la ciudad sea Bogota Unicamente,,,Pendiente,
+25,Check out compra (Para tener en cuenta),Opciones de pago,"Agregar la opcion Convenios, que desplegue una lista de los convenios activos, y cuando seleccione valide con el numero de identificacion si esta activo o tiene cupo disponidle, de lo contrario informe que no tiene cupo y que debe comunicarse al fondo para consultar informacion del mismo, los convenios ya acordados COOPMSD e Inicio TX",Pendiente,"Adjunto archivo con los endpoint, usuario y contraseñas y manuales de cada uno"
+,,,"En este momento solo tenemos opcion de integracion con Coopmsd, estan en proceso de analisis otros fondos mas, la idea es que podamos agregar mas fondos en la medida que vayan ingresando como convenio",Pendiente,
+,,,De acuerdo con la ciudad de despacho mostrar el valor de envio y los dias de entrega,Pendiente,
+,,,"Al momento de confirmar el pedido, poder tener la opción de programar la fecha de entrega por parte del cliente, debe ser igual o superior a los dias de entrega",Pendiente,
+,,"Cuando sea retiro en tienda, tener en cuenta que se debe dejar la direccion de la farmacia de Pharmaplus, como esta actualmente en el formato",,Pendiente,
+,,Boton de agregar Formula medica si hay productos que estan marcados como obligatoria,,Pendiente,
+,,Click de terminos y condiciones,,Pendiente,
+,,Click de Tto de datos,,Pendiente,
+,,Click de aceptacion de envio de promociones y descuentos,,Pendiente,
+,,Tener en cuenta los datos de facturacion del cliente agregar los telefonos de contacto,,Pendiente,
+26,Formato de confirmacion de envio a domicilio,,,Pendiente,
+,,Agregar el datos de la empresa transportadora con el numero de guia,,Pendiente,
+27,"Los laboratorios algunas veces quieren cargar informaciion acerca de sus productos, formas de aplicacion, tratamiento de algunas enfermedades, etc, la idea es tener una pagina de blog que permita cargar esto",,,En proceso,
+28,Agregar icono de Whatsapp ,Icono de whatsapp flotante ,,Pendiente ,
+,"En la pagina principal, la seccion de Belleza, es posible que ahi se muestre la categoria de Cuidado Facial con sus subcategorias como aparece en esta seccion .... ?",,,,
+,Iconos de medios de pago,Agregar Iconos que estaba en tienda.pharmaplus.com.co y faltaria un icono que diga Convenios,,,
+,Lista de deseos quitarlo del pie de pagina principal,,,,

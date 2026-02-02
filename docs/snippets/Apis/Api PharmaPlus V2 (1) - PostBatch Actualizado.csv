@@ -1,0 +1,149 @@
+Post Batch,https://lavender-locust-203807.hostingersite.com/wp-json/custom-api/v1/products/batch
+"{
+  ""mode"": ""create_only"",
+  ""products"": [
+    {
+      ""sku"": ""SKU-1001"",
+      ""title"": ""Crema Hidratante Facial"",
+      ""regular_price"": ""20000"",
+      ""sale_price"": ""10000"",
+      ""description"": ""Crema hidratante para piel seca, enriquecida con aloe vera y vitamina E."",
+      ""short_description"": ""Hidratación profunda para tu piel."",
+      ""status"": ""publish"",
+      ""stock_quantity"": 50,
+      ""stock_status"": ""instock"",
+      ""featured"": true,
+      ""image"": ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/29909-_PREDNISOLIN_3_SOLUCION_ORAL_FRASCO_X_50_ML.jpg"",
+      ""gallery"": [
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/6667-_TIROXIN_100_MCG_CAJA_X_50_TAB.jpg"",
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/4652-_NASAMIST_HIPERTONICO_SPRAY_X_125_ML.jpg""
+      ],
+      ""categories"": [""cuidado-personal"", ""cosmeticos""],
+      ""tags"": [""piel-seca"", ""hidratacion""],
+      ""upsell_skus"": [""SKU-1"", ""3294""],
+      ""crosssell_skus"": [""68146""],
+      ""meta"": {
+        ""_marca"": ""MK"",
+        ""_registro_invima"": ""122212"",
+        ""_tipo_de_producto"": ""Cosmetico"",
+        ""_needs_rx"": ""true""
+      },
+      ""jet_taxonomies"": {
+        ""laboratorios"": [""MK"", ""La Roche""]
+      }
+    },
+    {
+      ""sku"": ""SKU-1012"",
+      ""title"": ""Crema Hidratante Corporal"",
+      ""regular_price"": ""30000"",
+      ""sale_price"": ""10000"",
+      ""description"": ""Crema hidratante para piel seca, enriquecida con aloe vera y vitamina E."",
+      ""short_description"": ""Hidratación profunda para tu piel."",
+      ""status"": ""publish"",
+      ""stock_quantity"": 50,
+      ""stock_status"": ""instock"",
+      ""featured"": true,
+      ""image"": ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/29909-_PREDNISOLIN_3_SOLUCION_ORAL_FRASCO_X_50_ML.jpg"",
+      ""gallery"": [
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/6667-_TIROXIN_100_MCG_CAJA_X_50_TAB.jpg"",
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/4652-_NASAMIST_HIPERTONICO_SPRAY_X_125_ML.jpg""
+      ],
+      ""categories"": [""cuidado-personal"", ""cosmeticos""],
+      ""tags"": [""piel-seca"", ""hidratacion""],
+      ""upsell_skus"": [""SKU-1"", ""3294""],
+      ""crosssell_skus"": [""68146""],
+      ""meta"": {
+        ""_marca"": ""MK"",
+        ""_registro_invima"": ""122212"",
+        ""_tipo_de_producto"": ""Cosmetico"",
+        ""_needs_rx"": ""true""
+      },
+      ""jet_taxonomies"": {
+        ""laboratorios"": [""MK"", ""La Roche""]
+      }
+    }
+  ]
+}",
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+Crear y Actualizar productos en un solo procedimienó,
+"Json:
+
+{
+  ""products"": [
+    {
+      ""sku"": ""SKU-test1"",
+      ""title"": ""Crema Hidratante Facial"",
+      ""regular_price"": ""20000"",
+      ""sale_price"": ""10000"",
+      ""description"": ""Crema hidratante para piel seca, enriquecida con aloe vera y vitamina E."",
+      ""short_description"": ""Hidratación profunda para tu piel."",
+      ""status"": ""publish"",
+      ""manage_stock"": true,
+      ""stock_quantity"": 50,
+      ""stock_status"": ""instock"",
+      ""backorders"": ""no"",
+      ""featured"": true,
+      ""image"": ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/29909-_PREDNISOLIN_3_SOLUCION_ORAL_FRASCO_X_50_ML.jpg"",
+      ""gallery"": [
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/6667-_TIROXIN_100_MCG_CAJA_X_50_TAB.jpg"",
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/4652-_NASAMIST_HIPERTONICO_SPRAY_X_125_ML.jpg""
+      ],
+      ""categories"": [""cuidado-personal"", ""cosmeticos""],
+      ""tags"": [""piel-seca"", ""hidratacion""],
+      ""upsell_skus"": [""SKU-1"", ""3294""],
+      ""crosssell_skus"": [""68146""],
+      ""meta"": {
+        ""_marca"": ""MK"",
+        ""_registro_invima"": ""122212"",
+        ""_tipo_de_producto"": ""Cosmetico"",
+        ""_needs_rx"": ""true""
+      },
+      ""jet_taxonomies"": {
+        ""laboratorios"": [""101""],
+        ""departamentosciudades"": [""91""]
+      }
+    },
+    {
+      ""sku"": ""SKU-test2"",
+      ""title"": ""Crema Hidratante Corporal"",
+      ""regular_price"": ""30000"",
+      ""sale_price"": ""10000"",
+      ""description"": ""Crema hidratante para piel seca, enriquecida con aloe vera y vitamina E."",
+      ""short_description"": ""Hidratación profunda para tu piel."",
+      ""status"": ""publish"",
+      ""stock_quantity"": 50,
+      ""stock_status"": ""instock"",
+      ""featured"": true,
+      ""image"": ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/29909-_PREDNISOLIN_3_SOLUCION_ORAL_FRASCO_X_50_ML.jpg"",
+      ""gallery"": [
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/6667-_TIROXIN_100_MCG_CAJA_X_50_TAB.jpg"",
+        ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/08/4652-_NASAMIST_HIPERTONICO_SPRAY_X_125_ML.jpg""
+      ],
+      ""categories"": [""cuidado-personal"", ""cosmeticos""],
+      ""tags"": [""piel-seca"", ""hidratacion""],
+      ""upsell_skus"": [""SKU-1"", ""3294""],
+      ""crosssell_skus"": [""68146""],
+      ""meta"": {
+        ""_marca"": ""MK"",
+        ""_registro_invima"": ""122212"",
+        ""_tipo_de_producto"": ""Cosmetico"",
+        ""_needs_rx"": ""true""
+      },
+      ""jet_taxonomies"": {
+        ""laboratorios"": [""101""],
+        ""departamentosciudades"": [""91""]
+      }
+    }
+  ]
+}",

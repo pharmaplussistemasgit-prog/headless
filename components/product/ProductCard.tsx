@@ -11,6 +11,7 @@ import { useQuickView } from "@/context/QuickViewContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { Heart } from "lucide-react";
 import { isColdChain } from "@/lib/coldChain";
+import { getProductPromo } from "@/lib/promotions";
 
 interface ProductCardProps {
   product: MappedProduct;
@@ -20,6 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { openQuickView } = useQuickView();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(product.id);
+  const promoLabel = getProductPromo(product);
 
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat('es-CO', {
@@ -70,6 +72,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Badges */}
         <div className="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
+          {promoLabel && (
+            <span className="bg-[#9333ea] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow-sm flex items-center gap-1 animate-pulse">
+              {promoLabel}
+            </span>
+          )}
           {product.discountPercentage && (
             <span className="bg-[#FFD700] text-black text-[10px] font-extrabold px-2 py-0.5 rounded shadow-sm">
               -{product.discountPercentage}%
@@ -81,11 +88,12 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           )}
           {product.isOnSale && (
-            <span className="bg-[#EF4444] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow-sm flex items-center gap-1 animate-pulse">
+            <span className="bg-[#EF4444] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
               ¡OFERTA!
             </span>
           )}
         </div>
+
 
         <CardContent className="p-0 flex flex-col flex-grow relative">
           {/* Images Area - Click Trigger */}

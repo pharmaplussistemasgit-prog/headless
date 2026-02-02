@@ -1,32 +1,75 @@
-import { toast } from "sonner";
+/**
+ * SMS Service Adapter
+ * 
+ * Defines the interface for sending SMS notifications.
+ * Currently keeps a generic implementation.
+ * 
+ * TODO: User must configure specific endpoint and keys here.
+ */
 
-export interface SMSMessage {
-    to: string;
-    body: string;
+// Interface for what we expect from an SMS provider
+interface SMSProvider {
+    send(phone: string, message: string): Promise<boolean>;
 }
 
-export const SMS_PROVIDER = "MOCK_TWILIO";
+// Configuration for the Customer's SMS Service
+const SMS_CONFIG = {
+    // Replace these with actual values provided by the client's SMS provider
+    apiUrl: process.env.SMS_API_URL || 'https://api.generic-sms-provider.com/send',
+    apiKey: process.env.SMS_API_KEY || 'your-api-key',
+    senderId: process.env.SMS_SENDER_ID || 'PharmaPlus'
+};
 
-export async function sendSMS(message: SMSMessage): Promise<{ success: boolean; id?: string }> {
-    console.log(`[${SMS_PROVIDER}] Sending SMS to ${message.to}: ${message.body}`);
+/**
+ * Sends an SMS to the specified phone number.
+ * 
+ * @param phone Phone number (e.g., "573001234567")
+ * @param message Text message content
+ * @returns boolean indicating success
+ */
+export async function sendSMS(phone: string, message: string): Promise<boolean> {
 
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+    // 1. Validation
+    if (!phone || !message) {
+        console.warn('[SMS] Missing phone or message');
+        return false;
+    }
 
-    // Simulate success
-    return {
-        success: true,
-        id: `SM${Math.random().toString(36).substring(7).toUpperCase()}`
-    };
-}
+    try {
+        console.log(`[SMS] Attempting to send to ${phone}: "${message}"`);
 
-export function scheduleSMSReminder(reminder: any) {
-    // In a real app, this would call a backend API to schedule a Cron Job or Lambda.
-    // Here we just notify the user that the system "registered" it.
-    console.log("Scheduling reminder for:", reminder);
+        // 2. Real Implementation (Uncomment and adjust when credentials are ready)
+        /*
+        const response = await fetch(SMS_CONFIG.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${SMS_CONFIG.apiKey}`
+            },
+            body: JSON.stringify({
+                to: phone,
+                from: SMS_CONFIG.senderId,
+                text: message
+            })
+        });
 
-    // Mock simulation of immediate "Safety Check" SMS
-    toast.message("📱 SMS de Prueba", {
-        description: `Hola ${reminder.patientName || 'Usuario'}, te recordaremos tomar ${reminder.productName} a las ${reminder.times[0]}.`,
-    });
+        if (!response.ok) {
+            throw new Error(`SMS Provider Error: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('[SMS] Success:', data);
+        */
+
+        // 3. Mock Implementation (For Testing/Demo)
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        console.log('[SMS] MOCK SENT (Check console for details)');
+        return true;
+
+    } catch (error) {
+        console.error('[SMS] Failed to send:', error);
+        return false;
+    }
 }

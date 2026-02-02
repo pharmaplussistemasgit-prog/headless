@@ -55,6 +55,31 @@ export const auth = {
 
             // Guardar sesión
             if (data.token) {
+                // 2. Fetch full user profile to get ROLES (JWT often omits them)
+                try {
+                    // context=edit is REQUIRED to see roles, capabilities, email, etc.
+                    const profileRes = await fetch(`${cleanUrl}/wp-json/wp/v2/users/me?context=edit`, {
+                        headers: {
+                            'Authorization': `Bearer ${data.token}`
+                        }
+                    });
+
+                    if (profileRes.ok) {
+                        const profile = await profileRes.json();
+                        // Merge roles from profile into data before saving
+                        data.user_role = profile.roles || [];
+
+                        // Fallback: If roles is empty but is_super_admin is true, assign administrator
+                        if ((!data.user_role || data.user_role.length === 0) && profile.is_super_admin) {
+                            data.user_role = ['administrator'];
+                        }
+
+                        console.log('Roles fetched successfully:', data.user_role);
+                    }
+                } catch (e) {
+                    console.error('Failed to fetch user roles, using default:', e);
+                }
+
                 auth.saveSession(data);
             }
 
@@ -94,6 +119,16 @@ export const auth = {
                 id: id,
                 roles: data.user_role || [] // Store roles
             }));
+            window.dispatchEvent(new Event('auth-change'));
+        }
+    },
+
+    /**
+     * Actualizar datos brutos de sesión (para actualizaciones de perfil)
+     */
+    saveSessionRaw: (userData: any) => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(USER_KEY, JSON.stringify(userData));
             window.dispatchEvent(new Event('auth-change'));
         }
     },

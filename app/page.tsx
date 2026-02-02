@@ -6,7 +6,7 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import ColdChainSection from "@/components/home/ColdChainSection";
 import RecommendedSection from "@/components/home/RecommendedSection";
 import ValueProposition from "@/components/home/ValueProposition";
-import { getProducts } from "@/lib/woocommerce";
+import { getProducts, getCategoryTreeData, getOnSaleProducts } from "@/lib/woocommerce";
 import { getShippingRates } from '@/lib/shipping';
 import dynamic from 'next/dynamic';
 
@@ -25,7 +25,7 @@ const FAQSection = dynamic(() => import('@/components/home/FAQSection'), {
 });
 
 // Enable ISR - revalidate every 1 minute for homepage (high traffic)
-export const revalidate = 60;
+export const revalidate = 0;
 
 // Professional Hero Slides with local images
 const heroSlides: HeroSlide[] = [
@@ -88,83 +88,102 @@ export default async function HomePage() {
   // 3. Cold Chain
   // 4. Beauty
   // 5. Health (with complex fallback)
+  // 6. Categories (New)
 
   const [
     featuredResult,
     flashDealsProducts,
     coldChainResult,
     beautyResult,
-    healthResult
+    healthResult,
+    categories
   ] = await Promise.all([
     // 1. Featured Products
     (async () => {
-      let res = await getProducts({ perPage: 12, featured: true, orderby: 'popularity' });
+      let res = await getProducts({ perPage: 30, featured: true, orderby: 'popularity' });
       if (res.products.length === 0) {
         console.warn('No featured products found, falling back to popular products');
-        res = await getProducts({ perPage: 12, orderby: 'popularity' });
+        res = await getProducts({ perPage: 30, orderby: 'popularity' });
       }
       return res;
     })(),
 
-    // 2. Flash Deals
+    // 2. Flash Deals (Real Offers Only - No Fallback)
     (async () => {
       try {
-        const res = await getProducts({ perPage: 10, sku: '3294,76205' });
-        if (res.products.length > 0) return res.products;
-
-        // Fallback 1
-        const temp = await getProducts({ perPage: 2, orderby: 'date', order: 'desc' });
-        return temp.products;
+        const { products } = await getOnSaleProducts(1, 12);
+        return products;
       } catch (error) {
         console.error('Error fetching flash deals:', error);
-        const temp = await getProducts({ perPage: 2 });
-        return temp.products;
+        return [];
       }
     })(),
 
     // 3. Cold Chain
-    getProducts({ search: 'insulina', perPage: 8, orderby: 'popularity' }),
+    getProducts({ search: 'insulina', perPage: 24, orderby: 'popularity' }),
 
     // 4. Beauty
-    getProducts({ search: 'shampoo', perPage: 10, orderby: 'popularity' }),
+    getProducts({ search: 'shampoo', perPage: 24, orderby: 'popularity' }),
 
     // 5. Health (with chained fallbacks)
     (async () => {
-      let res = await getProducts({ category: '20', perPage: 10, orderby: 'popularity' });
+      let res = await getProducts({ category: '20', perPage: 24, orderby: 'popularity' });
       if (res.products.length > 0) return res;
 
-      res = await getProducts({ search: 'farmacia', perPage: 10 });
+      res = await getProducts({ search: 'farmacia', perPage: 24 });
       if (res.products.length > 0) return res;
 
-      return await getProducts({ search: 'medicamento', perPage: 10 });
+      return await getProducts({ search: 'medicamento', perPage: 24 });
     })(),
+
+    // 6. Categories (New)
+    getCategoryTreeData(),
   ]);
 
+  // Helper function for shuffling
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
+  // Randomize all lists
+  const shuffledBeautyProducts = shuffleArray(beautyResult.products);
+  const shuffledFeaturedTotal = shuffleArray(featuredResult.products);
+  const shuffledFlashDeals = shuffleArray(flashDealsProducts);
+  const shuffledColdChain = shuffleArray(coldChainResult.products);
+  const shuffledHealth = shuffleArray(healthResult.products);
+
+  // Split featured for variety between sections
+  // Assuming we fetched ~30 items.
+  const midpoint = Math.ceil(shuffledFeaturedTotal.length / 2);
+  const recommendedSlice = shuffledFeaturedTotal.slice(0, midpoint);
+  const featuredSlice = shuffledFeaturedTotal.slice(midpoint);
+
+  // If not enough products, fallback to sharing
+  const recommendedProducts = recommendedSlice.length > 4 ? recommendedSlice : shuffledFeaturedTotal;
+  const featuredProductsList = featuredSlice.length > 4 ? featuredSlice : shuffledFeaturedTotal;
 
   return (
     <div className="w-full bg-[var(--color-bg-light)]">
       {/* Hero Section */}
       <HeroSection
         slides={heroSlides}
-        featuredProds={featuredResult.products.slice(0, 2)}
+        featuredProds={shuffledFeaturedTotal.slice(0, 2)}
       />
 
       {/* Category Icons */}
-      <CategoryIconsSection />
-
-
-
-
+      <CategoryIconsSection categories={categories} />
 
       {/* Brand Carousel (All Labs - T21) */}
       <BrandCarousel />
 
-
-
       {/* Recommended Section (Complementa tu bienestar) */}
       <RecommendedSection
-        products={featuredResult.products}
+        products={recommendedProducts}
         title={
           <span>
             <span className="text-[var(--color-pharma-blue)] italic font-bold">Complementa tu </span>
@@ -182,7 +201,7 @@ export default async function HomePage() {
               <span className="text-[var(--color-pharma-green)] font-extrabold">interesar...</span>
             </span>
           }
-          products={featuredResult.products}
+          products={featuredProductsList}
         />
       )}
 
@@ -190,7 +209,7 @@ export default async function HomePage() {
       <FeaturedBrands />
 
       {/* Cold Chain Section */}
-      <ColdChainSection products={coldChainResult.products} />
+      <ColdChainSection products={shuffledColdChain} />
 
       {/* Flash Deals Section */}
       {flashDealsProducts.length > 0 && (
@@ -201,15 +220,26 @@ export default async function HomePage() {
               <span className="text-[var(--color-pharma-green)] font-extrabold">Ofertas</span>
             </span>
           }
-          products={flashDealsProducts}
+          products={shuffledFlashDeals}
         />
       )}
 
       {/* Beauty Section */}
-      <BeautySection products={beautyResult.products} />
+      {(() => {
+        // ID 299 = Cuidado Facial. We find it in the tree to get its children.
+        const facialNode = categories.find(c => c.id === 299);
+        const facialSubcategories = facialNode?.children || [];
+
+        return (
+          <BeautySection
+            products={shuffledBeautyProducts}
+            subcategories={facialSubcategories}
+          />
+        );
+      })()}
 
       {/* Health Section (New) */}
-      <HealthSection products={healthResult.products} />
+      <HealthSection products={shuffledHealth} />
 
       {/* FAQ Section */}
       <FAQSection />

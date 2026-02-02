@@ -84,6 +84,35 @@ export async function getLatestProduct(): Promise<Product | null> {
   }
 }
 
+/**
+ * Obtiene productos que están en oferta (on_sale: true).
+ * WooCommerce maneja automáticamente las fechas de vigencia (date_on_sale_from/to).
+ */
+export async function getOnSaleProducts(page: number = 1, perPage: number = 24): Promise<{ products: Product[]; total: number; totalPages: number }> {
+  try {
+    const response = await wcFetchRaw<Product[]>("products", {
+      on_sale: true,
+      per_page: perPage,
+      page: page,
+      status: 'publish',
+      stock_status: 'instock' // Opcional: solo stock disponible
+    }, 3600); // Cache de 1 hora para ofertas
+
+    const total = parseInt(response.headers.get("x-wp-total") || "0", 10);
+    const totalPages = parseInt(response.headers.get("x-wp-totalpages") || "0", 10);
+    const data = response.data ?? [];
+
+    return {
+      products: data,
+      total,
+      totalPages
+    };
+  } catch (error) {
+    console.error("Error obteniendo productos en oferta:", error);
+    return { products: [], total: 0, totalPages: 0 };
+  }
+}
+
 // Helper: obtener URL de imagen de la librería de medios de WordPress por ID
 async function getMediaSourceUrl(mediaId: number): Promise<string | undefined> {
   try {
@@ -379,6 +408,7 @@ export async function getProducts(params: {
       orderby,
       order,
       status: 'publish',
+      stock_status: 'instock', // Force only in-stock products globally
     };
 
     if (sku) queryParams.sku = sku;
@@ -413,15 +443,20 @@ export async function getProducts(params: {
  */
 export async function getCategoryGlobalFacets(categoryId: number): Promise<FilterState | null> {
   try {
-    console.log(`[Cache] Generando facetas globales para categoría ${categoryId}...`);
-    const products = await wcFetchAll<Product>("products", {
+    console.log(`[Cache] Generando facetas globales (Fast Mode) para categoría ${categoryId}...`);
+
+    // OPTIMIZATION: Instead of fetching ALL products (wcFetchAll) which takes 60s+ for large categories,
+    // we fetch a statistically significant sample (100 items).
+    // This allows instant loading while still providing relevant brand/tag filters.
+    // For 100% accuracy, a dedicated Search/Filter engine (like ElasticSearch) would be required.
+    const { data: products } = await wcFetchRaw<Product[]>("products", {
       category: categoryId.toString(),
-      per_page: 50,
+      per_page: 80, // Limit to 80 items for speed (approx 1.5s max request)
       status: 'publish',
-      stock_status: 'instock' // Only filter available products ? Or all? usually all visible.
+      stock_status: 'instock'
     }, CATEGORY_CACHE_TTL);
 
-    const mapped = products.map((p: any) => mapWooProduct(p));
+    const mapped = (products || []).map((p: any) => mapWooProduct(p));
     return analyzeProductsForFilters(mapped);
   } catch (error) {
     console.error(`Error calculating facets for category ${categoryId}:`, error);

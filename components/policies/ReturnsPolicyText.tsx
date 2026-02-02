@@ -51,9 +51,15 @@ export default function ReturnsPolicyText() {
 
                     <div className="bg-gray-50 p-5 rounded-xl mt-4">
                         <h4 className="font-bold text-gray-900 mb-2">2.1. Manejo de productos nutricionales, medicamentos biológicos o de cadena de frio, dermocosméticos e institucionales</h4>
-                        <p className="text-sm">
+                        <p className="text-sm mb-3">
                             No se acreditarán devoluciones de productos nutricionales, medicamentos biológicos o de cadena de frio, dermocosméticos e institucionales por políticas internas tanto de Pharmaplus como del laboratorio fabricante; solo serán recibidos para asegurar su destrucción; como excepción se acreditarán por daños en el transporte.
                         </p>
+                        <div className="bg-blue-100 border-l-4 border-blue-500 p-3 rounded">
+                            <p className="text-xs font-bold text-blue-800 uppercase mb-1">📢 Información Importante sobre Cadena de Frío:</p>
+                            <p className="text-sm text-blue-900">
+                                Para garantizar la integridad de los medicamentos que requieren refrigeración, <strong>el envío incluye obligatoriamente una nevera de icopor y geles refrigerantes</strong> con un costo adicional de <strong>$12.000 COP</strong>. Este valor se sumará automáticamente a su factura. Por seguridad sanitaria, <strong>NO se aceptan devoluciones</strong> de estos productos bajo ninguna circunstancia una vez entregados.
+                            </p>
+                        </div>
                     </div>
 
                     <div className="mt-4">

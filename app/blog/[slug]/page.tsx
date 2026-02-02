@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
 
-                <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 mb-12 w-full text-center md:text-left">
+                <div className="relative z-10 w-full max-w-[95%] lg:max-w-[1400px] mx-auto px-4 sm:px-6 mb-12 text-center md:text-left">
                     <span className="inline-block px-3 py-1 bg-[var(--color-pharma-blue)] text-white text-xs font-bold uppercase tracking-wider rounded mb-4">
                         Artículo
                     </span>
@@ -76,7 +76,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
 
             {/* Contenido Prose */}
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
+            <div className="w-full max-w-[95%] lg:max-w-[1400px] mx-auto px-4 sm:px-6 -mt-10 relative z-20">
                 <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100">
                     <div
                         className="prose prose-lg prose-blue max-w-none prose-img:rounded-2xl prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-[var(--color-pharma-blue)] prose-a:no-underline hover:prose-a:underline"

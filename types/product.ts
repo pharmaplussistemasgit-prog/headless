@@ -16,6 +16,10 @@ export interface WooProduct {
     sku: string;
     categories: { id: number; name: string; slug: string }[];
     tags: { id: number; name: string; slug: string }[];
+    average_rating?: string;
+    rating_count?: number;
+    date_on_sale_from?: string | null;
+    date_on_sale_to?: string | null;
 }
 
 export interface MappedProduct {
@@ -45,6 +49,10 @@ export interface MappedProduct {
 
     // UI Helpers
     discountPercentage: number | null;
+    dateOnSaleFrom: string | null;
+    dateOnSaleTo: string | null;
+    averageRating: string | null;
+    ratingCount: number | null;
 }
 
 export interface WooCategory {

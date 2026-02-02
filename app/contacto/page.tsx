@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 
+// TODO: VERIFICAR SI LOS NOMBRES DE LOS CAMPOS (name, email, etc) COINCIDEN CON WORDPRESS
+const CONTACT_FORM_ID = 16907;
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -14,6 +17,7 @@ export default function ContactPage() {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -24,17 +28,44 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setLoading(true);
+    setErrorMsg('');
 
-    // Simulación de envío
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch('/api/forms/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          formId: CONTACT_FORM_ID,
+          data: {
+            // Mapeo hipotético - Se debe ajustar según los "Field Names" del JFB en WP
+            nombre: formData.name,
+            email: formData.email,
+            telefono: formData.phone,
+            asunto: formData.subject,
+            mensaje: formData.message,
+            // Algunos JFB requieren nombres especificos como 'text-field-1', etc.
+            // Pendiente confirmar con el usuario.
+          }
+        })
+      });
 
-    setSuccess(true);
-    setLoading(false);
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      const result = await response.json();
 
-    // Reset success message after 5 seconds
-    setTimeout(() => setSuccess(false), 5000);
+      if (result.success) {
+        setSuccess(true);
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        setTimeout(() => setSuccess(false), 5000);
+      } else {
+        setErrorMsg(result.message || 'Error al enviar el mensaje.');
+      }
+
+    } catch (err) {
+      setErrorMsg('Error de conexión. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,7 +86,6 @@ export default function ContactPage() {
 
           {/* INFORMACIÓN DE CONTACTO */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Card 1: Atención al Cliente */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
                 <Phone className="w-6 h-6 text-[var(--color-pharma-blue)]" />
@@ -67,7 +97,6 @@ export default function ContactPage() {
               </a>
             </div>
 
-            {/* Card 2: Correo */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
                 <Mail className="w-6 h-6 text-[var(--color-pharma-green)]" />
@@ -79,7 +108,6 @@ export default function ContactPage() {
               </a>
             </div>
 
-            {/* Card 3: Ubicación */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
                 <MapPin className="w-6 h-6 text-purple-600" />
@@ -118,6 +146,12 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {errorMsg && (
+                    <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm mb-4">
+                      {errorMsg}
+                    </div>
+                  )}
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700">Nombre Completo *</label>

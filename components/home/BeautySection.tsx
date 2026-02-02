@@ -4,11 +4,12 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
-import { Product } from '@/types/woocommerce';
+import { Navigation, Autoplay, FreeMode } from 'swiper/modules';
+import { Product, Category } from '@/types/woocommerce';
 import { mapWooProduct } from '@/lib/mappers';
 import { WooProduct } from '@/types/product';
 import ProductCard from '@/components/product/ProductCard';
+import { getCategoryStyle } from '@/lib/category-styles';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -16,21 +17,23 @@ import 'swiper/css/navigation';
 
 interface BeautySectionProps {
     products: Product[];
+    subcategories: Category[];
 }
 
-const SUBCATEGORIES = [
-    { name: 'Ojos', image: '/placeholder-beauty-eyes.png', icon: '👁️' },
-    { name: 'Rostro', image: '/placeholder-beauty-face.png', icon: '✨' },
-    { name: 'Labios', image: '/placeholder-beauty-lips.png', icon: '💄' },
-    { name: 'Uñas', image: '/placeholder-beauty-nails.png', icon: '💅' },
-    { name: 'Accesorios', image: '/placeholder-beauty-acc.png', icon: '🖌️' },
-    { name: 'Perfumes', image: '/placeholder-beauty-perfume.png', icon: '🧴' },
-    { name: 'Electro', image: '/placeholder-beauty-electro.png', icon: '🔌' },
-];
-
-export default function BeautySection({ products }: BeautySectionProps) {
+export default function BeautySection({ products, subcategories }: BeautySectionProps) {
     const prevRef = useRef<HTMLButtonElement>(null);
     const nextRef = useRef<HTMLButtonElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = 300;
+            scrollContainerRef.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     // If no specific beauty products, we might want to hide or fallback
     if (!products || products.length === 0) return null;
@@ -41,31 +44,49 @@ export default function BeautySection({ products }: BeautySectionProps) {
                 <div className="bg-white shadow-sm p-6 md:p-8">
                     <div className="w-full lg:w-[90%] mx-auto">
                         {/* Header */}
-                        {/* Header */}
                         <div className="mb-6">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-2xl md:text-3xl font-bold italic text-[var(--color-pharma-blue)]">
                                     Belleza
                                 </h2>
-                                <Link href="/categoria/belleza" className="text-xs font-medium text-gray-400 hover:text-[var(--color-pharma-blue)] flex items-center gap-1 transition-colors">
+                                <Link href="/categoria/cuidado-facial" className="text-xs font-medium text-gray-400 hover:text-[var(--color-pharma-blue)] flex items-center gap-1 transition-colors">
                                     Ver más <ChevronRight className="w-3 h-3" />
                                 </Link>
                             </div>
                             <div className="w-full h-px bg-gray-300 mt-2"></div>
                         </div>
 
-                        {/* Subcategories Nav Row */}
-                        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-6 mb-4">
-                            {SUBCATEGORIES.map((cat, idx) => (
-                                <Link
-                                    key={idx}
-                                    href={`/categoria/belleza/${cat.name.toLowerCase()}`}
-                                    className="flex-shrink-0 flex items-center gap-3 bg-white border border-gray-100 rounded-lg p-3 min-w-[140px] hover:shadow-md hover:border-purple-100 transition-all group"
-                                >
-                                    <span className="text-2xl">{cat.icon}</span>
-                                    <span className="font-semibold text-gray-600 group-hover:text-purple-600 text-sm">{cat.name}</span>
-                                </Link>
-                            ))}
+                        {/* Subcategories Draggable Carousel */}
+                        <div className="relative mb-8 group/cats px-1">
+                            <Swiper
+                                modules={[FreeMode]}
+                                spaceBetween={14}
+                                slidesPerView={'auto'}
+                                freeMode={true}
+                                grabCursor={true}
+                                className="!py-2"
+                            >
+                                {subcategories.map((cat) => {
+                                    const style = getCategoryStyle(cat.slug);
+                                    const Icon = style.icon;
+
+                                    return (
+                                        <SwiperSlide key={cat.id} className="!w-auto">
+                                            <Link
+                                                href={`/categoria/${cat.slug}`}
+                                                className={`flex items-center gap-2 bg-white border border-gray-100 rounded-full px-5 py-2.5 hover:shadow-lg transition-all group ${style.borderColor} border-b-2`}
+                                            >
+                                                <span className={`p-1.5 rounded-full ${style.bgColor} ${style.iconColor}`}>
+                                                    <Icon size={18} />
+                                                </span>
+                                                <span className="font-semibold text-gray-700 group-hover:text-purple-700 text-sm whitespace-nowrap">
+                                                    {cat.name}
+                                                </span>
+                                            </Link>
+                                        </SwiperSlide>
+                                    );
+                                })}
+                            </Swiper>
                         </div>
 
                         {/* Products Carousel */}

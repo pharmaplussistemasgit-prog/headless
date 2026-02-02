@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook, Instagram, Phone, Mail, MapPin, Truck, ShieldCheck, Clock, MessageCircle, Send, CreditCard } from 'lucide-react';
+import { Facebook, Instagram, Phone, Mail, MapPin, Truck, ShieldCheck, Clock, MessageCircle, Send, CreditCard, Banknote } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -99,8 +99,8 @@ export default function Footer() {
 
                 <div className="space-y-2 text-sm text-blue-100">
                   <p>NIT 830.110.109-7</p>
-                  <p>Calle 123 # 45-67, Bogotá D.C.</p>
-                  <p>Colombia, Suramérica</p>
+                  <p>Calle 86 # 27 - 54</p>
+                  <p>Bogotá, Colombia</p>
                 </div>
 
                 <div>
@@ -122,7 +122,7 @@ export default function Footer() {
                   <Link href="https://www.instagram.com/pharmapluscolombia/" target="_blank" className="text-blue-200 hover:text-white transition-colors hover:scale-110" aria-label="Síguenos en Instagram">
                     <Instagram className="w-6 h-6" />
                   </Link>
-                  <Link href="/contacto" className="hover:scale-110 transition-transform" aria-label="Escríbenos por WhatsApp">
+                  <Link href="https://wa.me/573168397933" target="_blank" className="hover:scale-110 transition-transform" aria-label="Escríbenos por WhatsApp">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://tienda.pharmaplus.com.co/wp-content/uploads/elementor/thumbs/Whatsapp-rd7cxj0k3c24bqbqf6c65a5tulhs2kwxhcpb8hbib8.png"
@@ -143,10 +143,17 @@ export default function Footer() {
 
                 <div className="space-y-6 w-full">
                   <div>
-                    <Link href="tel:6015934005" className="block text-2xl md:text-3xl font-bold text-white hover:text-[var(--color-pharma-green)] transition-colors">
-                      (601) 593 4005
+                    <h4 className="text-xs text-blue-200 uppercase mb-1">PBX:</h4>
+                    <Link href="tel:6015934005" className="block text-xl md:text-2xl font-bold text-white hover:text-[var(--color-pharma-green)] transition-colors">
+                      (601) 593 - 4005
                     </Link>
-                    <span className="text-xs text-blue-200 mt-1 block">Línea de atención nacional</span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs text-blue-200 uppercase mb-1">Whatsapp:</h4>
+                    <Link href="https://wa.me/573168397933" target="_blank" className="block text-xl md:text-2xl font-bold text-white hover:text-[var(--color-pharma-green)] transition-colors">
+                      +57 316 839 7933
+                    </Link>
                   </div>
 
                   <div className="space-y-1 text-sm text-blue-100">
@@ -154,9 +161,9 @@ export default function Footer() {
                     <p><span className="font-semibold text-white">Sábados:</span> 8:00 am - 8:00 pm</p>
                   </div>
 
-                  <Link href="mailto:atencionalusuario@pharmaplus.com.co" className="flex items-center gap-2 text-sm text-white hover:underline break-words hover:text-[var(--color-pharma-green)] transition-colors">
+                  <Link href="mailto:auraolarte@pharmaplus.com.co" className="flex items-center gap-2 text-sm text-white hover:underline break-words hover:text-[var(--color-pharma-green)] transition-colors">
                     <Mail className="w-4 h-4 shrink-0" />
-                    <span className="truncate">atencionalusuario@pharmaplus.com.co</span>
+                    <span className="truncate">auraolarte@pharmaplus.com.co</span>
                   </Link>
                 </div>
               </div>
@@ -171,7 +178,7 @@ export default function Footer() {
                   </Link>
                 </h3>
                 <ul className="space-y-3 w-full">
-                  <li><Link href="/preguntas-frecuentes" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preguntas Frecuentes</Link></li>
+                  <li><Link href="/politicas/preguntas-frecuentes" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preguntas Frecuentes</Link></li>
                   <li><Link href="/politicas/terminos-condiciones" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Términos y Condiciones</Link></li>
                   <li><Link href="/politicas/politicas-devolucion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas de Devoluciones</Link></li>
                   <li><Link href="/politicas/proteccion-datos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Política de Protección de Datos</Link></li>
@@ -191,45 +198,96 @@ export default function Footer() {
                   <li><Link href="/mi-cuenta" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Panel de control</Link></li>
                   <li><Link href="/mi-cuenta/pedidos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Mis pedidos</Link></li>
                   <li><Link href="/carrito" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Carrito de compras</Link></li>
-                  <li><Link href="/wishlist" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Lista de deseos</Link></li>
+                  <li><Link href="/wishlist" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Me Interesan</Link></li>
                   <li><Link href="/reversion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Reversión de pago</Link></li>
                 </ul>
 
-                {/* PAYMENT METHODS SECTION - GRID */}
-                <div>
-                  <h3 className="text-sm font-bold text-[var(--color-pharma-green)] uppercase tracking-wider mb-4 text-center md:text-left">
-                    Medios de Pago
-                  </h3>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Visa.png" alt="Visa" className="max-h-full max-w-full" />
-                    </div>
-                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Mastercard.png" alt="Mastercard" className="max-h-full max-w-full" />
-                    </div>
-                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/PSE.png" alt="PSE" className="max-h-full max-w-full" />
-                    </div>
-                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Diners.png" alt="Diners" className="max-h-full max-w-full" />
-                    </div>
-                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Contra-Entrega.png" alt="Contra Entrega" className="max-h-full max-w-full" />
-                    </div>
-                    <div className="bg-white p-1 rounded h-8 w-12 flex items-center justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/Transferencia_Bancaria.png" alt="Transferencia" className="max-h-full max-w-full" />
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
 
+          </div>
+
+          {/* PAYMENT METHODS SECTION - FULL WIDTH HORIZONTAL */}
+          <div className="w-full mt-12 pt-8 border-t border-white/10">
+            <h3 className="text-base font-bold text-[var(--color-pharma-green)] uppercase tracking-wider mb-8 text-center">
+              Medios de Pago y Envío
+            </h3>
+
+            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8 lg:gap-10">
+              {/* 1. Visa */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Image src="/images/payments/visa.svg" alt="Visa" width={60} height={36} className="w-auto h-full object-contain" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">Visa</span>
+              </div>
+
+              {/* 2. MasterCard */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Image src="/images/payments/mastercard.svg" alt="MasterCard" width={60} height={36} className="w-auto h-full object-contain" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">MasterCard</span>
+              </div>
+
+              {/* 3. Amex */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Image src="/images/payments/amex.svg" alt="Amex" width={60} height={36} className="w-auto h-full object-contain" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">Amex</span>
+              </div>
+
+              {/* 4. Diners */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Image src="/images/payments/diners.svg" alt="Diners" width={60} height={36} className="w-auto h-full object-contain" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">Diners</span>
+              </div>
+
+              {/* 5. PSE */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://tienda.pharmaplus.com.co/wp-content/uploads/2025/08/PSE.png" alt="PSE" className="w-auto h-full object-contain" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">PSE</span>
+              </div>
+
+              {/* 6. Datáfono */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Image src="/images/payments/datafono.svg" alt="Datáfono" width={60} height={36} className="w-auto h-full object-contain" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">Datáfono</span>
+              </div>
+
+              {/* 7. Efectivo */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Banknote className="w-8 h-8 text-green-600" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide mt-1">Efectivo</span>
+              </div>
+
+              {/* 8. Contra Entrega */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <Truck className="w-8 h-8 text-[var(--color-pharma-blue)]" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide whitespace-nowrap mt-1">Contra Entrega</span>
+              </div>
+
+              {/* 9. Recoger en Tienda */}
+              <div className="flex flex-col items-center gap-2 group">
+                <div className="bg-white/90 p-2 rounded-lg h-12 w-20 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                  <MapPin className="w-8 h-8 text-[var(--color-pharma-blue)]" />
+                </div>
+                <span className="text-[10px] text-blue-100 uppercase font-semibold tracking-wide whitespace-nowrap mt-1">Recoger</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

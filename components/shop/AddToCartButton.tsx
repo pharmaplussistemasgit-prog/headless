@@ -23,7 +23,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
             price: price,
             quantity: 1,
             image: product.images?.[0]?.src || '/placeholder-image.png',
-            slug: product.slug
+            slug: product.slug,
+            categories: product.categories // Pass categories for cold chain logic
         });
     };
 

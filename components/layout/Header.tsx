@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
     Search, ShoppingCart, User, MapPin, ChevronDown,
-    Phone, Mail, Tag, Heart, Store, Pill, Menu, CreditCard, Snowflake, FileText, HelpCircle, Truck
+    Phone, Mail, Tag, Heart, Store, Pill, Menu, CreditCard, Snowflake, FileText, HelpCircle, Truck, ClipboardList
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { CategoryTree } from '@/types/woocommerce';
@@ -139,10 +139,10 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
                         </div>
 
                         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                            {/* Wishlist */}
-                            <Link href="/wishlist" className="relative group p-2 hidden sm:block" aria-label="Ver lista de deseos">
-                                <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 group-hover:border-red-200 group-hover:bg-red-50 flex items-center justify-center text-slate-600 group-hover:text-red-500 transition-all duration-300">
-                                    <Heart className="w-5 h-5" />
+                            {/* Wishlist - Me Interesan */}
+                            <Link href="/wishlist" className="relative group p-2 hidden sm:block" aria-label="Ver Me Interesan">
+                                <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 group-hover:border-[var(--color-pharma-blue)] group-hover:bg-blue-50 flex items-center justify-center text-slate-600 group-hover:text-[var(--color-pharma-blue)] transition-all duration-300">
+                                    <ClipboardList className="w-5 h-5" />
                                 </div>
                             </Link>
 
@@ -209,21 +209,47 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
 
                         {/* Quick Links Nav */}
                         <nav className="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar">
-                            {[
-                                { href: "/ofertas", icon: Tag, label: "Ofertas" },
-                                { href: "/pastillero", icon: Pill, label: "Pastillero" },
-                                { href: "/tiendas", icon: Store, label: "Tiendas" },
-                                { href: "/blog", icon: FileText, label: "Blog" },
-                            ].map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className="flex items-center gap-2 text-[13px] font-medium text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-all whitespace-nowrap"
-                                >
-                                    <link.icon className="w-4 h-4 opacity-80" />
-                                    <span>{link.label}</span>
-                                </Link>
-                            ))}
+                            <Link
+                                href="/ofertas"
+                                className="flex items-center gap-2 text-[13px] font-medium text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-all whitespace-nowrap"
+                            >
+                                <Tag className="w-4 h-4 opacity-80" />
+                                <span>Ofertas</span>
+                            </Link>
+
+                            {/* HIGHLIGHTED: Pastillero Virtual */}
+                            <Link
+                                href="/mi-cuenta/pastillero"
+                                className="flex items-center gap-2 text-[13px] font-bold text-white bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-all whitespace-nowrap shadow-sm border border-white/10 mx-1"
+                            >
+                                <Pill className="w-4 h-4 text-[var(--color-pharma-orange)] drop-shadow-sm" fill="currentColor" />
+                                <span className="tracking-wide">Pastillero Virtual</span>
+                            </Link>
+
+                            {/* HIGHLIGHTED: Cadena de Frío */}
+                            <Link
+                                href="/categoria/cadena-de-frio"
+                                className="flex items-center gap-2 text-[13px] font-bold text-cyan-50 hover:text-white hover:bg-cyan-500/30 px-3 py-2 rounded-lg transition-all whitespace-nowrap mx-1 group"
+                            >
+                                <Snowflake className="w-4 h-4 text-cyan-300 group-hover:animate-spin-slow" />
+                                <span className="group-hover:text-cyan-100 transition-colors">Cadena de Frío</span>
+                            </Link>
+
+                            <Link
+                                href="/tiendas"
+                                className="flex items-center gap-2 text-[13px] font-medium text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-all whitespace-nowrap"
+                            >
+                                <Store className="w-4 h-4 opacity-80" />
+                                <span>Tiendas</span>
+                            </Link>
+
+                            <Link
+                                href="/blog"
+                                className="flex items-center gap-2 text-[13px] font-medium text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-all whitespace-nowrap"
+                            >
+                                <FileText className="w-4 h-4 opacity-80" />
+                                <span>Blog</span>
+                            </Link>
 
                             <button
                                 onClick={() => setShippingModalOpen(true)}
@@ -379,7 +405,7 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
                                         <User className="w-6 h-6 text-[var(--color-pharma-blue)] mb-2" />
                                         <span className="text-xs font-bold text-slate-700">Mi Cuenta</span>
                                     </Link>
-                                    <Link href="/pastillero" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-xl active:scale-95 transition-transform">
+                                    <Link href="/mi-cuenta/pastillero" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-xl active:scale-95 transition-transform">
                                         <Pill className="w-6 h-6 text-[var(--color-pharma-green)] mb-2" />
                                         <span className="text-xs font-bold text-slate-700">Pastillero</span>
                                     </Link>

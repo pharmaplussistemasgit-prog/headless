@@ -4,22 +4,19 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText, CreditCard, Building, CheckCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/product/ProductCard';
 
 import { auth } from '@/lib/auth';
+import AgreementModal from './AgreementModal';
 
 interface CheckoutFormProps {
     shippingRules: import('@/lib/shipping').ShippingRule[];
 }
 
-
-
 import { COLOMBIA_STATES, COLOMBIA_CITIES, ISO_TO_DANE_MAP } from '@/lib/colombia-data';
-
-import { CreditCard, Building, CheckCircle, Loader2 } from 'lucide-react';
 import PrescriptionUploader from './PrescriptionUploader';
 
 export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
@@ -27,12 +24,14 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [isCompany, setIsCompany] = useState(false);
 
+    // T25: OrbisFarma / Convenios State
+    const [agreementTransactionId, setAgreementTransactionId] = useState<string | null>(null);
+    const [showAgreementModal, setShowAgreementModal] = useState(false);
+
     const [deliveryMethod, setDeliveryMethod] = useState<'shipping' | 'pickup'>('shipping');
     const [deliveryDate, setDeliveryDate] = useState('');
     const [prescriptionConfirmed, setPrescriptionConfirmed] = useState(false);
     const [prescriptionFileUrl, setPrescriptionFileUrl] = useState<string | null>(null);
-
-
 
     // Shipping State
     const [selectedState, setSelectedState] = useState('');
@@ -42,6 +41,8 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     const [loadingShipping, setLoadingShipping] = useState(false);
     const [cityCode, setCityCode] = useState('');
     const [availableCities, setAvailableCities] = useState<Array<{ code: string, name: string }>>([]);
+    const [termsAccepted, setTermsAccepted] = useState(false);
+    const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
     const [customerData, setCustomerData] = useState({
         firstName: '',
@@ -92,6 +93,16 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
                 if (data.success) {
                     setAvailableCities(data.data);
+
+                    // Auto-select if only one city (e.g. Bogotá)
+                    if (data.data.length === 1) {
+                        const singleCity = data.data[0];
+                        setCustomerData(prev => ({ ...prev, city: singleCity.name }));
+                        setCityCode(singleCity.code);
+                        // Calculate shipping automatically
+                        const stateName = COLOMBIA_STATES.find(s => s.code === selectedState)?.name || '';
+                        calculateShipping(singleCity.code, singleCity.name, stateName);
+                    }
                 } else {
                     console.error('Error loading cities:', data.message);
                     setAvailableCities([]);
@@ -209,7 +220,13 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
         }
     };
 
-    const handleCheckout = () => {
+    const handleAgreementAuthorized = (data: any) => {
+        setAgreementTransactionId(data.transactionid || data.response?.transactionid);
+        setShowAgreementModal(false);
+        toast.success(`Cupo autorizado. Saldo disponible: ${data.response?.cardbalance || 'N/A'}`);
+    };
+
+    const handleCheckout = async (isAgreement = false) => {
         if (!selectedState) {
             toast.error("Selecciona un departamento de envío");
             return;
@@ -218,7 +235,6 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             toast.error("No tenemos cobertura en esta zona");
             return;
         }
-
 
         // ... validation continued
         if (!customerData.firstName || !customerData.email || !customerData.documentId) {
@@ -236,15 +252,70 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             return;
         }
 
+        if (!termsAccepted || !privacyAccepted) {
+            toast.error("Debes aceptar los Términos y la Política de Datos para continuar");
+            return;
+        }
+
         // T25: Prescription Validation
         if (requiresPrescription && !prescriptionConfirmed) {
             toast.error("Debes confirmar que tienes la fórmula médica");
             return;
         }
 
-
+        // Agreement Validation
+        if (isAgreement && !agreementTransactionId) {
+            setShowAgreementModal(true);
+            return;
+        }
 
         setIsLoading(true);
+
+        // HEADLESS CHECKOUT FLOW (Convenios)
+        if (isAgreement && agreementTransactionId) {
+            try {
+                const response = await fetch('/api/checkout/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer: customerData,
+                        items: items,
+                        agreementId: agreementTransactionId,
+                        agreementCardNumber: customerData.documentId, // Assuming ID is the card number used
+                        shippingLine: {
+                            method_id: deliveryMethod === 'pickup' ? 'local_pickup' : 'flat_rate',
+                            method_title: shippingMethodName,
+                            total: shippingCost.toString()
+                        },
+                        metaData: [
+                            { key: "fee_amount", value: requiresColdChain ? coldChainFee.toString() : "0" },
+                            { key: "meta_has_prescription", value: requiresPrescription ? "yes" : "no" },
+                            { key: "meta_prescription_url", value: prescriptionFileUrl || "" }
+                        ]
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    clearCart();
+                    toast.success("¡Pedido creado exitosamente!");
+                    window.location.href = `/checkout/success?id=${result.orderId}`;
+                } else {
+                    toast.error(result.message || "Error creando el pedido");
+                    setIsLoading(false);
+                }
+
+            } catch (error) {
+                console.error(error);
+                toast.error("Error de conexión al procesar el pedido.");
+                setIsLoading(false);
+            }
+            return;
+        }
+
+
+        // LEGACY FLOW (Wompi/WordPress Handover)
         try {
             // Handover URL (Legacy/Backend)
             const baseUrl = (process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://tienda.pharmaplus.com.co").replace(/\/$/, "") + "/finalizar-compra/";
@@ -256,6 +327,7 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
             const params = new URLSearchParams();
             params.append('saprix_handover', 'true');
+            // Removed agreement params here as we handle it headless now
             params.append('items', itemsString);
 
             // Send selected state as shipping zone context
@@ -280,15 +352,11 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             }
 
             params.append('documentId', customerData.documentId);
-
-            // Snippet #09: Inject 'billing_cedula'
             params.append('billing_cedula', customerData.documentId);
-            // Also append standard WP billing fields just in case
-            params.append('billing_type_document', 'cedula'); // Legacy support
+            params.append('billing_type_document', 'cedula');
 
-            // Replaced Snippet #06, #07, #08: Handle Hidden/Default Fields
-            params.append('billing_country', 'CO'); // Hardcoded 'CO'
-            params.append('billing_postcode', '000000'); // Default Postcode
+            params.append('billing_country', 'CO');
+            params.append('billing_postcode', '000000');
             params.append('shipping_country', 'CO');
 
             if (isCompany && customerData.companyName) {
@@ -305,8 +373,6 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             let orderComments = '';
             if (deliveryDate) orderComments += `Fecha de entrega preferida: ${deliveryDate}. `;
 
-
-
             if (orderComments) {
                 params.append('order_comments', orderComments);
             }
@@ -321,7 +387,6 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                 }
             }
 
-            // Address 2 (Apartment) - merged or empty
             params.append('billing_address_2', '');
 
             const handoverUrl = `${baseUrl}?${params.toString()}`;
@@ -509,7 +574,6 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                                                     Horario: Lunes a Viernes 7am - 7pm
                                                 </p>
                                                 <div className="flex items-center gap-1 mt-2 text-[10px] font-bold text-green-600 uppercase">
-                                                    <span className="bg-green-100 px-2 py-0.5 rounded">Envío Gratis</span>
                                                     <span className="bg-green-100 px-2 py-0.5 rounded">Entrega Inmediata</span>
                                                 </div>
                                             </div>
@@ -669,21 +733,35 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
                     <div className="border-t border-gray-100 pt-4 space-y-2 mb-6">
                         <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Subtotal Productos</span>
-                            {/* cartTotal includes fee, so subtract it for display */}
+                            <span className="text-gray-600">Valor Productos</span>
+                            {/* Product Sum Only */}
                             <span className="font-bold">${(cartTotal - (requiresColdChain ? coldChainFee : 0)).toLocaleString()}</span>
                         </div>
 
                         {requiresColdChain && (
-                            <div className="flex justify-between text-sm text-blue-600 bg-blue-50 p-2 rounded-lg">
-                                <span className="flex items-center gap-1">
-                                    <ThermometerSnowflake className="w-4 h-4" />
-                                    Nevera + Gel
-                                </span>
-                                <span className="font-bold">${coldChainFee.toLocaleString()}</span>
-                            </div>
+                            <>
+                                <div className="mt-2 mb-3 bg-blue-50 border border-blue-100 p-3 rounded-lg text-xs text-blue-800">
+                                    <p className="font-bold mb-1">Costo Adicional: Nevera ($12.000)</p>
+                                    <p>Este valor se sumará a tu pedido por la nevera certificada obligatoria para el transporte.</p>
+                                </div>
+
+                                <div className="flex justify-between text-sm text-blue-600">
+                                    <span className="flex items-center gap-1">
+                                        <ThermometerSnowflake className="w-4 h-4" />
+                                        Nevera de Icopor
+                                    </span>
+                                    <span className="font-bold">${coldChainFee.toLocaleString()}</span>
+                                </div>
+
+                                {/* Intermediate Subtotal (Products + Fridge) */}
+                                <div className="flex justify-between text-sm font-bold text-gray-800 pt-2 border-t border-dashed border-gray-200 mt-2">
+                                    <span>Subtotal</span>
+                                    <span>${cartTotal.toLocaleString()}</span>
+                                </div>
+                            </>
                         )}
-                        <div className="flex justify-between text-sm">
+
+                        <div className="flex justify-between text-sm pt-1">
                             <span className="text-gray-600">Envío</span>
                             {shippingCost === 0 ? (
                                 <span className="text-green-600 font-bold">Gratis</span>
@@ -714,21 +792,130 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         </div>
                     )}
 
-                    <button
-                        onClick={handleCheckout}
-                        disabled={isLoading || !selectedState || isBelowMinAmount}
-                        className="w-full py-4 bg-[var(--color-pharma-green)] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                    >
-                        {isLoading ? 'Procesando...' : 'Pagar Ahora'}
-                        {!isLoading && <ArrowRight size={18} />}
-                    </button>
+                    {/* Agreement Status Feedback */}
+                    {agreementTransactionId && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 animate-in fade-in slide-in-from-top-2">
+                            <div className="flex items-start gap-3">
+                                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                                <div>
+                                    <h4 className="font-bold text-green-800 text-sm">Convenio Autorizado</h4>
+                                    <p className="text-xs text-green-700 mt-1">
+                                        Validación exitosa. Ya puedes finalizar tu compra.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
-                    <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
-                        <ShieldCheck size={14} />
-                        <span>Pagos procesados de forma segura</span>
+                    {/* Legal Checkboxes */}
+                    <div className="space-y-4 py-6 border-t border-gray-100">
+                        <label className="flex items-start gap-3 cursor-pointer group">
+                            <div className="relative flex items-center mt-0.5">
+                                <input
+                                    type="checkbox"
+                                    checked={termsAccepted}
+                                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                                    className="peer h-4 w-4 cursor-pointer appearance-none border border-gray-300 rounded bg-white transition-all checked:border-[var(--color-pharma-blue)] checked:bg-[var(--color-pharma-blue)] hover:border-[var(--color-pharma-blue)]"
+                                />
+                                <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <span className="text-xs text-gray-600">
+                                Acepto los <Link href="/politicas/terminos-condiciones" target="_blank" className="text-[var(--color-pharma-blue)] underline">Términos y Condiciones</Link>
+                            </span>
+                        </label>
+
+                        <label className="flex items-start gap-3 cursor-pointer group">
+                            <div className="relative flex items-center mt-0.5">
+                                <input
+                                    type="checkbox"
+                                    checked={privacyAccepted}
+                                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                                    className="peer h-4 w-4 cursor-pointer appearance-none border border-gray-300 rounded bg-white transition-all checked:border-[var(--color-pharma-blue)] checked:bg-[var(--color-pharma-blue)] hover:border-[var(--color-pharma-blue)]"
+                                />
+                                <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <span className="text-xs text-gray-600">
+                                Acepto la <Link href="/politicas/proteccion-datos" target="_blank" className="text-[var(--color-pharma-blue)] underline">Política de Tratamiento de Datos</Link> y el uso de cookies.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div className="space-y-3">
+                        {!agreementTransactionId && (
+                            <button
+                                onClick={() => handleCheckout(false)}
+                                disabled={isLoading || !selectedState || isBelowMinAmount}
+                                className="w-full py-4 bg-[var(--color-pharma-green)] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed group"
+                            >
+                                {isLoading ? 'Procesando...' : 'Pagar con Tarjeta / PSE / Efectivo'}
+                                {!isLoading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
+                            </button>
+                        )}
+
+                        <button
+                            onClick={() => handleCheckout(true)}
+                            disabled={isLoading || !selectedState || isBelowMinAmount}
+                            className={`
+                                w-full py-4 font-bold rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed
+                                ${agreementTransactionId
+                                    ? 'bg-[var(--color-pharma-blue)] text-white hover:bg-blue-700 shadow-md ring-2 ring-offset-2 ring-[var(--color-pharma-blue)]'
+                                    : 'bg-white text-[var(--color-pharma-blue)] border-2 border-[var(--color-pharma-blue)] hover:bg-blue-50'
+                                }
+                                disabled:bg-gray-100 disabled:border-gray-300 disabled:text-gray-400
+                            `}
+                        >
+                            {isLoading && agreementTransactionId ? 'Procesando Convenio...'
+                                : agreementTransactionId ? 'Finalizar Compra con Convenio'
+                                    : 'Pagar con Convenio / Libranza'}
+                            <CreditCard size={18} />
+                        </button>
+
+                        {agreementTransactionId && (
+                            <button
+                                onClick={() => {
+                                    setAgreementTransactionId(null);
+                                    toast.info("Convenio removido. Selecciona otro método de pago.");
+                                }}
+                                className="w-full py-2 text-xs text-red-500 hover:text-red-700 underline"
+                            >
+                                Cancelar / Cambiar Método de Pago
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="mt-4 flex flex-col items-center justify-center gap-2 text-xs text-gray-400 text-center">
+                        <div className="flex items-center gap-2 mb-1">
+                            <ShieldCheck size={14} />
+                            <span>Pagos procesados de forma segura</span>
+                        </div>
+                        <p className="max-w-xs">
+                            Al continuar, aceptas nuestros{' '}
+                            <Link href="/politicas/terminos-condiciones" target="_blank" className="text-[var(--color-pharma-blue)] hover:underline">
+                                Términos y Condiciones
+                            </Link>
+                            {' '}y{' '}
+                            <Link href="/revision-pago-electronico" target="_blank" className="text-[var(--color-pharma-blue)] hover:underline">
+                                Política de Reversión de Pago
+                            </Link>.
+                        </p>
                     </div>
                 </div>
             </div>
+
+            {showAgreementModal && (
+                <AgreementModal
+                    onAuthorized={handleAgreementAuthorized}
+                    onCancel={() => setShowAgreementModal(false)}
+                />
+            )}
         </div >
     );
 }

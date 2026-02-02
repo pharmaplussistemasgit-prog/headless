@@ -1,0 +1,1097 @@
+Codigo Ciudad,Term Name,Parent Name,Parent Slug,VALOR DOMICILIO,Dias de entrega
+05001,Medellin,Antioquia,05,12320,1
+05002,Abejorral,Antioquia,05,60480,5
+05003,San Antonio De Prado,Antioquia,05,42560,5
+05004,Abriaqui,Antioquia,05,60480,5
+05021,Alejandria,Antioquia,05,60480,5
+05030,Amaga,Antioquia,05,60480,5
+05031,Amalfi,Antioquia,05,42560,5
+05034,Andes,Antioquia,05,60480,5
+05036,Angelopolis,Antioquia,05,42560,5
+05038,Angostura,Antioquia,05,60480,5
+05040,Anori,Antioquia,05,42560,5
+05042,Antioquia,Antioquia,05,60480,5
+05044,Anza,Antioquia,05,60480,5
+05045,Apartado,Antioquia,05,60480,5
+05051,Arboletes,Antioquia,05,60480,5
+05055,Argelia,Antioquia,05,42560,5
+05059,Armenia,Antioquia,05,12320,5
+05079,Barbosa,Antioquia,05,42560,5
+05085,Belen Antioquia,Antioquia,05,60480,5
+05086,Belmira,Antioquia,05,60480,5
+05088,Bello,Antioquia,05,12320,1
+05091,Betania,Antioquia,05,60480,5
+05093,Betulia,Antioquia,05,60480,5
+05101,Bolivar,Antioquia,05,42560,5
+05105,Bolombolo,Antioquia,05,60480,5
+05107,Briceño,Antioquia,05,60480,5
+05113,Buritica,Antioquia,05,60480,5
+05120,Caceres,Antioquia,05,42560,5
+05125,Caicedo,Antioquia,05,60480,5
+05129,Caldas,Antioquia,05,12320,2
+05134,Campamento,Antioquia,05,60480,5
+05138,Cañasgordas,Antioquia,05,60480,5
+05142,Caracoli,Antioquia,05,60480,5
+05145,Caramanta,Antioquia,05,60480,5
+05147,Carepa,Antioquia,05,60480,4
+05148,El Carmen De Viboral,Antioquia,05,60480,5
+05150,Carolina,Antioquia,05,60480,5
+05154,Caucasia,Antioquia,05,42560,3
+05172,Chigorodo,Antioquia,05,60480,5
+05190,Cisneros,Antioquia,05,60480,5
+05197,Cocorna,Antioquia,05,60480,5
+05206,Concepcion,Antioquia,05,60480,5
+05209,Concordia,Antioquia,05,42560,5
+05212,Copacabana,Antioquia,05,12320,2
+05234,Dabeiba,Antioquia,05,60480,5
+05237,Don Matias,Antioquia,05,60480,5
+05240,Ebejico,Antioquia,05,60480,5
+05250,El Bagre,Antioquia,05,60480,5
+05252,El Poblado,Antioquia,05,12320,5
+05253,La Pintada,Antioquia,05,42560,5
+05264,Entrerrios,Antioquia,05,60480,5
+05266,Envigado,Antioquia,05,12320,1
+05282,Fredonia,Antioquia,05,60480,5
+05284,Frontino,Antioquia,05,60480,5
+05306,Giraldo,Antioquia,05,60480,5
+05308,Girardota,Antioquia,05,12320,2
+05310,Gomez Plata,Antioquia,05,60480,5
+05313,Granada,Antioquia,05,42560,5
+05315,Guadalupe,Antioquia,05,60480,5
+05318,Guarne,Antioquia,05,12320,2
+05321,Guatape,Antioquia,05,42560,5
+05347,Heliconia,Antioquia,05,60480,5
+05353,Hispania,Antioquia,05,42560,5
+05360,Itagüi,Antioquia,05,12320,1
+05361,Ituango,Antioquia,05,42560,5
+05364,Jardin,Antioquia,05,60480,5
+05368,Jerico,Antioquia,05,60480,5
+05376,La Ceja,Antioquia,05,12320,2
+05378,La Sierra,Antioquia,05,42560,5
+05380,La Estrella,Antioquia,05,42560,5
+05400,La Union,Antioquia,05,60480,5
+05411,Liborina,Antioquia,05,42560,5
+05425,Maceo,Antioquia,05,60480,5
+05440,Marinilla,Antioquia,05,60480,2
+05467,Montebello,Antioquia,05,60480,5
+05475,Murindo,Antioquia,05,60480,5
+05480,Mutata,Antioquia,05,60480,5
+05483,Nariño,Antioquia,05,60480,5
+05490,Necocli,Antioquia,05,60480,5
+05495,Nechi,Antioquia,05,60480,5
+05501,Olaya,Antioquia,05,42560,5
+05541,El Peñol,Antioquia,05,42560,5
+05543,Peque,Antioquia,05,42560,5
+05576,Pueblorrico,Antioquia,05,60480,5
+05579,Puerto Berrio,Antioquia,05,60480,5
+05585,Puerto Nare (Lama),Antioquia,05,60480,5
+05591,Puerto Triunfo,Antioquia,05,42560,5
+05604,Remedios,Antioquia,05,42560,5
+05607,Retiro,Antioquia,05,60480,5
+05612,Riogrande,Antioquia,05,60480,5
+05615,Rionegro,Antioquia,05,12320,1
+05628,Sabanalarga,Antioquia,05,60480,5
+05631,Sabaneta,Antioquia,05,12320,1
+05642,Salgar,Antioquia,05,60480,5
+05647,San Andres,Antioquia,05,60480,5
+05649,San Carlos,Antioquia,05,60480,5
+05650,San Cristobal,Antioquia,05,42560,5
+05652,San Francisco,Antioquia,05,60480,5
+05656,San Jeronimo,Antioquia,05,60480,5
+05658,San Jose De La Montana,Antioquia,05,60480,5
+05659,San Juan De Uraba,Antioquia,05,60480,5
+05660,San Luis,Antioquia,05,60480,5
+05664,San Pedro,Antioquia,05,60480,5
+05665,San Pedro De Uraba,Antioquia,05,42560,5
+05667,San Rafael,Antioquia,05,60480,5
+05670,San Roque,Antioquia,05,42560,5
+05674,San Vicente,Antioquia,05,60480,5
+05679,Santa Barbara,Antioquia,05,60480,5
+05682,Santa Fe De Antioquia,Antioquia,05,12320,5
+05686,Santa Rosa De Osos,Antioquia,05,60480,5
+05690,Santo Domingo,Antioquia,05,42560,5
+05697,Santuario,Antioquia,05,60480,5
+05736,Segovia,Antioquia,05,42560,5
+05756,Sonson,Antioquia,05,60480,5
+05761,Sopetran,Antioquia,05,60480,5
+05789,Tamesis,Antioquia,05,60480,5
+05790,Taraza,Antioquia,05,42560,5
+05792,Tarso,Antioquia,05,60480,5
+05809,Titiribi,Antioquia,05,60480,5
+05819,Toledo,Antioquia,05,42560,5
+05837,Turbo,Antioquia,05,60480,5
+05842,Uramita,Antioquia,05,60480,5
+05847,Urrao,Antioquia,05,60480,5
+05854,Valdivia,Antioquia,05,60480,5
+05856,Valparaiso,Antioquia,05,60480,5
+05858,Vegachi,Antioquia,05,60480,5
+05861,Venecia,Antioquia,05,60480,5
+05873,Vigia Del Fuerte,Antioquia,05,60480,5
+05885,Yali,Antioquia,05,60480,5
+05887,Yarumal,Antioquia,05,60480,5
+05890,Yolombo,Antioquia,05,42560,5
+05893,Yondo,Antioquia,05,60480,5
+05895,Zaragoza,Antioquia,05,42560,5
+08001,Barranquilla,Atlántico,08,12320,2
+08078,Baranoa,Atlántico,08,60480,3
+08137,Campo De La Cruz,Atlántico,08,60480,5
+08141,Candelaria,Atlántico,08,60480,5
+08296,Galapa,Atlántico,08,60480,3
+08372,Juan De Acosta,Atlántico,08,42560,5
+08421,Luruaco,Atlántico,08,42560,3
+08433,Malambo,Atlántico,08,12320,2
+08436,Manati,Atlántico,08,42560,5
+08520,Palmar D Varela,Atlántico,08,60480,5
+08549,Piojo,Atlántico,08,60480,5
+08558,Polonuevo,Atlántico,08,60480,5
+08560,Ponedera,Atlántico,08,60480,5
+08573,Puerto Colombia,Atlántico,08,42560,3
+08606,Repelon,Atlántico,08,42560,5
+08634,Sabanagrande,Atlántico,08,60480,5
+08638,Sabanalarga,Atlántico,08,60480,5
+08675,Santa Lucia,Atlántico,08,60480,5
+08685,Santo Tomas,Atlántico,08,42560,3
+08758,Soledad,Atlántico,08,12320,2
+08770,Suan,Atlántico,08,42560,5
+08832,Tubara,Atlántico,08,42560,5
+08849,Usiacuri,Atlántico,08,42560,5
+08851,Campeche,Atlántico,08,60480,5
+08905,Juan Mina,Atlántico,08,12320,3
+11001,Bogota,Cundinamarca,25,4816,1
+13001,Cartagena,Bolivar,13,12320,1
+13006,Achi,Bolivar,13,60480,5
+13042,Arenal,Bolivar,13,42560,5
+13052,Arjona,Bolivar,13,60480,5
+13074,Barranco De Loba,Bolivar,13,42560,5
+13140,Calamar,Bolivar,13,42560,5
+13160,Canta Gallo,Bolivar,13,60480,5
+13212,Cordoba,Bolivar,13,42560,5
+13244,Carmen De Bolivar,Bolivar,13,60480,5
+13248,El Guamo,Bolivar,13,42560,5
+13300,La Boquilla,Bolivar,13,60480,5
+13430,Magangue,Bolivar,13,42560,4
+13433,Mahates,Bolivar,13,42560,5
+13440,Margarita,Bolivar,13,60480,5
+13442,Maria La Baja,Bolivar,13,42560,5
+13468,Mompos,Bolivar,13,42560,5
+13473,Morales,Bolivar,13,42560,5
+13549,Pinillos,Bolivar,13,42560,5
+13600,Rio Viejo,Bolivar,13,42560,5
+13647,San Estanislao,Bolivar,13,60480,5
+13650,San Fernando,Bolivar,13,42560,5
+13654,San Jacinto,Bolivar,13,42560,5
+13657,San Juan Nepomuceno,Bolivar,13,60480,5
+13667,San Martin De Loba,Bolivar,13,42560,5
+13670,San Pablo,Bolivar,13,60480,5
+13673,Santa Catalina,Bolivar,13,42560,5
+13683,Santa Rosa,Bolivar,13,60480,5
+13688,Santa Rosa Del Sur,Bolivar,13,42560,5
+13744,Simiti,Bolivar,13,42560,5
+13760,Soplaviento,Bolivar,13,42560,5
+13780,Talaigua Nuevo,Bolivar,13,42560,5
+13781,Paso caballo,Bolivar,13,60480,5
+13810,Tiquisio,Bolivar,13,60480,5
+13836,Turbaco,Bolivar,13,42560,3
+13838,Turbana,Bolivar,13,42560,5
+13873,Villanueva,Bolivar,13,60480,5
+13894,Zambrano,Bolivar,13,42560,5
+15001,Tunja,Boyacá,15,12320,1
+15022,Almeida,Boyacá,15,60480,5
+15047,Aquitania,Boyacá,15,42560,5
+15051,Arcabuco,Boyacá,15,42560,5
+15087,Belen,Boyacá,15,60480,5
+15088,Belencito,Boyacá,15,60480,5
+15090,Berbeo,Boyacá,15,42560,5
+15092,Beteitiva,Boyacá,15,60480,5
+15097,Boavita,Boyacá,15,60480,5
+15104,Boyaca,Boyacá,15,60480,5
+15106,Briceño,Boyacá,15,60480,5
+15109,Buenavista,Boyacá,15,60480,5
+15114,Busbanza,Boyacá,15,60480,5
+15131,Caldas,Boyacá,15,12320,2
+15135,Campohermoso,Boyacá,15,42560,5
+15162,Cerinza,Boyacá,15,60480,5
+15172,Chinavita,Boyacá,15,60480,5
+15176,Chiquinquira,Boyacá,15,12320,2
+15180,Chiscas,Boyacá,15,60480,5
+15183,Chita,Boyacá,15,42560,5
+15185,Chitaraque,Boyacá,15,42560,5
+15187,Chivata,Boyacá,15,42560,5
+15189,Cienega,Boyacá,15,42560,5
+15204,Combita,Boyacá,15,42560,5
+15212,Coper,Boyacá,15,42560,5
+15215,Corrales,Boyacá,15,42560,5
+15218,Covarachia,Boyacá,15,60480,5
+15223,Cubara,Boyacá,15,42560,5
+15224,Cucaita,Boyacá,15,60480,5
+15226,Cuitiva,Boyacá,15,42560,5
+15232,Chiquiza,Boyacá,15,60480,5
+15238,Duitama,Boyacá,15,12320,1
+15244,El Cocuy,Boyacá,15,60480,5
+15248,El Espino,Boyacá,15,60480,5
+15272,Firavitoba,Boyacá,15,42560,5
+15276,Floresta,Boyacá,15,42560,5
+15293,Gachantiva,Boyacá,15,60480,5
+15296,Gameza,Boyacá,15,42560,5
+15299,Garagoa,Boyacá,15,60480,3
+15317,Guacamayas,Boyacá,15,60480,5
+15322,Guateque,Boyacá,15,60480,3
+15325,Guayata,Boyacá,15,60480,5
+15332,Güican,Boyacá,15,60480,5
+15362,Iza,Boyacá,15,42560,5
+15367,Jenesano,Boyacá,15,42560,5
+15368,Jerico,Boyacá,15,60480,5
+15377,Labranzagrande,Boyacá,15,42560,5
+15380,La Capilla,Boyacá,15,60480,5
+15401,La Victoria,Boyacá,15,60480,3
+15403,La Uvita,Boyacá,15,60480,5
+15407,Villa De Leyva,Boyacá,15,12320,1
+15425,Macanal,Boyacá,15,42560,5
+15442,Maripi,Boyacá,15,42560,5
+15455,Miraflores,Boyacá,15,60480,5
+15464,Mongua,Boyacá,15,42560,5
+15466,Mongui,Boyacá,15,60480,5
+15469,Moniquira,Boyacá,15,60480,5
+15476,Motavita,Boyacá,15,42560,5
+15480,Muzo,Boyacá,15,60480,5
+15491,Nobsa,Boyacá,15,42560,1
+15494,Nuevo Colon,Boyacá,15,42560,5
+15500,Oicata,Boyacá,15,42560,5
+15507,Otanche,Boyacá,15,60480,5
+15511,Pachavita,Boyacá,15,42560,5
+15514,Paez,Boyacá,15,42560,5
+15516,Paipa,Boyacá,15,12320,1
+15518,Pajarito,Boyacá,15,60480,5
+15522,Panqueba,Boyacá,15,60480,5
+15531,Pauna,Boyacá,15,42560,5
+15533,Paya,Boyacá,15,42560,5
+15537,Paz De Rio,Boyacá,15,60480,5
+15542,Pesca,Boyacá,15,42560,5
+15550,Pisba,Boyacá,15,60480,5
+15572,Puerto Boyaca,Boyacá,15,42560,5
+15580,Quipama,Boyacá,15,60480,5
+15599,Ramiriqui,Boyacá,15,60480,5
+15600,Raquira,Boyacá,15,60480,5
+15621,Rondon,Boyacá,15,42560,5
+15632,Saboya,Boyacá,15,60480,5
+15638,Sachica,Boyacá,15,60480,5
+15646,Samaca,Boyacá,15,12320,5
+15660,San Eduardo,Boyacá,15,42560,5
+15664,San Jose De Pare,Boyacá,15,42560,5
+15667,San Luis De Gaceno,Boyacá,15,60480,5
+15673,San Mateo,Boyacá,15,60480,5
+15676,San Miguel De Sema,Boyacá,15,42560,5
+15681,San Pablo De Borbur,Boyacá,15,42560,5
+15686,Santana,Boyacá,15,60480,5
+15690,Santa Maria,Boyacá,15,60480,5
+15693,Santa Rosa De Viterbo,Boyacá,15,60480,5
+15696,Santa Sofia,Boyacá,15,60480,5
+15720,Sativanorte,Boyacá,15,60480,5
+15723,Sativasur,Boyacá,15,60480,5
+15740,Siachoque,Boyacá,15,42560,5
+15753,Soata,Boyacá,15,60480,5
+15755,Socota,Boyacá,15,60480,5
+15757,Socha,Boyacá,15,60480,5
+15759,Sogamoso,Boyacá,15,12320,1
+15761,Somondoco,Boyacá,15,60480,5
+15762,Sora,Boyacá,15,42560,5
+15763,Sotaquira,Boyacá,15,60480,5
+15764,Soraca,Boyacá,15,42560,5
+15774,Susacon,Boyacá,15,42560,5
+15776,Sutamarchan,Boyacá,15,42560,5
+15778,Sutatenza,Boyacá,15,60480,5
+15790,Tasco,Boyacá,15,60480,5
+15798,Tenza,Boyacá,15,60480,5
+15804,Tibana,Boyacá,15,60480,5
+15806,Tibasosa,Boyacá,15,60480,5
+15808,Tinjaca,Boyacá,15,60480,5
+15810,Tipacoque,Boyacá,15,42560,5
+15814,Toca,Boyacá,15,60480,5
+15816,Togüi,Boyacá,15,60480,5
+15820,Topaga,Boyacá,15,42560,5
+15822,Tota,Boyacá,15,42560,5
+15832,Tunungua,Boyacá,15,42560,5
+15835,Turmeque,Boyacá,15,60480,5
+15837,Tuta,Boyacá,15,60480,5
+15839,Tu tasa,Boyacá,15,60480,5
+15842,umbita,Boyacá,15,42560,3
+15861,Ventaquemada,Boyacá,15,60480,5
+15879,Viracacha,Boyacá,15,42560,5
+15897,Zetaquira,Boyacá,15,42560,5
+17001,Manizales,Caldas,17,12320,5
+17013,Aguadas,Caldas,17,60480,5
+17042,Anserma,Caldas,17,60480,5
+17050,Aranzazu,Caldas,17,60480,5
+17060,Arauca-,Caldas,17,60480,5
+17088,Belalcazar,Caldas,17,60480,5
+17174,Chinchina,Caldas,17,60480,1
+17272,Filadelfia,Caldas,17,60480,5
+17380,La Dorada,Caldas,17,12320,2
+17388,La Merced,Caldas,17,60480,5
+17433,Manzanares,Caldas,17,60480,5
+17442,Marmato,Caldas,17,42560,5
+17444,Marquetalia,Caldas,17,60480,5
+17446,Marulanda,Caldas,17,42560,5
+17486,Neira,Caldas,17,60480,5
+17495,Norcasia,Caldas,17,60480,5
+17513,Pacora,Caldas,17,60480,5
+17524,Palestina,Caldas,17,42560,5
+17541,Pensilvania,Caldas,17,60480,5
+17614,Riosucio,Caldas,17,12320,3
+17616,Risaralda,Caldas,17,60480,5
+17653,Salamina,Caldas,17,60480,5
+17662,Samana,Caldas,17,42560,5
+17665,San Jose,Caldas,17,60480,5
+17777,Supia,Caldas,17,60480,5
+17867,Victoria,Caldas,17,60480,5
+17873,Villamaria,Caldas,17,60480,1
+17877,Viterbo,Caldas,17,42560,5
+17879,Guarinocito,Caldas,17,42560,5
+18001,Florencia,Caquetá,18,42560,2
+18029,Albania,Caquetá,18,60480,5
+18094,Belen De Los Andaquies,Caquetá,18,42560,5
+18150,Cartagena Del Chaira,Caquetá,18,42560,5
+18205,Curillo,Caquetá,18,60480,5
+18247,El Doncello,Caquetá,18,60480,5
+18256,El Paujil,Caquetá,18,42560,5
+18410,La Montañita,Caquetá,18,42560,5
+18460,Milan,Caquetá,18,60480,5
+18479,Morelia,Caquetá,18,60480,5
+18592,Puerto Rico,Caquetá,18,42560,5
+18610,San Jose De Fragua,Caquetá,18,60480,5
+18753,San Vicente Del Caguan,Caquetá,18,60480,5
+18765,Solano,Caquetá,18,42560,5
+18860,Valparaiso,Caquetá,18,60480,5
+19001,Popayan,Cauca,19,12320,5
+19022,Almaguer,Cauca,19,60480,5
+19050,Argelia,Cauca,19,42560,5
+19075,Balboa,Cauca,19,42560,5
+19100,Bolivar,Cauca,19,42560,5
+19110,Buenos Aires,Cauca,19,42560,5
+19130,Cajibio,Cauca,19,60480,5
+19137,Caldono,Cauca,19,60480,5
+19142,Caloto,Cauca,19,42560,5
+19212,Corinto,Cauca,19,42560,5
+19215,El Bordo,Cauca,19,42560,5
+19256,El Tambo,Cauca,19,60480,5
+19318,Guapi,Cauca,19,42560,5
+19355,Inza,Cauca,19,60480,5
+19364,Jambalo,Cauca,19,60480,5
+19392,La Sierra,Cauca,19,42560,5
+19397,La Vega,Cauca,19,60480,5
+19418,Lopez,Cauca,19,42560,5
+19450,Mercaderes,Cauca,19,60480,5
+19455,Miranda,Cauca,19,60480,5
+19473,Morales,Cauca,19,42560,5
+19501,Florencia,Cauca,19,42560,2
+19513,Padilla,Cauca,19,60480,5
+19517,Paez,Cauca,19,42560,5
+19532,Patia (El Bordo),Cauca,19,60480,5
+19548,Piendamo,Cauca,19,42560,5
+19573,Puerto Tejada,Cauca,19,60480,2
+19585,Purace,Cauca,19,60480,5
+19622,Rosas,Cauca,19,42560,5
+19693,San Sebastian,Cauca,19,60480,5
+19698,Santander De Quilichao,Cauca,19,12320,3
+19701,Santa Rosa,Cauca,19,60480,5
+19743,Silvia,Cauca,19,42560,5
+19760,Sotara,Cauca,19,60480,5
+19807,Timbio,Cauca,19,60480,5
+19809,Timbiqui,Cauca,19,42560,5
+19810,Coconuco,Cauca,19,60480,5
+19821,Toribio,Cauca,19,60480,5
+19824,Totoro,Cauca,19,60480,5
+19830,Sucre,Cauca,19,42560,5
+19845,Villa Rica,Cauca,19,12320,3
+20001,Valledupar,Cesar,20,12320,2
+20011,Aguachica,Cesar,20,12320,3
+20013,Agustin Codazzi,Cesar,20,60480,5
+20032,Astrea,Cesar,20,42560,5
+20045,Becerril,Cesar,20,60480,5
+20060,Bosconia,Cesar,20,42560,5
+20175,Chimichagua,Cesar,20,42560,5
+20178,Chiriguana,Cesar,20,60480,5
+20228,Curumani,Cesar,20,60480,5
+20238,El Copey,Cesar,20,42560,5
+20250,El Paso,Cesar,20,42560,5
+20295,Gamarra,Cesar,20,60480,5
+20310,Gonzalez,Cesar,20,42560,5
+20383,La Gloria,Cesar,20,60480,5
+20400,La Jagua De Ibirico,Cesar,20,60480,5
+20443,Manaure Balcon Del Cesar,Cesar,20,42560,5
+20517,Pailitas,Cesar,20,60480,5
+20550,Pelaya,Cesar,20,42560,5
+20570,Pueblo Bello,Cesar,20,60480,5
+20614,Rio De Oro,Cesar,20,60480,5
+20621,La Paz,Cesar,20,42560,5
+20710,San Alberto,Cesar,20,60480,5
+20750,San Diego,Cesar,20,42560,5
+20770,San Martin,Cesar,20,60480,5
+20787,Tamalameque,Cesar,20,60480,5
+20790,San Juan Del Cesar,Cesar,20,42560,3
+20793,Maria Angola,Cesar,20,60480,5
+23001,Monteria,Córdoba,23,12320,2
+23050,Apartada,Córdoba,23,60480,5
+23068,Ayapel,Córdoba,23,60480,5
+23079,Buenavista,Córdoba,23,60480,5
+23090,Canalete,Córdoba,23,60480,5
+23162,Cerete,Córdoba,23,42560,2
+23168,Chima,Córdoba,23,42560,5
+23182,Chinu,Córdoba,23,60480,5
+23189,Cienaga De Oro,Córdoba,23,60480,5
+23417,Lorica,Córdoba,23,60480,5
+23419,Los Cordobas,Córdoba,23,60480,5
+23464,Momil,Córdoba,23,60480,5
+23466,Montelibano,Córdoba,23,42560,5
+23500,Moñitos,Córdoba,23,60480,5
+23555,Planeta Rica,Córdoba,23,60480,5
+23570,Pueblo Nuevo,Córdoba,23,42560,5
+23574,Puerto Escondido,Córdoba,23,42560,5
+23580,Puerto Libertador,Córdoba,23,42560,5
+23586,Purisima,Córdoba,23,60480,5
+23660,Sahagun,Córdoba,23,60480,5
+23670,San Andres De Sotavento,Córdoba,23,42560,5
+23672,San Antero,Córdoba,23,60480,5
+23675,San Bernardo Del Viento,Córdoba,23,42560,5
+23678,San Carlos,Córdoba,23,60480,5
+23686,San Pelayo,Córdoba,23,42560,5
+23807,Tierralta,Córdoba,23,60480,5
+23855,Valencia,Córdoba,23,42560,5
+23890,Tuchin,Córdoba,23,42560,5
+25002,Osa,Cundinamarca,25,60480,5
+25003,Negativa,Cundinamarca,25,60480,5
+25004,Bonafont,Cundinamarca,25,60480,5
+25005,Suba,Cundinamarca,25,5824,1
+25006,Saquen,Cundinamarca,25,60480,5
+25007,Sume,Cundinamarca,25,60480,5
+25018,Agua De Dios,Cundinamarca,25,12320,2
+25019,Alban,Cundinamarca,25,60480,2
+25035,Anapoima,Cundinamarca,25,12320,2
+25040,Anolaima,Cundinamarca,25,12320,2
+25053,Arbelaez,Cundinamarca,25,12320,2
+25086,Beltran,Cundinamarca,25,42560,5
+25095,Bituima,Cundinamarca,25,42560,5
+25099,Bojaca,Cundinamarca,25,12320,5
+25107,Briceño,Cundinamarca,25,60480,5
+25120,Cabrera,Cundinamarca,25,60480,5
+25123,Cachipay,Cundinamarca,25,60480,5
+25126,Cajica,Cundinamarca,25,12320,1
+25148,Caparrapi,Cundinamarca,25,60480,5
+25151,Caqueza,Cundinamarca,25,42560,5
+25154,Carmen De Carupa,Cundinamarca,25,60480,5
+25168,Chaguani,Cundinamarca,25,42560,5
+25175,Chia,Cundinamarca,25,5824,1
+25178,Chipaque,Cundinamarca,25,60480,5
+25181,Choachi,Cundinamarca,25,60480,5
+25183,Choconta,Cundinamarca,25,60480,2
+25200,Cogua,Cundinamarca,25,60480,5
+25214,Cota,Cundinamarca,25,12320,1
+25224,Cucunuba,Cundinamarca,25,60480,5
+25245,El Colegio,Cundinamarca,25,12320,1
+25258,El Peñon,Cundinamarca,25,60480,5
+25269,Facatativa,Cundinamarca,25,5824,1
+25279,Fomeque,Cundinamarca,25,60480,5
+25281,Fosca,Cundinamarca,25,42560,5
+25286,Funza,Cundinamarca,25,5824,1
+25288,Fuquene,Cundinamarca,25,60480,5
+25290,Fusagasuga,Cundinamarca,25,12320,1
+25293,Gachala,Cundinamarca,25,42560,5
+25295,Gachancipa,Cundinamarca,25,60480,2
+25297,Gacheta,Cundinamarca,25,60480,5
+25299,Gama,Cundinamarca,25,42560,5
+25307,Girardot,Cundinamarca,25,12320,1
+25312,Granada,Cundinamarca,25,42560,5
+25315,El Rosal,Cundinamarca,25,12320,2
+25317,Guacheta,Cundinamarca,25,60480,5
+25320,Guaduas,Cundinamarca,25,12320,3
+25322,Guasca,Cundinamarca,25,12320,3
+25324,Guataqui,Cundinamarca,25,42560,5
+25326,Guatavita,Cundinamarca,25,12320,5
+25328,Guayabal De Siquima,Cundinamarca,25,60480,5
+25335,Guayabetal,Cundinamarca,25,42560,5
+25339,Gutierrez,Cundinamarca,25,60480,5
+25368,Jerusalen,Cundinamarca,25,42560,5
+25372,Junin,Cundinamarca,25,42560,5
+25377,La Calera,Cundinamarca,25,12320,1
+25386,La Mesa,Cundinamarca,25,12320,1
+25394,La Palma,Cundinamarca,25,42560,5
+25398,La Pena,Cundinamarca,25,60480,5
+25402,La Vega,Cundinamarca,25,60480,5
+25407,Lenguazaque,Cundinamarca,25,60480,5
+25426,Macheta,Cundinamarca,25,42560,5
+25430,Madrid,Cundinamarca,25,5824,1
+25436,Manta,Cundinamarca,25,42560,5
+25438,Medina,Cundinamarca,25,60480,5
+25450,Mesitas Del Colegio,Cundinamarca,25,12320,3
+25473,Mosquera,Cundinamarca,25,5824,1
+25478,Muña,Cundinamarca,25,60480,5
+25483,Nariño,Cundinamarca,25,60480,5
+25486,Nemocon,Cundinamarca,25,12320,2
+25488,Nilo,Cundinamarca,25,12320,5
+25489,Nimaima,Cundinamarca,25,42560,5
+25491,Nocaima,Cundinamarca,25,60480,5
+25506,Venecia - Ospina Perez,Cundinamarca,25,60480,5
+25513,Pacho,Cundinamarca,25,12320,5
+25518,Paime,Cundinamarca,25,42560,5
+25524,Pandi,Cundinamarca,25,60480,5
+25530,Paratebueno,Cundinamarca,25,60480,5
+25535,Pasca,Cundinamarca,25,60480,5
+25572,Puerto Salgar,Cundinamarca,25,42560,3
+25580,Puli,Cundinamarca,25,42560,5
+25592,Quebradanegra,Cundinamarca,25,42560,5
+25594,Quetame,Cundinamarca,25,60480,5
+25596,Quipile,Cundinamarca,25,60480,5
+25599,Apulo,Cundinamarca,25,12320,1
+25612,Ricaurte,Cundinamarca,25,12320,2
+25645,San Antonio Del Tequendama,Cundinamarca,25,42560,5
+25649,San Bernardo,Cundinamarca,25,60480,5
+25653,San Cayetano,Cundinamarca,25,60480,5
+25658,San Francisco,Cundinamarca,25,60480,5
+25662,San Juan De Rioseco,Cundinamarca,25,60480,5
+25718,Sasaima,Cundinamarca,25,12320,2
+25736,Sesquile,Cundinamarca,25,60480,2
+25740,Sibate,Cundinamarca,25,60480,3
+25743,Silvania,Cundinamarca,25,12320,1
+25745,Simijaca,Cundinamarca,25,60480,2
+25754,Soacha,Cundinamarca,25,5824,1
+25758,Sopo,Cundinamarca,25,5824,1
+25769,Subachoque,Cundinamarca,25,12320,2
+25772,Suesca,Cundinamarca,25,60480,2
+25777,Supata,Cundinamarca,25,60480,5
+25779,Susa,Cundinamarca,25,60480,5
+25781,Sutatausa,Cundinamarca,25,60480,5
+25785,Tabio,Cundinamarca,25,5824,1
+25793,Tausa,Cundinamarca,25,60480,5
+25797,Tena,Cundinamarca,25,60480,5
+25799,Tenjo,Cundinamarca,25,5824,2
+25805,Tibacuy,Cundinamarca,25,60480,5
+25807,Tibirita,Cundinamarca,25,60480,5
+25815,Tocaima,Cundinamarca,25,12320,2
+25817,Tocancipa,Cundinamarca,25,5824,1
+25823,Topaipi,Cundinamarca,25,42560,5
+25839,Ubala,Cundinamarca,25,60480,5
+25841,Ubaque,Cundinamarca,25,60480,5
+25843,Ubate,Cundinamarca,25,12320,3
+25845,Une,Cundinamarca,25,60480,5
+25851,utica,Cundinamarca,25,60480,5
+25862,Vergara,Cundinamarca,25,60480,5
+25867,Viani,Cundinamarca,25,42560,5
+25871,Villagomez,Cundinamarca,25,42560,2
+25873,Villapinzon,Cundinamarca,25,60480,2
+25875,Villeta,Cundinamarca,25,12320,2
+25878,Viota,Cundinamarca,25,12320,5
+25885,Yacopi,Cundinamarca,25,60480,5
+25898,Zipacon,Cundinamarca,25,60480,5
+25899,Zipaquira,Cundinamarca,25,5824,1
+27001,Quibdo,Choco,27,42560,5
+27006,Acandi,Choco,27,60480,5
+27025,Alto Baudo,Choco,27,60480,5
+27073,Bagado,Choco,27,60480,5
+27075,Bahia Solano,Choco,27,60480,5
+27077,Bajo Baudo,Choco,27,60480,5
+27099,Bojaya,Choco,27,60480,5
+27205,Condoto,Choco,27,60480,5
+27245,El Carmen,Choco,27,42560,5
+27361,Istmina,Choco,27,60480,5
+27372,Jurado,Choco,27,60480,5
+27413,Lloro,Choco,27,60480,5
+27491,Novita,Choco,27,60480,5
+27495,Nuqui,Choco,27,60480,5
+27615,Riosucio,Choco,27,12320,3
+27660,San Jose Del Palmar,Choco,27,60480,5
+27745,Sipi,Choco,27,60480,5
+27787,Tado,Choco,27,60480,5
+27800,Unguia,Choco,27,42560,5
+41001,Neiva,Huila,41,12320,1
+41006,Acevedo,Huila,41,60480,5
+41013,Agrado,Huila,41,60480,5
+41016,Aipe,Huila,41,60480,5
+41020,Algeciras,Huila,41,42560,5
+41026,Altamira,Huila,41,60480,5
+41078,Baraya,Huila,41,60480,5
+41132,Campoalegre,Huila,41,60480,5
+41206,Colombia,Huila,41,42560,5
+41244,Elias,Huila,41,42560,5
+41298,Garzon,Huila,41,42560,5
+41306,Gigante,Huila,41,60480,5
+41319,Guadalupe,Huila,41,60480,5
+41324,Hobo,Huila,41,42560,5
+41349,iquira,Huila,41,60480,5
+41359,Isnos,Huila,41,60480,5
+41378,La Argentina,Huila,41,42560,5
+41396,La Plata,Huila,41,12320,5
+41483,Nataga,Huila,41,60480,5
+41503,Oporapa,Huila,41,42560,5
+41518,Palermo,Huila,41,42560,5
+41530,Pital,Huila,41,60480,5
+41551,Pitalito,Huila,41,12320,3
+41615,Rivera,Huila,41,60480,3
+41660,Saladoblanco,Huila,41,60480,5
+41668,San Agustin,Huila,41,60480,5
+41676,Santa Maria,Huila,41,60480,5
+41770,Suaza,Huila,41,60480,5
+41791,Tarqui,Huila,41,60480,5
+41797,Tesalia,Huila,41,60480,5
+41799,Tello,Huila,41,42560,5
+41801,Teruel,Huila,41,60480,5
+41807,Timana,Huila,41,60480,5
+41872,Villavieja,Huila,41,60480,5
+41885,Yaguara,Huila,41,42560,5
+44001,Riohacha,Guajira,44,42560,5
+44035,Albania,Guajira,44,60480,5
+44078,Barrancas,Guajira,44,60480,5
+44111,Urumita,Guajira,44,60480,5
+44279,Fonseca,Guajira,44,60480,3
+44378,Hato Nuevo,Guajira,44,60480,5
+44430,Maicao,Guajira,44,42560,5
+44560,Manaure,Guajira,44,60480,5
+44650,San Juan Del Cesar,Guajira,44,42560,3
+44847,Uribia,Guajira,44,60480,5
+44874,Villanueva,Guajira,44,60480,5
+44876,El Molino,Guajira,44,42560,5
+44907,Distraccion,Guajira,44,42560,5
+47001,Santa Marta,Magdalena,47,12320,2
+47002,El Rodadero,Magdalena,47,12320,5
+47045,Algarrobo,Magdalena,47,60480,5
+47053,Aracataca,Magdalena,47,42560,5
+47058,Ariguani,Magdalena,47,60480,5
+47161,Cerro De San Antonio,Magdalena,47,60480,5
+47170,Chivolo,Magdalena,47,42560,5
+47189,Cienaga,Magdalena,47,12320,2
+47245,El Banco,Magdalena,47,12320,5
+47246,El Dificil,Magdalena,47,60480,5
+47258,El Piñon,Magdalena,47,60480,5
+47268,El Reten,Magdalena,47,42560,5
+47288,Fundacion,Magdalena,47,12320,5
+47318,Guamal,Magdalena,47,60480,5
+47460,Granada,Magdalena,47,42560,5
+47461,Orihueca,Magdalena,47,42560,5
+47541,Pedraza,Magdalena,47,60480,5
+47545,Pijiño,Magdalena,47,42560,5
+47551,Pivijay,Magdalena,47,42560,5
+47555,Plato,Magdalena,47,60480,5
+47570,Puebloviejo,Magdalena,47,60480,5
+47605,Remolino,Magdalena,47,60480,5
+47660,San angel,Magdalena,47,60480,5
+47675,Salamina,Magdalena,47,60480,5
+47692,San Sebastian De Buenavista,Magdalena,47,60480,5
+47703,San Zenon,Magdalena,47,60480,5
+47707,Santa Ana,Magdalena,47,60480,5
+47730,Sevilla,Magdalena,47,60480,2
+47745,Sitionuevo,Magdalena,47,42560,5
+47798,Tenerife,Magdalena,47,60480,5
+50001,Villavicencio,Meta,50,12320,1
+50006,Acacias,Meta,50,12320,3
+50124,Cabuyaro,Meta,50,60480,5
+50150,Castilla La Nueva,Meta,50,60480,5
+50223,Cubarral,Meta,50,60480,5
+50226,Cumaral,Meta,50,60480,3
+50245,El Calvario,Meta,50,60480,5
+50251,El Castillo,Meta,50,60480,5
+50287,Fuente De Oro,Meta,50,60480,5
+50313,Granada,Meta,50,42560,5
+50318,Guamal,Meta,50,60480,5
+50330,Mesetas,Meta,50,60480,5
+50350,Lejanias,Meta,50,60480,5
+50370,La Uribe,Meta,50,60480,5
+50450,Puerto Concordia,Meta,50,60480,5
+50560,Piñalito,Meta,50,60480,5
+50568,Puerto Gaitan,Meta,50,60480,5
+50573,Puerto Lopez,Meta,50,12320,5
+50577,Puerto Lleras,Meta,50,60480,5
+50590,Puerto Rico,Meta,50,42560,5
+50606,Restrepo,Meta,50,42560,3
+50680,San Carlos Guaroa,Meta,50,60480,5
+50683,San Juan De Arama,Meta,50,42560,5
+50686,San Juanito,Meta,50,60480,5
+50689,San Martin,Meta,50,60480,5
+50711,Vista Hermosa,Meta,50,60480,5
+52001,Pasto,Nariño,52,12320,5
+52019,Alban,Nariño,52,60480,2
+52022,Aldana,Nariño,52,42560,5
+52036,Ancuya,Nariño,52,60480,5
+52051,Arboleda,Nariño,52,60480,5
+52079,Barbacoas,Nariño,52,42560,5
+52083,Belen,Nariño,52,60480,5
+52110,Buesaco,Nariño,52,60480,5
+52203,Colon,Nariño,52,60480,5
+52207,Consaca,Nariño,52,60480,5
+52210,Contadero,Nariño,52,42560,5
+52215,Cordoba,Nariño,52,42560,5
+52224,Cuaspud,Nariño,52,60480,5
+52227,Cumbal,Nariño,52,12320,5
+52233,Cumbitara,Nariño,52,60480,5
+52250,El Charco,Nariño,52,60480,5
+52256,El Rosario,Nariño,52,60480,5
+52258,El Tablon,Nariño,52,60480,5
+52260,El Tambo,Nariño,52,60480,5
+52287,Funes,Nariño,52,60480,5
+52317,Guachucal,Nariño,52,42560,5
+52320,Guaitarilla,Nariño,52,60480,5
+52323,Gualmatan,Nariño,52,60480,5
+52352,Iles,Nariño,52,60480,5
+52354,Imues,Nariño,52,60480,5
+52356,Ipiales,Nariño,52,60480,3
+52378,La Cruz,Nariño,52,60480,5
+52381,La Florida,Nariño,52,60480,5
+52399,La Union,Nariño,52,60480,5
+52405,Leiva,Nariño,52,42560,5
+52411,Linares,Nariño,52,42560,5
+52418,Los Andes,Nariño,52,60480,5
+52427,Magüi,Nariño,52,60480,5
+52435,Mallama,Nariño,52,60480,5
+52473,Mosquera,Nariño,52,42560,1
+52490,Olaya Herrera,Nariño,52,60480,5
+52506,Ospina,Nariño,52,60480,5
+52520,Francisco Pizarro,Nariño,52,60480,5
+52540,Policarpa,Nariño,52,42560,5
+52560,Potosi,Nariño,52,60480,5
+52573,Puerres,Nariño,52,60480,5
+52585,Pupiales,Nariño,52,42560,5
+52612,Ricaurte,Nariño,52,12320,2
+52621,Roberto Payan,Nariño,52,60480,5
+52678,Samaniego,Nariño,52,60480,5
+52683,Sandona,Nariño,52,60480,5
+52687,San Lorenzo,Nariño,52,42560,5
+52693,San Pablo,Nariño,52,60480,5
+52696,Santa Barbara,Nariño,52,60480,5
+52699,Santacruz,Nariño,52,60480,5
+52720,Sapuyes,Nariño,52,42560,5
+52786,Taminango,Nariño,52,42560,5
+52788,Tangua,Nariño,52,42560,5
+52835,Tumaco,Nariño,52,60480,5
+52838,Tuquerres,Nariño,52,60480,5
+52885,Yacuanquer,Nariño,52,42560,5
+54001,Cucuta,Norte Santander,54,12320,2
+54003,abrego,Norte Santander,54,60480,5
+54051,Arboledas,Norte Santander,54,60480,5
+54060,Atalaya,Norte Santander,54,60480,5
+54099,Bochalema,Norte Santander,54,60480,5
+54109,Bucarasica,Norte Santander,54,60480,5
+54125,Cacota,Norte Santander,54,42560,5
+54128,Cachira,Norte Santander,54,60480,5
+54172,Chinacota,Norte Santander,54,60480,5
+54174,Chitaga,Norte Santander,54,60480,5
+54206,Convencion,Norte Santander,54,60480,5
+54223,Cucutilla,Norte Santander,54,60480,5
+54239,Durania,Norte Santander,54,60480,5
+54245,El Carmen,Norte Santander,54,42560,5
+54250,El Tarra,Norte Santander,54,60480,5
+54261,El Zulia,Norte Santander,54,42560,5
+54313,Gramalote,Norte Santander,54,42560,5
+54344,Hacari,Norte Santander,54,60480,5
+54347,Herran,Norte Santander,54,42560,5
+54377,Labateca,Norte Santander,54,60480,5
+54385,La Esperanza,Norte Santander,54,60480,5
+54398,La Playa,Norte Santander,54,60480,5
+54405,Los Patios,Norte Santander,54,60480,5
+54418,Lourdes,Norte Santander,54,60480,5
+54480,Mutiscua,Norte Santander,54,60480,5
+54498,Ocaña,Norte Santander,54,42560,3
+54518,Pamplona,Norte Santander,54,12320,3
+54520,Pamplonita,Norte Santander,54,60480,5
+54553,Puerto Santander,Norte Santander,54,42560,5
+54599,Ragonvalia,Norte Santander,54,42560,5
+54660,Salazar,Norte Santander,54,60480,5
+54670,San Calixto,Norte Santander,54,42560,5
+54673,San Cayetano,Norte Santander,54,60480,5
+54680,Santiago,Norte Santander,54,42560,5
+54720,Sardinata,Norte Santander,54,60480,5
+54743,Silos,Norte Santander,54,60480,5
+54800,Teorama,Norte Santander,54,60480,5
+54810,Tibu,Norte Santander,54,60480,5
+54820,Toledo,Norte Santander,54,42560,5
+54871,Villa Caro,Norte Santander,54,60480,5
+54874,Villa Del Rosario,Norte Santander,54,60480,2
+63001,Armenia,Quindío,63,12320,5
+63080,Barcelona,Quindío,63,60480,5
+63111,Buenavista,Quindío,63,60480,5
+63130,Calarca,Quindío,63,12320,2
+63190,Circasia,Quindío,63,60480,2
+63212,Cordoba,Quindío,63,42560,5
+63272,Filandia,Quindío,63,60480,5
+63302,Genova,Quindío,63,42560,5
+63401,La Tebaida,Quindío,63,12320,2
+63470,Montenegro,Quindío,63,12320,1
+63548,Pijao,Quindío,63,60480,5
+63594,Quimbaya,Quindío,63,60480,1
+63690,Salento,Quindío,63,60480,5
+66001,Pereira,Risaralda,66,12320,1
+66045,Apia,Risaralda,66,60480,5
+66075,Balboa,Risaralda,66,42560,5
+66088,Belen De Umbria,Risaralda,66,60480,5
+66170,Dos Quebradas,Risaralda,66,60480,5
+66318,Guatica,Risaralda,66,42560,5
+66383,La Celia,Risaralda,66,42560,5
+66400,La Virginia,Risaralda,66,60480,1
+66440,Marsella,Risaralda,66,60480,5
+66456,Mistrato,Risaralda,66,42560,5
+66572,Pueblo Rico,Risaralda,66,42560,5
+66594,Quinchia,Risaralda,66,42560,5
+66682,Santa Rosa De Cabal,Risaralda,66,60480,1
+66687,Santuario,Risaralda,66,60480,5
+68001,Bucaramanga,Santander,68,12320,1
+68013,Albania,Santander,68,60480,5
+68051,Aratoca,Santander,68,60480,5
+68077,Barbosa,Santander,68,42560,5
+68079,Barichara,Santander,68,60480,5
+68081,Barrancabermeja,Santander,68,12320,3
+68092,Betulia,Santander,68,60480,5
+68101,Bolivar,Santander,68,42560,5
+68121,Cabrera,Santander,68,60480,5
+68132,California,Santander,68,42560,5
+68147,Capitanejo,Santander,68,60480,5
+68152,Carcasi,Santander,68,60480,5
+68160,Cepita,Santander,68,42560,5
+68162,Cerrito,Santander,68,42560,5
+68167,Charala,Santander,68,60480,5
+68169,Charta,Santander,68,60480,5
+68176,Chima,Santander,68,42560,5
+68179,Chipata,Santander,68,42560,5
+68190,Cimitarra,Santander,68,60480,5
+68207,Concepcion,Santander,68,60480,5
+68209,Confines,Santander,68,60480,5
+68211,Contratacion,Santander,68,60480,5
+68217,Coromoro,Santander,68,60480,5
+68229,Curiti,Santander,68,60480,5
+68245,El Guacamayo,Santander,68,60480,5
+68255,El Playon,Santander,68,60480,5
+68264,Encino,Santander,68,60480,5
+68266,Enciso,Santander,68,42560,5
+68271,Florian,Santander,68,60480,5
+68276,Floridablanca,Santander,68,12320,1
+68296,Galan,Santander,68,60480,5
+68298,Gambita,Santander,68,60480,5
+68307,Giron,Santander,68,12320,1
+68318,Guaca,Santander,68,60480,5
+68320,Guadalupe,Santander,68,60480,5
+68322,Guapota,Santander,68,60480,5
+68324,Guavata,Santander,68,60480,5
+68327,Güepsa,Santander,68,60480,5
+68344,Jesus Maria,Santander,68,60480,5
+68370,Jordan,Santander,68,60480,5
+68377,La Belleza,Santander,68,42560,5
+68385,Landazuri,Santander,68,60480,5
+68397,La Paz,Santander,68,42560,5
+68406,Lebrija,Santander,68,60480,5
+68418,Los Santos,Santander,68,60480,5
+68425,Macaravita,Santander,68,60480,5
+68432,Malaga,Santander,68,42560,5
+68444,Matanza,Santander,68,60480,5
+68464,Mogotes,Santander,68,60480,5
+68468,Molagavita,Santander,68,60480,5
+68498,Ocamonte,Santander,68,60480,5
+68500,Oiba,Santander,68,60480,5
+68502,Onzaga,Santander,68,60480,5
+68522,Palmar,Santander,68,42560,5
+68524,Paramo,Santander,68,60480,5
+68547,Piedecuesta,Santander,68,12320,2
+68549,Pinchote,Santander,68,42560,5
+68572,Puente Nacional,Santander,68,60480,5
+68573,Puerto Parra,Santander,68,42560,5
+68575,Puerto Wilches,Santander,68,60480,3
+68615,Rionegro,Santander,68,12320,1
+68655,Sabana De Torres,Santander,68,60480,3
+68669,San Andres,Santander,68,60480,5
+68673,San Benito,Santander,68,42560,5
+68679,San Gil,Santander,68,12320,3
+68682,San Joaquin,Santander,68,60480,5
+68684,San Jose De Miranda,Santander,68,60480,5
+68686,San Miguel,Santander,68,42560,5
+68689,San Vicente De Chucuri,Santander,68,60480,5
+68705,Santa Barbara,Santander,68,60480,5
+68720,Santa Helena Del Opon,Santander,68,42560,5
+68745,Simacota,Santander,68,60480,5
+68755,Socorro,Santander,68,12320,3
+68770,Suaita,Santander,68,42560,5
+68773,Sucre,Santander,68,42560,5
+68780,Surata,Santander,68,60480,5
+68820,Tona,Santander,68,60480,5
+68855,Valle San Jose,Santander,68,60480,5
+68861,Velez,Santander,68,60480,5
+68867,Villanueva,Santander,68,60480,5
+68895,Zapatoca,Santander,68,60480,5
+68900,Barranca,Santander,68,60480,5
+70001,Sincelejo,Sucre,70,12320,2
+70013,Betulia,Sucre,70,60480,5
+70110,Buenavista,Sucre,70,60480,5
+70124,Caimito,Sucre,70,42560,5
+70204,Coloso,Sucre,70,60480,5
+70210,Coveñas,Sucre,70,60480,5
+70215,Corozal,Sucre,70,12320,3
+70230,Chalan,Sucre,70,42560,5
+70235,Galeras,Sucre,70,42560,5
+70265,Guaranda,Sucre,70,42560,5
+70400,La Union,Sucre,70,60480,5
+70418,Los Palmitos,Sucre,70,42560,5
+70429,Majagual,Sucre,70,60480,5
+70473,Morroa,Sucre,70,42560,5
+70508,Ovejas,Sucre,70,42560,5
+70523,Palmito,Sucre,70,42560,5
+70670,Sampues,Sucre,70,60480,5
+70678,San Benito Abad,Sucre,70,60480,5
+70702,San Juan De Betulia,Sucre,70,60480,5
+70708,San Marcos,Sucre,70,60480,5
+70713,San Onofre,Sucre,70,42560,5
+70717,San Pedro,Sucre,70,60480,5
+70742,Since,Sucre,70,60480,5
+70771,Sucre,Sucre,70,42560,5
+70820,Tolu,Sucre,70,60480,5
+70823,Toluviejano,Sucre,70,60480,5
+73001,Ibague,Tolima,73,12320,1
+73024,Alpujarra,Tolima,73,42560,5
+73026,Alvarado,Tolima,73,60480,5
+73030,Ambalema,Tolima,73,60480,5
+73043,Anzoategui,Tolima,73,60480,5
+73055,Armero,Tolima,73,42560,5
+73067,Ataco,Tolima,73,60480,5
+73124,Cajamarca,Tolima,73,12320,2
+73148,Carmen De Apicala,Tolima,73,12320,2
+73152,Casabianca,Tolima,73,42560,5
+73168,Chaparral,Tolima,73,60480,3
+73200,Coello,Tolima,73,42560,5
+73217,Coyaima,Tolima,73,12320,5
+73226,Cunday,Tolima,73,60480,5
+73236,Dolores,Tolima,73,60480,5
+73268,Espinal,Tolima,73,60480,5
+73270,Falan,Tolima,73,60480,5
+73275,Flandes,Tolima,73,12320,1
+73283,Fresno,Tolima,73,60480,3
+73319,Guamo,Tolima,73,60480,3
+73321,Gualanday,Tolima,73,60480,5
+73347,Herveo,Tolima,73,60480,5
+73349,Icononzo,Tolima,73,60480,5
+73408,Lerida,Tolima,73,60480,3
+73411,Libano,Tolima,73,42560,3
+73443,Mariquita,Tolima,73,12320,5
+73449,Melgar,Tolima,73,12320,1
+73461,Murillo,Tolima,73,60480,5
+73483,Natagaima,Tolima,73,60480,3
+73504,Ortega,Tolima,73,60480,3
+73545,Padua,Tolima,73,60480,5
+73547,Piedras,Tolima,73,60480,5
+73555,Planadas,Tolima,73,42560,5
+73563,Prado,Tolima,73,42560,5
+73585,Purificacion,Tolima,73,60480,5
+73616,Rioblanco,Tolima,73,42560,5
+73622,Roncesvalles,Tolima,73,42560,5
+73624,Rovira,Tolima,73,60480,3
+73671,Saldaña,Tolima,73,42560,5
+73675,San Antonio,Tolima,73,42560,5
+73678,San Luis,Tolima,73,60480,5
+73686,Santa Isabel,Tolima,73,42560,5
+73688,Honda,Tolima,73,12320,3
+73770,Suarez,Tolima,73,60480,5
+73854,Valle De San Juan,Tolima,73,60480,5
+73861,Venadillo,Tolima,73,42560,5
+73870,Villahermosa,Tolima,73,42560,5
+73873,Villarrica,Tolima,73,60480,5
+73874,Guayabal,Tolima,73,60480,3
+73879,Chicoral,Tolima,73,42560,5
+76001,Cali,Valle,76,12320,1
+76020,Alcala,Valle,76,42560,5
+76025,Amaime,Valle,76,60480,5
+76036,Andalucia,Valle,76,60480,2
+76041,Ansermanuevo,Valle,76,42560,5
+76054,Argelia,Valle,76,42560,5
+76100,Bolivar,Valle,76,42560,5
+76109,Buenaventura,Valle,76,42560,4
+76111,Buga,Valle,76,42560,2
+76113,Bugalagrande,Valle,76,42560,2
+76122,Caicedonia,Valle,76,60480,5
+76126,Calima,Valle,76,60480,5
+76130,Candelaria,Valle,76,60480,5
+76147,Cartago,Valle,76,12320,1
+76233,Dagua,Valle,76,60480,5
+76243,El Aguila,Valle,76,42560,5
+76246,El Cairo,Valle,76,60480,5
+76247,El Carmelo,Valle,76,60480,5
+76248,El Cerrito,Valle,76,60480,2
+76250,El Dovio,Valle,76,42560,5
+76275,Florida,Valle,76,60480,3
+76306,Ginebra,Valle,76,60480,5
+76318,Guacari,Valle,76,42560,5
+76364,Jamundi,Valle,76,12320,2
+76377,La Cumbre,Valle,76,60480,5
+76380,La Paila,Valle,76,42560,5
+76400,La Union,Valle,76,60480,5
+76403,La Victoria,Valle,76,60480,3
+76497,Obando,Valle,76,42560,3
+76520,Palmira,Valle,76,12320,2
+76563,Pradera,Valle,76,42560,3
+76606,Restrepo,Valle,76,42560,3
+76616,Riofrio,Valle,76,60480,5
+76622,Roldanillo,Valle,76,12320,3
+76670,San Pedro,Valle,76,60480,5
+76736,Sevilla,Valle,76,60480,2
+76823,Toro,Valle,76,60480,3
+76828,Trujillo,Valle,76,60480,5
+76834,Tulua,Valle,76,12320,2
+76845,Ulloa,Valle,76,42560,5
+76863,Versalles,Valle,76,42560,5
+76869,Vijes,Valle,76,42560,5
+76880,Villa gorgona,Valle,76,42560,5
+76890,Yotoco,Valle,76,60480,5
+76892,Yumbo,Valle,76,12320,2
+76895,Zarzal,Valle,76,60480,2
+76992,Zaragoza,Valle,76,42560,5
+81001,Arauca,Arauca,81,60480,5
+81065,Arauquita,Arauca,81,60480,5
+81220,Cravo Norte,Arauca,81,60480,5
+81300,Fortul,Arauca,81,42560,5
+81591,Puerto Rondon,Arauca,81,42560,5
+81736,Saravena,Arauca,81,60480,5
+81794,Tame,Arauca,81,60480,5
+85001,Yopal,Casanare,85,12320,3
+85010,Aguazul,Casanare,85,60480,3
+85015,Chameza,Casanare,85,60480,5
+85125,Hato Corozal,Casanare,85,42560,5
+85136,Mani,Casanare,85,60480,5
+85162,Monterrey,Casanare,85,60480,5
+85225,Nunchia,Casanare,85,60480,5
+85230,Orocue,Casanare,85,42560,5
+85250,Paz De Ariporo,Casanare,85,60480,5
+85263,Pore,Casanare,85,60480,5
+85279,Recetor,Casanare,85,60480,5
+85300,Sabanalarga,Casanare,85,60480,5
+85315,San Luis De Palenque,Casanare,85,42560,5
+85400,Tamara,Casanare,85,60480,5
+85410,Tauramena,Casanare,85,42560,5
+85430,Trinidad,Casanare,85,60480,5
+85440,Villanueva,Casanare,85,60480,5
+86001,Mocoa,Putumayo,86,60480,5
+86219,Colon,Putumayo,86,60480,5
+86320,Orito,Putumayo,86,60480,5
+86568,Puerto Asis,Putumayo,86,60480,5
+86573,Puerto Leguizamo,Putumayo,86,60480,5
+86749,Sibundoy,Putumayo,86,42560,5
+86755,San Francisco,Putumayo,86,60480,5
+86760,Santiago,Putumayo,86,42560,5
+86865,Villagarzon,Putumayo,86,60480,5
+86866,La Hormiga,Putumayo,86,60480,5
+88001,San Andres,San Andrés,88,60480,5
+88564,Providencia,San Andrés,88,60480,5
+91001,Leticia,Amazonas,91,60480,5
+91263,El Encanto,Amazonas,91,60480,5
+91405,La Chorrera,Amazonas,91,60480,5
+91407,Miriti-Parana,Amazonas,91,60480,5
+91460,Puerto Nariño,Amazonas,91,60480,5
+91669,Tarapaca,Amazonas,91,60480,5
+91798,Inirida,Amazonas,91,60480,5
+94001,Inirida,Guainía,94,60480,5
+94343,Guaviare,Guainía,94,60480,5
+95001,San Jose Del Guaviare,Guaviare,95,60480,5
+95015,Calamar,Guaviare,95,42560,5
+95025,El Retorno,Guaviare,95,60480,5
+95200,Morichal,Guaviare,95,60480,5
+95220,Mitu,Guaviare,95,42560,5
+97001,Mitu,Vaupés,97,42560,5
+97161,Caruru,Vaupés,97,60480,5
+97511,Yavarate,Vaupés,97,60480,5
+99001,Puerto Carreño,Vichada,99,60480,5
+99100,La Primavera,Vichada,99,60480,5
+99200,Casuarito,Vichada,99,60480,5
+99496,Nueva Antioquia,Vichada,99,60480,5
+99524,Santa Rita,Vichada,99,60480,5
+99666,Santa Rosalia,Vichada,99,60480,5
+99760,San Jose De Cune,Vichada,99,60480,5

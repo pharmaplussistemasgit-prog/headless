@@ -4,17 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 import { isRefrigerated, requiresMedicalPrescription, COLD_CHAIN_FEE } from "@/lib/product-logic";
 import { calculateCartTotal } from '@/lib/promotions';
-
-export interface CartItem {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-    variationId?: number;
-    attributes?: Record<string, string>;
-    slug: string;
-}
+import { CartItem } from "@/types/cart";
 
 interface CartContextType {
     items: CartItem[];

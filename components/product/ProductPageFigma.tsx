@@ -143,7 +143,8 @@ export default function ProductPageFigma({ mapped, images, colorOptions, sizeOpt
       attributes: {
         ...(selectedColor && { Color: selectedColor }),
         ...(selectedSize && { Talla: selectedSize })
-      }
+      },
+      categories: mapped?.categories // Pass categories for cold chain logic
     });
     toast.success("Producto agregado al carrito");
   }

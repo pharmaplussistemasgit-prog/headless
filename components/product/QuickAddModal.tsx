@@ -55,10 +55,11 @@ export default function QuickAddModal({
 
     const variationStock =
         selectedVariation?.stock_quantity ??
-        (selectedVariation?.stock_status === "outofstock" ? 0 : undefined);
+        (selectedVariation?.stock_status === "outofstock" ? 0 : product?.stock ?? undefined);
 
     const isOutOfStock =
-        variationStock === 0 || selectedVariation?.stock_status === "outofstock";
+        (variationStock === 0) ||
+        (selectedVariation ? selectedVariation.stock_status === "outofstock" : !product?.isInStock);
 
     const priceFmt = useMemo(() => {
         return new Intl.NumberFormat("es-CO", {
@@ -90,11 +91,13 @@ export default function QuickAddModal({
             quantity: quantity,
             image: mainImage,
             slug: product?.slug || "",
+            sku: product?.sku || undefined, // T19: ERP Support
             variationId: selectedVariantId,
             attributes: {
                 Color: selectedColor,
                 Talla: selectedSize
-            }
+            },
+            categories: product?.categories // Pass categories for cold chain logic
         });
         onClose();
     }
@@ -207,9 +210,15 @@ export default function QuickAddModal({
                                     <label className="text-[10px] font-bold text-gray-900 uppercase tracking-wide">
                                         Cantidad
                                     </label>
-                                    {!isOutOfStock && (
-                                        <span className="text-[10px] text-green-600 font-semibold bg-green-50 px-2 py-0.5 rounded-full">
+                                    {!isOutOfStock ? (
+                                        <span className="text-[10px] text-green-600 font-semibold bg-green-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
                                             Disponible
+                                        </span>
+                                    ) : (
+                                        <span className="text-[10px] text-red-600 font-semibold bg-red-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                                            Agotado
                                         </span>
                                     )}
                                 </div>

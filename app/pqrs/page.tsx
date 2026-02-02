@@ -3,6 +3,11 @@
 import React, { useState } from 'react';
 import { Send, AlertCircle, CheckCircle, FileText } from 'lucide-react';
 
+import { submitToJetForm } from '@/lib/jetform-connector';
+
+// TODO: VERIFICAR NOMBRE DE CAMPOS EN JFB (macross: %nombre%, %email%, etc)
+const PQRS_FORM_ID = 23124;
+
 export default function PQRSPage() {
     const [formData, setFormData] = useState({
         type: '',
@@ -17,6 +22,7 @@ export default function PQRSPage() {
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({
@@ -27,17 +33,51 @@ export default function PQRSPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!formData.type || !formData.name || !formData.email || !formData.message) {
+            setErrorMsg('Por favor diligencie los campos obligatorios (*)');
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
+        setErrorMsg('');
 
-        // Simulación de envío
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            const response = await fetch('/api/forms/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    formId: PQRS_FORM_ID,
+                    data: {
+                        // Mapeo hipotético - AJUSTAR SEGUN JFB
+                        tipo_solicitud: formData.type,
+                        nombre: formData.name,
+                        tipo_doc: formData.idType,
+                        num_doc: formData.idNumber,
+                        email: formData.email,
+                        telefono: formData.phone,
+                        orden: formData.orderNumber,
+                        mensaje: formData.message
+                    }
+                })
+            });
 
-        setSuccess(true);
-        setLoading(false);
-        setFormData({ type: '', name: '', idType: '', idNumber: '', email: '', phone: '', orderNumber: '', message: '' });
+            const result = await response.json();
 
-        // Reset success message after 8 seconds
-        setTimeout(() => setSuccess(false), 8000);
+            if (result.success) {
+                setSuccess(true);
+                setFormData({ type: '', name: '', idType: '', idNumber: '', email: '', phone: '', orderNumber: '', message: '' });
+                setTimeout(() => setSuccess(false), 8000);
+            } else {
+                setErrorMsg(result.message || 'Error al enviar la solicitud.');
+            }
+
+        } catch (err) {
+            setErrorMsg('Error de conexión. Intenta nuevamente.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -99,6 +139,11 @@ export default function PQRSPage() {
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
+                            {errorMsg && (
+                                <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm mb-4">
+                                    {errorMsg}
+                                </div>
+                            )}
 
                             {/* Tipo de solicitud */}
                             <div>

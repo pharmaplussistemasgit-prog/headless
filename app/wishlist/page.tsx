@@ -5,7 +5,7 @@ import { useWishlist, WishlistItem } from "@/context/WishlistContext";
 import ProductCard from "@/components/product/ProductCard";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Scale, X, CheckSquare, Square } from "lucide-react";
+import { ClipboardList, Scale, X, CheckSquare, Square } from "lucide-react";
 import ComparisonModal from "@/components/wishlist/ComparisonModal";
 import { toast } from "sonner";
 
@@ -35,10 +35,10 @@ export default function WishlistPage() {
                 <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
                         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4 italic tracking-tight uppercase">
-                            Mi Lista de Deseos
+                            Me Interesan
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl">
-                            Guarda tus favoritos ahora y decídete después.
+                            Productos que has marcado porque te interesan.
                         </p>
                     </div>
                 </div>
@@ -46,13 +46,13 @@ export default function WishlistPage() {
                 {items.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-20 text-center">
                         <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
-                            <Heart size={40} className="text-gray-400" />
+                            <ClipboardList size={40} className="text-gray-400" />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                            Tu lista de deseos está vacía
+                            Aún no tienes productos que te interesen
                         </h2>
                         <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md">
-                            No has guardado ningún artículo todavía. Explora nuestra colección y encuentra lo que buscas.
+                            Explora nuestra colección y marca los productos que llamen tu atención.
                         </p>
                         <Link
                             href="/tienda"
@@ -65,7 +65,7 @@ export default function WishlistPage() {
                     <>
                         <div className="flex items-center justify-between mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100">
                             <span className="text-sm font-bold text-blue-900 uppercase tracking-wider flex items-center gap-2">
-                                <Heart className="w-4 h-4" />
+                                <ClipboardList className="w-4 h-4" />
                                 {items.length} {items.length === 1 ? "Artículo" : "Artículos"} guardados
                             </span>
                             <span className="text-xs text-blue-600 font-medium">

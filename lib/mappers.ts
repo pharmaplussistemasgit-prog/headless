@@ -16,8 +16,17 @@ export function mapWooProduct(p: WooProduct): MappedProduct {
     const rawRx = getMeta('_needs_rx');
     const requiresRx = rawRx === 'true' || rawRx === true || rawRx === 'on' || rawRx === 'yes';
 
+
+
+    // Cold Chain Logic: Based STRICTLY on Category (as per woocommerce-mapping.md)
+    // ID: 3368, Slug: cadena-de-frio
+    const hasColdChainCategory = p.categories?.some(c => c.slug === 'cadena-de-frio' || c.id === 3368);
+
+    // Legacy/Backup metadata check (kept for safety but Category is primary)
     const rawCold = getMeta('_cadena_de_frio');
-    const isRefrigerated = rawCold === 'true' || rawCold === true || rawCold === 'on' || rawCold === 'yes';
+    const isMetaDataCold = rawCold === 'true' || rawCold === true || rawCold === 'on' || rawCold === 'yes';
+
+    const isRefrigerated = hasColdChainCategory || isMetaDataCold;
 
     // 2. Precios y Stock
     const price = parseInt(p.price || '0', 10);
@@ -60,6 +69,10 @@ export function mapWooProduct(p: WooProduct): MappedProduct {
         productType,
         requiresRx,
         isRefrigerated,
-        discountPercentage
+        discountPercentage,
+        dateOnSaleFrom: p.date_on_sale_from || null,
+        dateOnSaleTo: p.date_on_sale_to || null,
+        averageRating: p.average_rating || null,
+        ratingCount: p.rating_count || 0,
     };
 }

@@ -3,7 +3,7 @@ import { getCategoryTreeData, getProducts, getCategoryGlobalFacets } from '@/lib
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ThermometerSnowflake, Info } from 'lucide-react';
+import { ThermometerSnowflake, Info, AlertTriangle, Snowflake } from 'lucide-react';
 import { mapWooProduct } from '@/lib/mappers';
 import { WooProduct } from '@/types/product';
 import CategoryCatalogue from '@/components/category/CategoryCatalogue';
@@ -72,11 +72,28 @@ export default async function ColdChainPage(props: {
                         Garantizamos la integridad del producto desde nuestra farmacia hasta tu hogar.
                     </p>
 
-                    <div className="flex items-start gap-3 bg-blue-50/50 p-4 rounded-xl border border-blue-100 max-w-xl">
-                        <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-sm text-blue-800">
-                            <strong>Nota Importante:</strong> Estos productos se entregan en empaques térmicos especiales con geles refrigerantes para mantener la temperatura entre 2°C y 8°C.
-                        </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-2">
+                        {/* Packaging Cost Alert */}
+                        <div className="flex items-start gap-3 bg-cyan-50 p-4 rounded-xl border border-cyan-100 hover:shadow-sm transition-shadow h-full">
+                            <div className="bg-cyan-100 p-2 rounded-full flex-shrink-0">
+                                <Snowflake className="w-5 h-5 text-cyan-700" />
+                            </div>
+                            <div className="text-sm text-cyan-900">
+                                <strong className="font-bold block mb-1 text-cyan-800 text-[15px]">Costo Adicional: Nevera ($12.000)</strong>
+                                <span className="opacity-90">Este valor <span className="font-bold">se sumará a tu pedido</span> por la nevera certificada obligatoria para el transporte.</span>
+                            </div>
+                        </div>
+
+                        {/* No Returns Warning */}
+                        <div className="flex items-start gap-3 bg-red-50 p-4 rounded-xl border border-red-100 hover:shadow-sm transition-shadow h-full">
+                            <div className="bg-red-100 p-2 rounded-full flex-shrink-0">
+                                <AlertTriangle className="w-5 h-5 text-red-600" />
+                            </div>
+                            <div className="text-sm text-red-900">
+                                <strong className="font-bold block mb-1 text-red-800 text-[15px]">Sin Devolución</strong>
+                                <span className="opacity-90">Por seguridad sanitaria, los productos de cadena de frío <span className="font-bold underline decoration-red-300">no tienen cambio</span>.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

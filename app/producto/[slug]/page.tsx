@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { getProductBySlug } from "@/lib/woocommerce"; // Specific import as we don't need options anymore for default clean view
+import { getProductBySlug } from "@/lib/woocommerce";
 import ProductDetails from "@/components/product/ProductDetails";
-import { applyMapping } from "@/lib/mapping";
+import { mapWooProduct } from "@/lib/mappers";
 import { MappedProduct } from "@/types/product";
 
 // Force revalidation
@@ -43,24 +43,7 @@ export default async function ProductPage(props: ProductPageProps) {
         notFound();
     }
 
-    const mappedProduct = applyMapping(product, [
-        { id: "id", label: "id", source: "id", type: "any" },
-        { id: "name", label: "name", source: "name", type: "any" },
-        { id: "slug", label: "slug", source: "slug", type: "any" },
-        { id: "sku", label: "sku", source: "sku", type: "any" },
-        { id: "price", label: "price", source: "price", type: "any" },
-        { id: "regular_price", label: "regular_price", source: "regular_price", type: "any" },
-        { id: "sale_price", label: "sale_price", source: "sale_price", type: "any" },
-        { id: "description", label: "description", source: "description", type: "any" },
-        { id: "short_description", label: "short_description", source: "short_description", type: "any" },
-        { id: "images", label: "images", source: "images", type: "any" },
-        { id: "categories", label: "categories", source: "categories", type: "any" },
-        { id: "tags", label: "tags", source: "tags", type: "any" },
-        { id: "attributes", label: "attributes", source: "attributes", type: "any" },
-        { id: "stock_status", label: "stock_status", source: "stock_status", type: "any" },
-        { id: "stock_quantity", label: "stock_quantity", source: "stock_quantity", type: "any" },
-        { id: "type", label: "type", source: "type", type: "any" },
-    ]) as unknown as MappedProduct;
+    const mappedProduct = mapWooProduct(product as unknown as any);
 
     // Fetch related products (same category)
     let relatedProducts: any[] = [];

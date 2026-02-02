@@ -167,12 +167,30 @@ export default function AboutUsPage() {
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[
-                                { title: "Seguridad y cumplimiento", desc: "Garantizamos la integridad de los productos en toda la cadena logística, cumpliendo con normas INVIMA y BPA." },
-                                { title: "Excelencia operativa", desc: "Ejecutamos procesos eficientes, trazables y medibles, orientados a resultados y a la satisfacción total del cliente." },
-                                { title: "Innovación y mejora continua", desc: "Promovemos una cultura de aprendizaje constante que impulsa la optimización tecnológica y la digitalización." },
-                                { title: "Servicio centrado en el paciente", desc: "Cada decisión, acción y entrega está guiada por la empatía y el compromiso con las personas." },
-                                { title: "Transparencia y ética", desc: "Actuamos con honestidad e integridad, cumpliendo las normas SAGRILAFT y PTEE." },
-                                { title: "Desarrollo del talento", desc: "Fomentamos un entorno colaborativo donde la formación y el respeto impulsan el crecimiento." }
+                                { 
+                                    title: "1. Seguridad y cumplimiento", 
+                                    desc: "Garantizamos la integridad de los productos en toda la cadena logística, cumpliendo con normas INVIMA y BPA. Trabajamos con más de 120 compañías nacionales y multinacionales, asegurando productos confiables y una entrega segura y trazable." 
+                                },
+                                { 
+                                    title: "2. Excelencia operativa", 
+                                    desc: "Ejecutamos procesos eficientes, trazables y medibles, orientados a resultados y a la satisfacción total del cliente." 
+                                },
+                                { 
+                                    title: "3. Innovación y mejora continua", 
+                                    desc: "Promovemos una cultura de aprendizaje constante que impulsa la optimización tecnológica, la digitalización y la innovación en la cadena de suministro farmacéutica." 
+                                },
+                                { 
+                                    title: "4. Servicio centrado en el paciente", 
+                                    desc: "Cada decisión, acción y entrega está guiada por la empatía y el compromiso con las personas que dependen de nuestros servicios." 
+                                },
+                                { 
+                                    title: "5. Transparencia y ética empresarial", 
+                                    desc: "Actuamos con honestidad, integridad y responsabilidad en cada interacción, fortaleciendo la confianza con nuestros aliados, autoridades y comunidades, cumpliendo las normas SAGRILAFT y PTEE." 
+                                },
+                                { 
+                                    title: "6. Trabajo en equipo y desarrollo del talento", 
+                                    desc: "Fomentamos un entorno colaborativo donde la formación, el respeto y la comunicación abierta impulsan el crecimiento individual y colectivo." 
+                                }
                             ].map((item, index) => (
                                 <div key={index} className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
                                     <h4 className="font-bold text-[var(--color-pharma-green)] mb-2">{item.title}</h4>
@@ -190,12 +208,12 @@ export default function AboutUsPage() {
                     <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Especialidades</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         {[
-                            "Anestesiología", "Angio-Flebol", "Cardiología", "Cirugía", "Cirugia Cardiovascular", "Cirugía Plástica / RP",
+                            "Anestesiología", "Angio-Flebol", "Cardiología", "Cirugía", "Cirugía Cardiovascular", "Cirugía Plástica / RP",
                             "Deportología", "Dermatología", "Diabetes", "Endocrinología", "Fertilidad", "Fisiatría",
                             "Gastroenterología", "Geriatría", "Ginecología", "Infectología", "Medicina General", "Medicina Interna",
                             "Nefrología-Dialisis", "Neumo-Tisiología", "Neurología", "Nutrición", "Oftalmología", "Oncología",
                             "Optometría", "Ortopedia", "Otorrinolaringología", "Pediatría", "Psiquiatría", "Reumatología",
-                            "Sitema Nervioso", "Traumatología", "Urología"
+                            "Sistema Nervioso", "Traumatología", "Urología"
                         ].map((spec, index) => (
                             <div key={index} className="bg-white p-4 rounded-lg shadow-sm text-center text-sm font-medium text-gray-700 border border-gray-100 hover:border-blue-200 hover:text-[var(--color-pharma-blue)] transition-colors cursor-default">
                                 {spec}

@@ -5,14 +5,16 @@ import Link from 'next/link';
 import {
     Package, MapPin, User, LogOut, LayoutDashboard, Pill,
     Ticket, Crown, CreditCard, Lock, Bell, Heart, Store,
-    Shield, HelpCircle, Headphones, ChevronRight
+    Shield, HelpCircle, Headphones, ChevronRight, PenTool, FileText
 } from 'lucide-react';
 import { auth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
+import { useUserRole } from '@/hooks/useUserRole';
 
 export default function AccountNav() {
     const pathname = usePathname();
     const router = useRouter();
+    const { isBlogAuthor } = useUserRole();
 
     const handleLogout = () => {
         auth.logout();
@@ -25,6 +27,7 @@ export default function AccountNav() {
         icon: any;
         highlight?: boolean;
         color?: string;
+        external?: boolean; // Support for external links
     }
 
     const sections: { title: string; items: NavItem[] }[] = [
@@ -54,6 +57,24 @@ export default function AccountNav() {
                 { name: 'Mis tiendas', href: '/tiendas', icon: Store },
             ]
         },
+        ...(isBlogAuthor ? [{
+            title: "Mi Blog",
+            items: [
+                {
+                    name: 'Redactar Artículo',
+                    href: 'https://tienda.pharmaplus.com.co/wp-admin/post-new.php',
+                    icon: PenTool,
+                    color: 'text-purple-600',
+                    external: true
+                },
+                {
+                    name: 'Mis Artículos',
+                    href: '/mi-cuenta/blog',
+                    icon: FileText,
+                    color: 'text-blue-600'
+                }
+            ]
+        }] : []),
         {
             title: "Ajustes y ayuda",
             items: [
@@ -90,6 +111,7 @@ export default function AccountNav() {
                                         }
                                         ${item.highlight ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-700' : ''}
                                     `}
+                                    {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className={`
@@ -108,7 +130,45 @@ export default function AccountNav() {
                 </div>
             ))}
 
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-4 border-t border-gray-100 space-y-2">
+                <button
+                    onClick={async () => {
+                        const token = auth.getToken();
+                        if (!token) {
+                            alert('No hay sesión activa');
+                            return;
+                        }
+                        try {
+                            const res = await fetch('https://tienda.pharmaplus.com.co/wp-json/wp/v2/users/me?context=edit', {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const data = await res.json();
+
+                            let roles = data.roles || [];
+                            // Fallback Logic
+                            if ((!roles || roles.length === 0) && data.is_super_admin) {
+                                roles = ['administrator'];
+                            }
+
+                            alert(`Super Admin: ${data.is_super_admin}\nRoles Recibidos: ${JSON.stringify(data.roles)}\nRoles Asignados: ${JSON.stringify(roles)}`);
+
+                            if (roles.length > 0) {
+                                const current = auth.getUser();
+                                auth.saveSessionRaw({ ...current, roles: roles });
+                                window.location.reload();
+                            } else {
+                                alert('Aun no se detectan roles. Revise consola.');
+                                console.log('DEBUG DATA:', data);
+                            }
+                        } catch (e) {
+                            alert('Error sincronizando: ' + e);
+                        }
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all"
+                >
+                    🔄 Sincronizar Permisos (Debug)
+                </button>
+
                 <button
                     onClick={handleLogout}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-all group"

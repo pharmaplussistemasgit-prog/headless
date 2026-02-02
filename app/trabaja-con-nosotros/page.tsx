@@ -1,5 +1,5 @@
-import React from 'react';
 import { Briefcase, Users, Heart, Star, Target } from 'lucide-react';
+import WorkWithUsForm from '@/components/form/WorkWithUsForm';
 
 export const metadata = {
     title: 'Trabaja con nosotros - PharmaPlus',
@@ -65,28 +65,9 @@ export default function WorkWithUsPage() {
                     </div>
                 </div>
 
-                {/* CTA Section */}
-                <div className="bg-[var(--color-pharma-green)] rounded-3xl p-10 md:p-16 text-center text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-full h-full opacity-10">
-                        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                            <circle cx="100" cy="0" r="50" fill="white" />
-                            <circle cx="0" cy="100" r="30" fill="white" />
-                        </svg>
-                    </div>
-
-                    <div className="relative z-10 max-w-2xl mx-auto">
-                        <h3 className="text-3xl font-bold mb-6">¿Estás listo para impactar vidas?</h3>
-                        <p className="text-lg text-green-50 mb-8 leading-relaxed">
-                            Si compartes nuestra misión y quieres hacer parte de una organización que impulsa el desarrollo humano y profesional, únete a nosotros y construyamos juntos el futuro de la salud.
-                        </p>
-                        <a
-                            href="mailto:seleccion@pharmaplus.com.co"
-                            className="inline-flex items-center gap-2 bg-white text-[var(--color-pharma-green)] px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg"
-                        >
-                            Enviar Hoja de Vida
-                            <Briefcase className="w-5 h-5" />
-                        </a>
-                    </div>
+                {/* CTA / FORM Section */}
+                <div className="max-w-3xl mx-auto">
+                    <WorkWithUsForm />
                 </div>
             </section>
         </div>

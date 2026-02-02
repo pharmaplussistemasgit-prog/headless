@@ -31,6 +31,10 @@ export interface Product {
   stock_quantity?: number;
   sku?: string;
   status?: string;
+  date_on_sale_from?: string;
+  date_on_sale_to?: string;
+  average_rating?: string;
+  rating_count?: number;
 }
 
 export interface VariationAttribute {

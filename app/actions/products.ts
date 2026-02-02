@@ -77,6 +77,7 @@ export async function getProductsByCategory(categoryId: number, options: {
             category: categoryId.toString(),
             per_page: options.perPage || 12,
             status: 'publish',
+            stock_status: 'instock', // Strict filter: No OOS products
             page: options.page || 1
         };
 
@@ -129,17 +130,45 @@ export async function searchProducts(query: string): Promise<MappedProduct[]> {
         if (!query || query.length < 3) return [];
 
         const api = getWooApi();
-        const response = await api.get("products", {
-            search: query,
-            per_page: 8, // Limit results for speed
-            status: 'publish',
-            stock_status: 'instock'
+        const isSingleTerm = !query.trim().includes(' ');
+
+        // Parallel requests: Standard Search + Explicit SKU (if applicable)
+        const requests: Promise<any>[] = [
+            api.get("products", {
+                search: query,
+                per_page: 12,
+                status: 'publish',
+                stock_status: 'instock' // Strict stock
+            })
+        ];
+
+        if (isSingleTerm) {
+            requests.push(
+                api.get("products", {
+                    sku: query.trim(),
+                    status: 'publish'
+                })
+            );
+        }
+
+        const responses = await Promise.all(requests);
+        const searchResults = responses[0]?.status === 200 ? responses[0].data : [];
+        const skuResults = (isSingleTerm && responses[1]?.status === 200) ? responses[1].data : [];
+
+        // Merge and Deduplicate
+        const uniqueProducts = new Map();
+
+        // Prioritize SKU match (put it first)
+        skuResults.forEach((p: any) => uniqueProducts.set(p.id, p));
+        searchResults.forEach((p: any) => {
+            if (!uniqueProducts.has(p.id)) {
+                uniqueProducts.set(p.id, p);
+            }
         });
 
-        if (response.status === 200) {
-            return response.data.map((p: any) => mapWooProduct(p));
-        }
-        return [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return Array.from(uniqueProducts.values()).map((p: any) => mapWooProduct(p));
+
     } catch (error) {
         console.error(`Error searching products for query "${query}":`, error);
         return [];

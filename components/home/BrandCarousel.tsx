@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { ALL_BRANDS_SLIDER } from '@/lib/brands-data';
+import { FEATURED_BRANDS } from '@/lib/brands-data';
 
 export default function BrandCarousel() {
     return (
@@ -34,7 +34,7 @@ export default function BrandCarousel() {
                 {/* Scrolling Track */}
                 <div className="flex gap-12 animate-scroll-slow px-4 w-max hover:[animation-play-state:paused] items-center">
                     {/* Triple list for smoother infinite loop */}
-                    {[...ALL_BRANDS_SLIDER, ...ALL_BRANDS_SLIDER, ...ALL_BRANDS_SLIDER].map((brand, idx) => (
+                    {[...FEATURED_BRANDS, ...FEATURED_BRANDS, ...FEATURED_BRANDS].map((brand, idx) => (
                         <Link
                             key={`carousel-${idx}`}
                             href={brand.slug ? `/marca/${brand.slug}` : '/tienda'}
