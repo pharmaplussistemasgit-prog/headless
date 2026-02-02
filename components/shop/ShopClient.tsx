@@ -209,7 +209,11 @@ export function ShopClient({ initialProducts, categories, tags, attributes, tota
                                         productType: null,
                                         requiresRx: false,
                                         isRefrigerated: false,
-                                        discountPercentage: product.sale_price ? Math.round(((Number(product.regular_price) - Number(product.sale_price)) / Number(product.regular_price)) * 100) : null
+                                        discountPercentage: product.sale_price ? Math.round(((Number(product.regular_price) - Number(product.sale_price)) / Number(product.regular_price)) * 100) : null,
+                                        dateOnSaleFrom: product.date_on_sale_from || null,
+                                        dateOnSaleTo: product.date_on_sale_to || null,
+                                        averageRating: product.average_rating || null,
+                                        ratingCount: product.rating_count || 0
                                     }}
                                 />
                             ))}
