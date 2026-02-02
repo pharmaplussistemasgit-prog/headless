@@ -41,6 +41,10 @@ export function ProductCard({ product }: { product: ProductSummary }) {
     requiresRx: false,
     isRefrigerated: isColdChain(product.categories, product),
     discountPercentage: isOnSale ? Math.round(((regularPrice - price) / regularPrice) * 100) : null,
+    dateOnSaleFrom: null,
+    dateOnSaleTo: null,
+    averageRating: null,
+    ratingCount: 0,
   };
 
   return (
