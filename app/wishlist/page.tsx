@@ -118,6 +118,10 @@ export default function WishlistPage() {
                                                     requiresRx: false,
                                                     isRefrigerated: false,
                                                     discountPercentage: null,
+                                                    dateOnSaleFrom: null,
+                                                    dateOnSaleTo: null,
+                                                    averageRating: null,
+                                                    ratingCount: 0,
                                                 }}
                                             />
                                         </div>
