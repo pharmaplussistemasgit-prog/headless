@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         }
 
         // 1. Insert into Database
-        const { data, error: dbError } = await supabaseAdmin
+        const { data, error: dbError } = await (supabaseAdmin as any)
             .from('pillbox_reminders')
             .insert([
                 {
@@ -81,7 +81,7 @@ export async function GET(request: Request) {
             return NextResponse.json({ success: false, error: 'Database connection not configured' }, { status: 500 });
         }
 
-        let query = supabaseAdmin
+        let query = (supabaseAdmin as any)
             .from('pillbox_reminders')
             .select('*')
             .order('created_at', { ascending: false });
