@@ -6,7 +6,7 @@ interface SMSResponse {
     data?: any[];
 }
 
-const API_URL = 'https://contacto-virtual.com/sms/back_sms/public/api/send/sms/json';
+const API_URL = 'https://contacto-virtual.com/a/api/send/sms/json';
 
 export async function sendSMS(phone: string, message: string) {
     const email = process.env.SMS_API_EMAIL;
