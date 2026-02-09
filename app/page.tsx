@@ -1,6 +1,6 @@
-import HeroSection, { HeroSlide } from "@/components/home/HeroSection";
+import { HeroSection } from "@/components/home/HeroSection";
+import type { HeroSlide } from "@/components/home/HeroSection";
 import CategoryIconsSection from "@/components/home/CategoryIconsSection";
-import BrandCarousel from '@/components/home/BrandCarousel';
 import FeaturedBrands from "@/components/home/FeaturedBrands";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import ColdChainSection from "@/components/home/ColdChainSection";
@@ -178,9 +178,6 @@ export default async function HomePage() {
       {/* Category Icons */}
       <CategoryIconsSection categories={categories} />
 
-      {/* Brand Carousel (All Labs - T21) */}
-      <BrandCarousel />
-
       {/* Recommended Section (Complementa tu bienestar) */}
       <RecommendedSection
         products={recommendedProducts}
@@ -205,7 +202,7 @@ export default async function HomePage() {
         />
       )}
 
-      {/* Featured Brands (Highlight - T21) Moved here as requested */}
+      {/* Featured Brands (Highlight - T21) */}
       <FeaturedBrands />
 
       {/* Cold Chain Section */}
@@ -226,7 +223,6 @@ export default async function HomePage() {
 
       {/* Beauty Section */}
       {(() => {
-        // ID 299 = Cuidado Facial. We find it in the tree to get its children.
         const facialNode = categories.find(c => c.id === 299);
         const facialSubcategories = facialNode?.children || [];
 
@@ -238,13 +234,13 @@ export default async function HomePage() {
         );
       })()}
 
-      {/* Health Section (New) */}
+      {/* Health Section */}
       <HealthSection products={shuffledHealth} />
 
       {/* FAQ Section */}
       <FAQSection />
 
-      {/* Value Proposition (Moved to bottom as requested) */}
+      {/* Value Proposition */}
       <ValueProposition />
     </div>
   );

@@ -1,0 +1,368 @@
+[
+  {
+    "id": 3271,
+    "name": "1091",
+    "slug": "1091",
+    "count": 13
+  },
+  {
+    "id": 3230,
+    "name": "1969",
+    "slug": "1969",
+    "count": 19
+  },
+  {
+    "id": 3232,
+    "name": "1978",
+    "slug": "1978",
+    "count": 11
+  },
+  {
+    "id": 3245,
+    "name": "2033",
+    "slug": "2033",
+    "count": 12
+  },
+  {
+    "id": 3217,
+    "name": "347",
+    "slug": "347",
+    "count": 19
+  },
+  {
+    "id": 3263,
+    "name": "442",
+    "slug": "442",
+    "count": 12
+  },
+  {
+    "id": 3290,
+    "name": "ABBOTT FORMAS NUTRICIONALES",
+    "slug": "abbott-formas-nutricionales",
+    "count": 72
+  },
+  {
+    "id": 2981,
+    "name": "ABBVIE",
+    "slug": "101",
+    "count": 0
+  },
+  {
+    "id": 3292,
+    "name": "ABBVIE EYE CARE",
+    "slug": "abbvie-eye-care",
+    "count": 23
+  },
+  {
+    "id": 3357,
+    "name": "ABBVIE FARMA",
+    "slug": "abbvie-farma",
+    "count": 6
+  },
+  {
+    "id": 2948,
+    "name": "ADIUM",
+    "slug": "53",
+    "count": 0
+  },
+  {
+    "id": 3304,
+    "name": "ALCON LABORATORIOS",
+    "slug": "alcon-laboratorios",
+    "count": 15
+  },
+  {
+    "id": 3330,
+    "name": "ASPEN",
+    "slug": "aspen",
+    "count": 61
+  },
+  {
+    "id": 3334,
+    "name": "ASTELLAS",
+    "slug": "astellas",
+    "count": 12
+  },
+  {
+    "id": 3298,
+    "name": "ASTRAZENECA COLOMBIA SAS",
+    "slug": "astrazeneca-colombia-sas",
+    "count": 42
+  },
+  {
+    "id": 3341,
+    "name": "AULEN PHARMA S.A.",
+    "slug": "aulen-pharma-s-a",
+    "count": 21
+  },
+  {
+    "id": 3308,
+    "name": "AXON PHARMA SAS",
+    "slug": "axon-pharma-sas",
+    "count": 36
+  },
+  {
+    "id": 3319,
+    "name": "BARIATRIC AND NUTRITIONAL SUPPORTS S A S",
+    "slug": "bariatric-and-nutritional-supports-s-a-s",
+    "count": 23
+  },
+  {
+    "id": 3322,
+    "name": "BIOHEALTHY SAS",
+    "slug": "biohealthy-sas",
+    "count": 38
+  },
+  {
+    "id": 3286,
+    "name": "BUSSIE FARMA",
+    "slug": "bussie-farma",
+    "count": 105
+  },
+  {
+    "id": 3318,
+    "name": "CLOSTER DERMA",
+    "slug": "closter-derma",
+    "count": 20
+  },
+  {
+    "id": 3329,
+    "name": "EPIDERMIQUE S.A.",
+    "slug": "epidermique-s-a",
+    "count": 39
+  },
+  {
+    "id": 3282,
+    "name": "EUROFARMA",
+    "slug": "eurofarma",
+    "count": 103
+  },
+  {
+    "id": 3297,
+    "name": "FAES FARMA COLOMBIA S.A.S.",
+    "slug": "faes-farma-colombia-s-a-s",
+    "count": 34
+  },
+  {
+    "id": 3321,
+    "name": "FAGRON",
+    "slug": "fagron",
+    "count": 48
+  },
+  {
+    "id": 3336,
+    "name": "GADOR DERMA",
+    "slug": "gador-derma",
+    "count": 18
+  },
+  {
+    "id": 3315,
+    "name": "HAIKO NATURAL SAS",
+    "slug": "haiko-natural-sas",
+    "count": 28
+  },
+  {
+    "id": 3345,
+    "name": "HEEL",
+    "slug": "heel",
+    "count": 1
+  },
+  {
+    "id": 3064,
+    "name": "HEEL COLOMBIA",
+    "slug": "202",
+    "count": 0
+  },
+  {
+    "id": 3359,
+    "name": "HUMANCARE DERMA",
+    "slug": "humancare-derma",
+    "count": 22
+  },
+  {
+    "id": 3320,
+    "name": "HUMAX",
+    "slug": "humax",
+    "count": 71
+  },
+  {
+    "id": 3101,
+    "name": "INMUNOPHARMA",
+    "slug": "964",
+    "count": 0
+  },
+  {
+    "id": 3294,
+    "name": "IPCA",
+    "slug": "ipca",
+    "count": 14
+  },
+  {
+    "id": 3289,
+    "name": "LAFRANCOL",
+    "slug": "lafrancol",
+    "count": 194
+  },
+  {
+    "id": 2965,
+    "name": "LAFRANCOL-FRANCO COLOMBIANO",
+    "slug": "80",
+    "count": 0
+  },
+  {
+    "id": 3287,
+    "name": "MEGALABS FARMA",
+    "slug": "megalabs-farma",
+    "count": 36
+  },
+  {
+    "id": 3324,
+    "name": "MEGALABS MEDIHEALT",
+    "slug": "megalabs-medihealt",
+    "count": 76
+  },
+  {
+    "id": 3350,
+    "name": "MEGALABS POEN",
+    "slug": "megalabs-poen",
+    "count": 13
+  },
+  {
+    "id": 3317,
+    "name": "MSD",
+    "slug": "msd",
+    "count": 38
+  },
+  {
+    "id": 3316,
+    "name": "NEWFOUNDLAND DIAGNOSTICS S.A.S",
+    "slug": "newfoundland-diagnostics-s-a-s",
+    "count": 14
+  },
+  {
+    "id": 3301,
+    "name": "OFTALMOQUIMICA",
+    "slug": "oftalmoquimica",
+    "count": 21
+  },
+  {
+    "id": 3327,
+    "name": "PFIZER S.A.S",
+    "slug": "pfizer-s-a-s",
+    "count": 74
+  },
+  {
+    "id": 3309,
+    "name": "PHARMALAB",
+    "slug": "pharmalab",
+    "count": 29
+  },
+  {
+    "id": 3279,
+    "name": "PROCAPS CONSUMO",
+    "slug": "procaps-consumo",
+    "count": 32
+  },
+  {
+    "id": 3296,
+    "name": "PROCAPS FARMA OTC",
+    "slug": "procaps-farma-otc",
+    "count": 35
+  },
+  {
+    "id": 3281,
+    "name": "PROCAPS FARMA RX",
+    "slug": "procaps-farma-rx",
+    "count": 138
+  },
+  {
+    "id": 3288,
+    "name": "PROCAPS FARMIONI",
+    "slug": "procaps-farmioni",
+    "count": 12
+  },
+  {
+    "id": 3280,
+    "name": "PROCAPS GENERICOS COLMED",
+    "slug": "procaps-genericos-colmed",
+    "count": 85
+  },
+  {
+    "id": 3362,
+    "name": "ROCHE",
+    "slug": "roche",
+    "count": 29
+  },
+  {
+    "id": 3313,
+    "name": "SEVEN PHARMA",
+    "slug": "seven-pharma",
+    "count": 52
+  },
+  {
+    "id": 3283,
+    "name": "SIEGFRIED DERMA",
+    "slug": "siegfried-derma",
+    "count": 58
+  },
+  {
+    "id": 3291,
+    "name": "SIEGFRIED FARMA",
+    "slug": "siegfried-farma",
+    "count": 110
+  },
+  {
+    "id": 3335,
+    "name": "SKINDRUG S.A.",
+    "slug": "skindrug-s-a",
+    "count": 38
+  },
+  {
+    "id": 3284,
+    "name": "SOPHIA LABORATORIO",
+    "slug": "sophia-laboratorio",
+    "count": 21
+  },
+  {
+    "id": 3305,
+    "name": "SUIPHAR DERMA",
+    "slug": "suiphar-derma",
+    "count": 14
+  },
+  {
+    "id": 3306,
+    "name": "SUIPHAR FARMA",
+    "slug": "suiphar-farma",
+    "count": 18
+  },
+  {
+    "id": 3293,
+    "name": "TECNOQUIMICAS MK",
+    "slug": "tecnoquimicas-mk",
+    "count": 144
+  },
+  {
+    "id": 3302,
+    "name": "TECNOQUIMICAS VISION",
+    "slug": "tecnoquimicas-vision",
+    "count": 37
+  },
+  {
+    "id": 3312,
+    "name": "TIES",
+    "slug": "ties",
+    "count": 13
+  },
+  {
+    "id": 3303,
+    "name": "VESALIUS PHARMA S.A.S.",
+    "slug": "vesalius-pharma-s-a-s",
+    "count": 22
+  },
+  {
+    "id": 3300,
+    "name": "XINETIX PHARMA S.A.S",
+    "slug": "xinetix-pharma-s-a-s",
+    "count": 36
+  }
+]

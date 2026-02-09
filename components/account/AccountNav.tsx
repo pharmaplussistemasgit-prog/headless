@@ -47,7 +47,7 @@ export default function AccountNav() {
                 { name: 'Cambia tu contraseña', href: '/mi-cuenta/password', icon: Lock },
                 { name: 'Mis compras', href: '/mi-cuenta/pedidos', icon: Package },
                 { name: 'Notificaciones', href: '/mi-cuenta/notificaciones', icon: Bell },
-                { name: 'Pastillero virtual', href: '/pastillero', icon: Pill, color: 'text-[var(--color-pharma-blue)]' },
+                { name: 'Pastillero virtual', href: '/mi-cuenta/pastillero', icon: Pill, color: 'text-[var(--color-pharma-blue)]' },
             ]
         },
         {
@@ -131,43 +131,7 @@ export default function AccountNav() {
             ))}
 
             <div className="pt-4 border-t border-gray-100 space-y-2">
-                <button
-                    onClick={async () => {
-                        const token = auth.getToken();
-                        if (!token) {
-                            alert('No hay sesión activa');
-                            return;
-                        }
-                        try {
-                            const res = await fetch('https://tienda.pharmaplus.com.co/wp-json/wp/v2/users/me?context=edit', {
-                                headers: { 'Authorization': `Bearer ${token}` }
-                            });
-                            const data = await res.json();
 
-                            let roles = data.roles || [];
-                            // Fallback Logic
-                            if ((!roles || roles.length === 0) && data.is_super_admin) {
-                                roles = ['administrator'];
-                            }
-
-                            alert(`Super Admin: ${data.is_super_admin}\nRoles Recibidos: ${JSON.stringify(data.roles)}\nRoles Asignados: ${JSON.stringify(roles)}`);
-
-                            if (roles.length > 0) {
-                                const current = auth.getUser();
-                                auth.saveSessionRaw({ ...current, roles: roles });
-                                window.location.reload();
-                            } else {
-                                alert('Aun no se detectan roles. Revise consola.');
-                                console.log('DEBUG DATA:', data);
-                            }
-                        } catch (e) {
-                            alert('Error sincronizando: ' + e);
-                        }
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all"
-                >
-                    🔄 Sincronizar Permisos (Debug)
-                </button>
 
                 <button
                     onClick={handleLogout}

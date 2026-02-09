@@ -1,3 +1,5 @@
+"use client";
+
 import BaseProductCard from "@/components/product/ProductCard";
 import { isColdChain } from "@/lib/coldChain";
 

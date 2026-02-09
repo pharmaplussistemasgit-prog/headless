@@ -1,75 +1,69 @@
-/**
- * SMS Service Adapter
- * 
- * Defines the interface for sending SMS notifications.
- * Currently keeps a generic implementation.
- * 
- * TODO: User must configure specific endpoint and keys here.
- */
+import { NextResponse } from 'next/server';
 
-// Interface for what we expect from an SMS provider
-interface SMSProvider {
-    send(phone: string, message: string): Promise<boolean>;
+interface SMSResponse {
+    status?: string;
+    message?: string;
+    data?: any[];
 }
 
-// Configuration for the Customer's SMS Service
-const SMS_CONFIG = {
-    // Replace these with actual values provided by the client's SMS provider
-    apiUrl: process.env.SMS_API_URL || 'https://api.generic-sms-provider.com/send',
-    apiKey: process.env.SMS_API_KEY || 'your-api-key',
-    senderId: process.env.SMS_SENDER_ID || 'PharmaPlus'
-};
+const API_URL = 'https://contacto-virtual.com/sms/back_sms/public/api/send/sms/json';
 
-/**
- * Sends an SMS to the specified phone number.
- * 
- * @param phone Phone number (e.g., "573001234567")
- * @param message Text message content
- * @returns boolean indicating success
- */
-export async function sendSMS(phone: string, message: string): Promise<boolean> {
+export async function sendSMS(phone: string, message: string) {
+    const email = process.env.SMS_API_EMAIL;
+    const token = process.env.SMS_API_TOKEN;
 
-    // 1. Validation
-    if (!phone || !message) {
-        console.warn('[SMS] Missing phone or message');
-        return false;
+    if (!email || !token) {
+        console.error('SMS API credentials missing');
+        return { success: false, error: 'Configuration Error' };
     }
 
-    try {
-        console.log(`[SMS] Attempting to send to ${phone}: "${message}"`);
+    // Ensure phone has 57 prefix if not present (assuming Colombia for now based on docs)
+    // The docs show examples with '57' prefix.
+    let cleanPhone = phone.replace(/\D/g, '');
+    if (cleanPhone.length === 10 && cleanPhone.startsWith('3')) {
+        cleanPhone = '57' + cleanPhone;
+    }
 
-        // 2. Real Implementation (Uncomment and adjust when credentials are ready)
-        /*
-        const response = await fetch(SMS_CONFIG.apiUrl, {
+    const payload = {
+        token: token,
+        email: email,
+        type_send: '1via',
+        data: [
+            {
+                cellphone: cleanPhone,
+                message: message.substring(0, 757) // Limit per docs
+            }
+        ]
+    };
+
+    try {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${SMS_CONFIG.apiKey}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                to: phone,
-                from: SMS_CONFIG.senderId,
-                text: message
-            })
+            body: JSON.stringify(payload)
         });
 
         if (!response.ok) {
-            throw new Error(`SMS Provider Error: ${response.statusText}`);
+            throw new Error(`HTTP Error: ${response.status}`);
         }
-        
-        const data = await response.json();
-        console.log('[SMS] Success:', data);
-        */
 
-        // 3. Mock Implementation (For Testing/Demo)
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const data: SMSResponse = await response.json();
 
-        console.log('[SMS] MOCK SENT (Check console for details)');
-        return true;
+        // Check for "SEND_OK" logic or specific error codes mentioned in docs
+        // Docs say: >0 is SEND_OK.
+        // The example response shows "status": "OK" and "id_sms" > 0 in data.
+
+        if (data.status === 'OK' || (data.data && data.data.length > 0 && data.data[0].id_sms > 0)) {
+            return { success: true, data };
+        } else {
+            console.error('SMS API Error Response:', data);
+            return { success: false, error: data.message || 'Error sending SMS', details: data };
+        }
 
     } catch (error) {
-        console.error('[SMS] Failed to send:', error);
-        return false;
+        console.error('SMS Send Error:', error);
+        return { success: false, error: 'Network or Server Error' };
     }
 }

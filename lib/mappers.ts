@@ -74,5 +74,6 @@ export function mapWooProduct(p: WooProduct): MappedProduct {
         dateOnSaleTo: p.date_on_sale_to || null,
         averageRating: p.average_rating || null,
         ratingCount: p.rating_count || 0,
+        promotion: null, // Will be populated by enrichProductsWithPromotions()
     };
 }

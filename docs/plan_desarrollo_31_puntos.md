@@ -191,10 +191,199 @@ Este documento detalla el estado actual de cada uno de los puntos solicitados, i
 **Requerimiento Cliente:** 
 *   "Mostrar promociones de paga una cantidad y lleva otra (...) Por ejemplo compra 2 y lleva 3, compra 1 y lleva 2 (...) Ya se habia creado una tabla de item_ptc y se creo una api para ello"
 *   **Observación:** "Tener en cuanta cuando se ingresa a ver la información de cada producto. Configurar tope por cada compra. Rango de fecha de la promocion. Mostrar unicamente lo que tiene existencias"
-**Status:** 🟡 Parcialmente Ejecutada
-**Detalle Técnico:**
-*   Front-end: Página `/ofertas` lista. Motor visual de promociones listo.
-*   **Pendiente:** Conexión con la API `item_ptc` mencionada o configuración de las reglas complejas ("Pague X Lleve Y") en el carrito de compras.
+
+**Status:** 🟢 **FASE 1 COMPLETADA** (Mock Implementation) | 🔴 **FASE 2 PENDIENTE** (API Integration)
+
+---
+
+#### ✅ **IMPLEMENTACIÓN COMPLETADA (Fecha: 2026-02-06)**
+
+Se implementó un sistema completo de promociones PTC ("Pague X Lleve Y") con datos mock que simula la tabla `wp_item_ptc` del ERP. La implementación incluye:
+
+##### **Archivos Creados:**
+
+1. **`types/promotion.ts`** → Definiciones TypeScript para promociones
+   - `PromotionRule`: Estructura de regla de promoción
+   - `ActivePromotion`: Promoción activa con descripción
+
+2. **`services/promotions.ts`** → Servicio de promociones con mock data
+   - `getActivePromotions()`: Obtiene todas las promociones activas
+   - `getPromotionForProduct(sku)`: Verifica promoción por SKU
+   - `getPromotedProductSkus()`: Lista de SKUs promocionados
+   - **Mock Data:** 3 promociones de ejemplo (SKUs: 4652, 3294, 68146)
+
+3. **`lib/enrichProducts.ts`** → Helper para enriquecer productos
+   - `enrichProductsWithPromotions()`: Agrega datos de promoción a productos mapeados
+
+##### **Archivos Modificados:**
+
+1. **`types/product.ts`**
+   - Agregado campo `promotion` a `MappedProduct` interface
+
+2. **`lib/mappers.ts`**
+   - Inicializa `promotion: null` en `mapWooProduct()`
+
+3. **`app/ofertas/page.tsx`** → **REFACTORIZACIÓN COMPLETA**
+   - Filtrado por SKUs con promociones activas
+   - Filtro estricto de stock (`stockStatus: 'instock'`)
+   - Enriquecimiento de productos con datos de promoción
+   - UI mejorada con contador de productos activos
+   - Manejo de estado vacío (sin promociones)
+
+4. **`components/product/ProductCard.tsx`** → ✅ **Ya implementado**
+   - Badge de promoción morado con animación pulse
+   - Usa `getProductPromo()` para mostrar texto dinámico
+
+##### **Funcionalidades Implementadas:**
+
+✅ **Badges de Promoción**
+- Se muestran en esquina superior izquierda de ProductCard
+- Estilo: Fondo morado (`#9333ea`), animación pulse
+- Texto dinámico: "🎁 Pague 2 Lleve 3", "🎁 Pague 1 Lleve 2", etc.
+
+✅ **Página `/ofertas`**
+- Muestra solo productos con promociones activas
+- Filtro estricto por stock disponible
+- Contador: "🎯 X productos con promoción activa"
+- Mensaje cuando no hay promociones
+
+✅ **Validaciones**
+- Filtro de fechas (startDate/endDate)
+- Filtro de stock (solo `instock`)
+- Validación de SKU
+
+✅ **Datos Mock Actuales:**
+```typescript
+// SKU 4652: Pague 2 Lleve 3 (vigente hasta 2026-12-31)
+// SKU 3294: Pague 1 Lleve 2 (vigente hasta 2026-06-30)
+// SKU 68146: Pague 3 Lleve 5 (vigente hasta 2026-12-31)
+```
+
+---
+
+#### 🔴 **PENDIENTE: Integración con API Real**
+
+##### **Problema Identificado:**
+- **Endpoint Esperado:** `GET /wp-json/custom-api/v1/item-ptc`
+- **Estado Actual:** ❌ **404 Not Found**
+- **Causa:** La tabla `wp_item_ptc` NO está registrada en `CUSTOM_API_V3.3.md`
+
+##### **Solución Requerida:**
+
+**Paso 1: Modificar WordPress**
+```php
+// En CUSTOM_API_V3.3.md, agregar a $cmu_tables:
+'item-ptc' => $GLOBALS['wpdb']->prefix . 'item_ptc',
+```
+
+**Paso 2: Actualizar `services/promotions.ts`**
+- Reemplazar `MOCK_PROMOTIONS` con fetch a API real
+- Mapear respuesta de API a estructura `PromotionRule[]`
+
+**Paso 3: Configurar Variables de Entorno**
+```bash
+NEXT_PUBLIC_WORDPRESS_API_URL=https://tienda.pharmaplus.com.co
+WORDPRESS_API_KEY=rwYK_B0nN_kHbq_ujB3_XRbZ_slCt
+```
+
+---
+
+#### 📚 **Documentación Completa**
+
+**Ubicación:** `docs/punto_19_mundo_ofertas_documentation.md`
+
+**Contenido:**
+- Arquitectura del sistema
+- Flujo de datos completo
+- Archivos creados/modificados con ejemplos
+- Casos de uso
+- Guía de migración a API real
+- Checklist de implementación
+
+**Referencias:**
+- [Documentación Punto 19](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/punto_19_mundo_ofertas_documentation.md)
+- [ERP-WordPress API Complete](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/erp_wordpress_api_complete.md)
+- [Snippet #21: Beneficios B2C](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/snippets/woocommerce_beneficios_b2c.php)
+
+---
+
+#### 🎯 **Próximos Pasos**
+
+1. **Decisión:** ¿Desplegar API en WordPress o mantener mock temporalmente?
+2. **Si API:** Modificar CUSTOM_API, desplegar, actualizar servicio
+3. **Testing:** Validar badges, filtrado, y fechas de vigencia
+4. **Producción:** Desplegar con promociones reales del ERP
+
+---
+   
+   $get_primary = function($table) {
+       $map = [
+           // ... mapeos existentes
+           $GLOBALS['wpdb']->prefix . 'item_ptc' => 'ITEM_PTC_ID', // Ajustar según PK real
+       ];
+       return $map[$table] ?? 'id';
+   };
+   ```
+
+2. **Endpoints Disponibles Automáticamente:**
+   - `GET /custom-api/v1/item-ptc` → Listar todas las promociones
+   - `GET /custom-api/v1/item-ptc/{id}` → Obtener promoción específica
+   - `POST /custom-api/v1/item-ptc` → Crear promoción
+   - `PUT /custom-api/v1/item-ptc/{id}` → Actualizar promoción
+   - `DELETE /custom-api/v1/item-ptc/{id}` → Eliminar promoción
+
+##### **Opción B: Mock en Frontend (Temporal)**
+- Crear servicio `services/promotions.ts` con datos hardcodeados para desarrollo.
+- **Limitación:** No permite gestión dinámica de promociones desde WordPress.
+
+#### 4. **Implementación Frontend (Una vez API disponible)**
+
+##### **A. Servicio de Promociones** (`services/promotions.ts`)
+```typescript
+interface PromotionRule {
+  sku: string;              // SKU del producto base
+  giftSku: string;          // SKU del producto regalo
+  buyQuantity: number;      // Cantidad mínima a comprar
+  getQuantity: number;      // Cantidad de regalo
+  startDate: string;        // YYYY-MM-DD
+  endDate: string;          // YYYY-MM-DD
+}
+
+export async function getActivePromotions(): Promise<PromotionRule[]> {
+  const today = new Date().toISOString().split('T')[0];
+  const res = await fetch(`${API_URL}/item-ptc?filters[FECHA_INICIO]<=${today}&filters[FECHA_FIN]>=${today}`);
+  return res.json();
+}
+```
+
+##### **B. Componente de Tarjeta de Producto** (`components/ui/ProductCard.tsx`)
+- Agregar badge visual "🎁 Pague X Lleve Y" cuando el producto tenga promoción activa.
+- Mostrar rango de fechas de la promoción.
+
+##### **C. Página Mundo Ofertas** (`app/ofertas/page.tsx`)
+- Filtrar productos que tengan promociones activas en `item_ptc`.
+- **Filtro de Stock:** Aplicar `stockStatus: 'instock'` para ocultar agotados (como solicitado).
+
+##### **D. Página de Producto Individual** (`app/producto/[slug]/page.tsx`)
+- Mostrar sección destacada con la promoción si aplica.
+- Indicar cantidad necesaria para activar el beneficio.
+
+#### 5. **Filtro de Stock (Punto Crítico)**
+- **Requerimiento:** "Mostrar únicamente lo que tiene existencias"
+- **Implementación:**
+  - `lib/woocommerce.ts` → `getProducts()` ya soporta `stockStatus: 'instock'` por defecto.
+  - Todas las secciones de homepage (Featured, Flash Deals, etc.) ya filtran por stock.
+  - **Excepción:** El buscador (`/tienda?search=...`) muestra agotados (implementado en Punto 31).
+
+#### 6. **Pendientes para Implementación**
+- [ ] **WordPress:** Agregar `item-ptc` a CUSTOM_API_V3.3 y desplegar.
+- [ ] **Frontend:** Crear servicio `services/promotions.ts`.
+- [ ] **Frontend:** Actualizar `ProductCard.tsx` con badge de promoción.
+- [ ] **Frontend:** Implementar lógica en `/ofertas` para listar solo productos con promociones activas.
+- [ ] **Frontend:** Mostrar detalles de promoción en página de producto individual.
+- [ ] **Testing:** Verificar que productos agotados NO aparecen en Mundo Ofertas.
+
+**Decisión Requerida:** ¿Proceder con Opción A (desplegar API) u Opción B (mock temporal)?
 
 ---
 
@@ -202,9 +391,18 @@ Este documento detalla el estado actual de cada uno de los puntos solicitados, i
 **Requerimiento Cliente:** 
 *   "Formulario de diligenciamento de dosis de medicamento diaria (...) la idea es enviar un recordatorio a traves de mensaje de texto para recordar la toma"
 *   **Observación:** "Ver pastillero virtual de la pagina farmatodo.com.co. Activar el SMS"
-**Status:** 🔴 Pendiente (Bloqueante)
+**Status:** ✅ Implementado
 **Detalle Técnico:**
-*   Requiere contratación de proveedor SMS (Twilio/AWS) y credenciales API para poder enviar los mensajes. Desarrollo detenido hasta tener este insumo.
+*   **Servicio:** Implementado `lib/sms.ts` conectando con API Contacto Virtual.
+*   **Frontend:** Página `/pastillero` creada con formulario funcional para pruebas.
+*   **API:** Endpoint `/api/sms/send` configurado y asegurado para manejar los envíos.
+*   **Detalles de Ejecución:**
+    - Se unificó la ruta en `/mi-cuenta/pastillero`.
+    - Se creó el formulario con persistencia de contacto (Nombre y Celular) y botón "Cancelar".
+    - Se integró autocompletar inteligente de productos en el campo "Medicamento".
+    - Se movió el historial de tratamientos al final de la página.
+    - Se creó la página `/mi-cuenta/notificaciones` para evitar errores 404.
+    - Integración SMS funcional.
 
 ---
 
@@ -262,9 +460,11 @@ Este documento detalla el estado actual de cada uno de los puntos solicitados, i
 
 ### 26. Formato de Confirmación de Envío
 **Requerimiento Cliente:** "Agregar el datos de la empresa transportadora con el numero de guia"
-**Status:** 🔴 Pendiente
+**Status:** ✅ Ejecutada
 **Detalle Técnico:**
-*   Depende de si el número de guía se genera automáticamente (integación Carrier) o manual. Se requiere definir flujo. Diseño de email pendiente.
+*   **Estrategia:** WordPress Snippet + Headless Frontend.
+*   **WordPress:** Implementado `wordpress_order_tracking_snippet.php` que agrega campos de "Transportadora" (Dropdown) y "Guía" en la edición del pedido, los expone en la API y los inyecta en emails transaccionales.
+*   **Headless:** Implementado componente `OrderTracking.tsx` en `/mi-cuenta/pedidos`. Muestra la transportadora y genera el enlace de rastreo dinámico automáticamente (Servientrega, Coordinadora, etc.). Botón de copiado de guía incluido.
 
 ---
 
@@ -283,4 +483,16 @@ Este documento detalla el estado actual de cada uno de los puntos solicitados, i
 *   Implementado en todas las páginas.
 
 ---
+### 29. Historial de Pedidos Avanzado
+**Requerimiento Cliente:** "Mejorar la visualización del historial, incluir filtros, detalle desplegable tipo acordeón y diseño limpio tipo factura."
+**Status:** ✅ Ejecutada
+**Detalle Técnico:**
+*   **Interfaz:** Diseño de **Acordeón** (Colapsado por defecto) para mayor orden.
+*   **Visualización:** Estilo "Factura" en el detalle de productos (Tabla de texto, sin imágenes, totales claros).
+*   **Filtros:** Separación por Pestañas (Todos/Curso/Historial) y Filtro de Fecha única.
+*   **Backend:** API `/api/orders` mejorada para búsqueda dual (ID/Email) y soporte de todos los estados personalizados de WooCommerce (`status: 'any'`).
+*   **Tracking:** Integración visual de Línea de Tiempo (`OrderTimeline`) y Rastreo de Envío (`OrderTracking`) dentro del acordeón.
+
+---
+
 **Total:** 31 Puntos Documentados.

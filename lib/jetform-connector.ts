@@ -47,10 +47,10 @@ export async function submitToJetForm(
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error(`[JetForm] Error ${response.status}:`, errorText);
+            console.error(`[JetForm] Error ${response.status} submitting to ${endpoint}:`, errorText);
             return {
                 success: false,
-                message: `Error del servidor (${response.status}). Por favor intenta más tarde.`
+                message: `Error del servidor (${response.status}): ${errorText.substring(0, 100)}... Por favor intenta más tarde.`
             };
         }
 

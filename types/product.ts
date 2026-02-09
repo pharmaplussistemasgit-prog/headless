@@ -53,6 +53,19 @@ export interface MappedProduct {
     dateOnSaleTo: string | null;
     averageRating: string | null;
     ratingCount: number | null;
+
+    // Promotion Data (PTC - "Pague X Lleve Y")
+    promotion?: {
+        description: string;
+        rule: {
+            itemId: string;
+            giftItemId: string;
+            buyQuantity: number;
+            receiveQuantity: number;
+            startDate: string;
+            endDate: string;
+        };
+    } | null;
 }
 
 export interface WooCategory {

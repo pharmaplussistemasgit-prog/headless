@@ -138,7 +138,7 @@ export async function searchProducts(query: string): Promise<MappedProduct[]> {
                 search: query,
                 per_page: 12,
                 status: 'publish',
-                stock_status: 'instock' // Strict stock
+                // stock_status: 'instock' // COMENTADO: Permitir buscar productos agotados también
             })
         ];
 

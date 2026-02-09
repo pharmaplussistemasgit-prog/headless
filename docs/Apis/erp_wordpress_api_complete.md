@@ -1,0 +1,603 @@
+# 📘 Documentación Completa: API ERP ↔ WordPress PharmaPlus
+
+## 🎯 Visión General
+
+Este documento consolida **toda la arquitectura de integración** entre el **ERP de PharmaPlus** y **WordPress/WooCommerce**. La API permite sincronización bidireccional de productos, órdenes, clientes, y datos de negocio (descuentos B2B, convenios, laboratorios, etc.).
+
+### 📂 Fuentes de Documentación
+- [Base B2B/B2C](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Base%20B2B%20B2C.csv) → Tablas de descuentos, convenios, laboratorios
+- [Orders](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Orders.csv) → Gestión de órdenes
+- [PostBatch](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20PostBatch%20Actualizado.csv) → Sincronización masiva de productos
+- [Productos](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Productos.csv) → CRUD de productos
+
+---
+
+## 🏗️ Arquitectura General
+
+```mermaid
+graph LR
+    A[ERP PharmaPlus] -->|REST API| B[WordPress/WooCommerce]
+    B -->|Custom API v1| C[Headless Frontend]
+    A -->|Sincronización Batch| B
+    B -->|Webhooks| A
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+```
+
+### 🔑 Autenticación
+- **Método:** API Key en header `X-API-KEY`
+- **Ejemplo:** `X-API-KEY: rwYK B0nN kHbq ujB3 XRbZ slCt`
+- **Base URL:** `https://tienda.pharmaplus.com.co/wp-json/custom-api/v1`
+
+---
+
+## 📦 1. API de Productos
+
+> **Fuente:** [Api PharmaPlus V2 - Productos.csv](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Productos.csv)
+
+### 🔄 Versiones Disponibles
+
+#### **API V1** (Basada en ID de WordPress)
+```
+POST   /wp-json/custom-api/v1/product
+GET    /wp-json/custom-api/v1/products
+GET    /wp-json/custom-api/v1/product/{id}
+PUT    /wp-json/custom-api/v1/product/id/{id}
+DELETE /wp-json/custom-api/v1/product/{id}
+```
+
+#### **API V2** (Basada en SKU - Recomendada) ⭐
+```
+POST   /wp-json/custom-api/v1/product
+POST   /wp-json/custom-api/v1/products/batch
+GET    /wp-json/custom-api/v1/products
+GET    /wp-json/custom-api/v1/product/sku/{sku}
+PUT    /wp-json/custom-api/v1/product/sku/{sku}
+PUT    /wp-json/custom-api/v1/products/sku/batch
+DELETE /wp-json/custom-api/v1/product/sku/{sku}
+DELETE /wp-json/custom-api/v1/products/batch/delete
+```
+
+### 📝 Estructura de Producto
+
+```json
+{
+  "sku": "SKU-123",
+  "title": "Amoxicilina 500mg - 21 Cápsulas",
+  "regular_price": "15000",
+  "sale_price": "12000",
+  "description": "Descripción larga del producto",
+  "short_description": "Descripción corta",
+  "status": "publish",
+  "stock_quantity": 100,
+  "stock_status": "instock",
+  "manage_stock": true,
+  "backorders": "no",
+  "featured": true,
+  "image": "https://url-imagen-principal.jpg",
+  "gallery": [
+    "https://url-imagen-1.jpg",
+    "https://url-imagen-2.jpg"
+  ],
+  "categories": ["antibioticos", "medicamentos-de-receta"],
+  "tags": ["infecciones", "antibiotico"],
+  "upsell_skus": ["SKU-456", "SKU-789"],
+  "crosssell_skus": ["SKU-111"],
+  "meta": {
+    "_marca": "MK",
+    "_registro_invima": "122212",
+    "_tipo_de_producto": "Medicamento",
+    "_needs_rx": "true"
+  },
+  "jet_taxonomies": {
+    "laboratorios": ["101"],
+    "principio-activo": ["amoxicilina"],
+    "departamentosciudades": ["91"]
+  }
+}
+```
+
+### 🎯 Casos de Uso Comunes
+
+#### 1️⃣ Crear Producto Individual
+```bash
+POST /wp-json/custom-api/v1/product
+Content-Type: application/json
+X-API-KEY: rwYK B0nN kHbq ujB3 XRbZ slCt
+
+{
+  "sku": "PARA500-20TAB",
+  "title": "Paracetamol 500mg - 20 Tabletas",
+  "regular_price": "5000",
+  "stock_quantity": 200,
+  "status": "publish"
+}
+```
+
+#### 2️⃣ Sincronización Masiva (Batch)
+> **Fuente:** [PostBatch Actualizado.csv](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20PostBatch%20Actualizado.csv)
+
+```bash
+POST /wp-json/custom-api/v1/products/batch
+Content-Type: application/json
+
+{
+  "mode": "create_only",  // "create_only" | "upsert"
+  "products": [
+    { "sku": "SKU-1001", "title": "Producto 1", ... },
+    { "sku": "SKU-1002", "title": "Producto 2", ... }
+  ]
+}
+```
+
+#### 3️⃣ Actualizar Stock por SKU
+```bash
+PUT /wp-json/custom-api/v1/product/sku/PARA500-20TAB
+
+{
+  "stock_quantity": 150,
+  "stock_status": "instock"
+}
+```
+
+#### 4️⃣ Búsqueda con Filtros
+```bash
+GET /wp-json/custom-api/v1/products?category=antibioticos&status=publish&per_page=10
+GET /wp-json/custom-api/v1/products?search=XEROLAN
+GET /wp-json/custom-api/v1/products?per_page=10&page=3
+```
+
+#### 5️⃣ Eliminar Productos en Lote
+```bash
+POST /wp-json/custom-api/v1/products/batch/delete
+
+{
+  "ids": [456, 789],
+  "skus": ["SKU-123", "SKU-456"]
+}
+```
+
+---
+
+## 🛒 2. API de Órdenes
+
+> **Fuente:** [Api PharmaPlus V2 - Orders.csv](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Orders.csv)
+
+### 🔧 Endpoints Disponibles
+
+```
+POST   /custom-api/v1/orders              → Crear orden individual
+POST   /custom-api/v1/orders/batch        → Crear múltiples órdenes
+GET    /custom-api/v1/order/{id}          → Obtener orden por ID
+GET    /custom-api/v1/orders              → Listar órdenes (con filtros)
+PUT    /custom-api/v1/order/{id}          → Actualizar orden
+PUT    /custom-api/v1/orders/batch        → Actualizar múltiples órdenes
+DELETE /custom-api/v1/order/{id}          → Eliminar orden
+POST   /custom-api/v1/orders/batch/delete → Eliminar múltiples órdenes
+```
+
+### 📊 Filtros Disponibles
+
+| Parámetro | Descripción | Ejemplo |
+|-----------|-------------|---------|
+| `page` | Número de página | `?page=1` |
+| `per_page` | Resultados por página | `?per_page=10` |
+| `status` | Estado de orden | `?status=processing` |
+| `customer_id` | ID de usuario | `?customer_id=123` |
+| `customer_email` | Email de usuario | `?customer_email=user@example.com` |
+| `search` | Búsqueda general | `?search=chrismgarrido` |
+| `orderby` | Ordenar por | `?orderby=date` |
+| `order` | Dirección | `?order=DESC` |
+
+### 🏷️ Estados de Orden
+
+```
+pending      → Pendiente
+processing   → Procesando
+on-hold      → En espera
+completed    → Completada
+cancelled    → Cancelada
+refunded     → Reembolsada
+failed       → Fallida
+```
+
+### 📝 Estructura de Orden
+
+```json
+{
+  "customer_id": 11,
+  "customer_email": "cliente@example.com",
+  "billing": {
+    "first_name": "Christian",
+    "last_name": "Martinez",
+    "email": "cliente@example.com",
+    "phone": "3110000000",
+    "address_1": "Calle 1",
+    "city": "Bogotá",
+    "country": "CO"
+  },
+  "shipping": {
+    "first_name": "Ana",
+    "last_name": "Pérez",
+    "address_1": "Calle 1",
+    "city": "Bogotá",
+    "country": "CO"
+  },
+  "items": [
+    { "sku": "4652", "quantity": 2, "price": 15000 },
+    { "product_id": 8683, "quantity": 1, "price": 15000 }
+  ],
+  "shipping_lines": [
+    { "method_id": "flat_rate", "method_title": "Envío estándar", "total": 8000 }
+  ],
+  "coupon_lines": [
+    { "code": "DESC10" }
+  ],
+  "fee_lines": [
+    { "name": "Empaque", "total": 2500 }
+  ],
+  "payment_method": "cod",
+  "payment_method_title": "Contra entrega",
+  "status": "processing",
+  "set_paid": true,
+  "transaction_id": "T-ABC-001",
+  "meta": {
+    "_fuente": "api",
+    "_canal": "erp"
+  }
+}
+```
+
+### 🎯 Casos de Uso
+
+#### 1️⃣ Crear Orden desde ERP
+```bash
+POST /custom-api/v1/orders
+
+{
+  "customer_email": "cliente@example.com",
+  "billing": { ... },
+  "items": [
+    { "sku": "4652", "quantity": 2, "price": 15000 }
+  ],
+  "status": "processing",
+  "set_paid": true,
+  "transaction_id": "ERP-12345"
+}
+```
+
+#### 2️⃣ Actualizar Estado de Orden
+```bash
+PUT /custom-api/v1/order/987
+
+{
+  "status": "completed",
+  "set_paid": true,
+  "transaction_id": "T-XYZ-999"
+}
+```
+
+#### 3️⃣ Listar Órdenes Procesando
+```bash
+GET /custom-api/v1/orders?page=1&per_page=10&status=processing
+```
+
+#### 4️⃣ Batch: Crear Múltiples Órdenes
+```bash
+POST /custom-api/v1/orders/batch
+
+{
+  "orders": [
+    { "customer_email": "cliente1@example.com", ... },
+    { "customer_email": "cliente2@example.com", ... }
+  ]
+}
+```
+
+---
+
+## 💼 3. API de Tablas de Negocio (B2B/B2C)
+
+> **Fuente:** [Api PharmaPlus V2 - Base B2B B2C.csv](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Base%20B2B%20B2C.csv)
+
+### 📋 Tablas Disponibles
+
+#### 1️⃣ **cliente-descuento-item** (B2B)
+Descuentos personalizados por cliente y producto.
+
+```
+GET    /wp-json/custom-api/v1/cliente-descuento-item
+GET    /wp-json/custom-api/v1/cliente-descuento-item/{id}
+POST   /wp-json/custom-api/v1/cliente-descuento-item
+PUT    /wp-json/custom-api/v1/cliente-descuento-item/{id}
+DELETE /wp-json/custom-api/v1/cliente-descuento-item/{id}
+```
+
+**Estructura:**
+```json
+{
+  "CLIENTE_ID": 1001,
+  "CONVENIO_ID": 2,
+  "COSTO_TIPO_ID": 1,
+  "PORCENTAJE_COM": 5.25,
+  "ITEM_ID": 8755,
+  "VALOR": 15000,
+  "FECHA_INICIAL": "2025-07-21",
+  "FECHA_FINAL": "2025-08-21"
+}
+```
+
+#### 2️⃣ **convenio** (B2B)
+Convenios empresariales.
+
+```
+GET    /wp-json/custom-api/v1/convenio
+GET    /wp-json/custom-api/v1/convenio/{id}
+POST   /wp-json/custom-api/v1/convenio
+PUT    /wp-json/custom-api/v1/convenio/{id}
+DELETE /wp-json/custom-api/v1/convenio/{id}
+```
+
+#### 3️⃣ **costo-tipo** (B2B)
+Tipos de costo para clientes corporativos.
+
+```
+GET    /wp-json/custom-api/v1/costo-tipo
+GET    /wp-json/custom-api/v1/costo-tipo/{id}
+POST   /wp-json/custom-api/v1/costo-tipo
+PUT    /wp-json/custom-api/v1/costo-tipo/{id}
+DELETE /wp-json/custom-api/v1/costo-tipo/{id}
+```
+
+#### 4️⃣ **descuento-call** (B2C)
+Descuentos para clientes finales (call center).
+
+```
+GET    /wp-json/custom-api/v1/descuento-call
+GET    /wp-json/custom-api/v1/descuento-call/{id}
+POST   /wp-json/custom-api/v1/descuento-call
+PUT    /wp-json/custom-api/v1/descuento-call/{id}
+DELETE /wp-json/custom-api/v1/descuento-call/{id}
+```
+
+#### 5️⃣ **laboratorio**
+Catálogo de laboratorios farmacéuticos.
+
+```
+GET    /wp-json/custom-api/v1/laboratorio
+GET    /wp-json/custom-api/v1/laboratorio/{id}
+POST   /wp-json/custom-api/v1/laboratorio
+PUT    /wp-json/custom-api/v1/laboratorio/{id}
+DELETE /wp-json/custom-api/v1/laboratorio/{id}
+```
+
+#### 6️⃣ **precio-distrib** (B2B)
+Precios especiales para distribuidores.
+
+```
+GET    /wp-json/custom-api/v1/precio-distrib
+GET    /wp-json/custom-api/v1/precio-distrib/{id}
+POST   /wp-json/custom-api/v1/precio-distrib
+PUT    /wp-json/custom-api/v1/precio-distrib/{id}
+DELETE /wp-json/custom-api/v1/precio-distrib/{id}
+```
+
+---
+
+## 🔍 4. Tabla Faltante: `item_ptc` (Promociones)
+
+### ⚠️ Diagnóstico
+- **Estado:** ❌ **NO EXISTE** en la API actual
+- **Ubicación Esperada:** `/wp-json/custom-api/v1/item-ptc`
+- **Problema:** No está registrada en `$cmu_tables` del snippet CUSTOM_API
+
+### 📊 Estructura Esperada (Basada en Snippet #21)
+```json
+{
+  "ITEM_ID": "4652",              // SKU del producto base
+  "ITEM_ID_RECAMBIO": "68146",    // SKU del producto regalo
+  "POR_COMPRA_DE": 2,             // Cantidad mínima a comprar
+  "RECIBE_PTC": 1,                // Cantidad de regalo
+  "FECHA_INICIO": "2025-01-01",   // Fecha inicio promoción
+  "FECHA_FIN": "2025-12-31"       // Fecha fin promoción
+}
+```
+
+### ✅ Solución Propuesta
+Ver [Punto 19 del Plan de Desarrollo](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/plan_desarrollo_31_puntos.md#L190-L292) para implementación completa.
+
+---
+
+## 🔐 5. Seguridad y Mejores Prácticas
+
+### 🛡️ Autenticación
+```javascript
+const headers = {
+  'Content-Type': 'application/json',
+  'X-API-KEY': process.env.WORDPRESS_API_KEY
+};
+```
+
+### ⚡ Rate Limiting
+- **Recomendación:** Máximo 60 requests/minuto
+- **Batch Operations:** Preferir siempre sobre múltiples requests individuales
+
+### 🔄 Sincronización Eficiente
+
+#### ✅ **CORRECTO:** Batch Update
+```javascript
+// Actualizar 100 productos en 1 request
+await fetch('/wp-json/custom-api/v1/products/batch', {
+  method: 'POST',
+  body: JSON.stringify({
+    mode: 'upsert',
+    products: [...100 productos]
+  })
+});
+```
+
+#### ❌ **INCORRECTO:** Requests Individuales
+```javascript
+// 100 requests separados (lento y sobrecarga el servidor)
+for (const product of products) {
+  await fetch(`/wp-json/custom-api/v1/product/sku/${product.sku}`, {
+    method: 'PUT',
+    body: JSON.stringify(product)
+  });
+}
+```
+
+---
+
+## 📚 6. Resumen de Endpoints por Categoría
+
+### 🛍️ Productos
+| Operación | Endpoint | Método |
+|-----------|----------|--------|
+| Crear individual | `/product` | POST |
+| Crear batch | `/products/batch` | POST |
+| Listar | `/products` | GET |
+| Obtener por SKU | `/product/sku/{sku}` | GET |
+| Actualizar por SKU | `/product/sku/{sku}` | PUT |
+| Actualizar batch | `/products/sku/batch` | PUT |
+| Eliminar por SKU | `/product/sku/{sku}` | DELETE |
+| Eliminar batch | `/products/batch/delete` | POST |
+
+### 📦 Órdenes
+| Operación | Endpoint | Método |
+|-----------|----------|--------|
+| Crear individual | `/orders` | POST |
+| Crear batch | `/orders/batch` | POST |
+| Listar | `/orders` | GET |
+| Obtener por ID | `/order/{id}` | GET |
+| Actualizar | `/order/{id}` | PUT |
+| Actualizar batch | `/orders/batch` | PUT |
+| Eliminar | `/order/{id}` | DELETE |
+| Eliminar batch | `/orders/batch/delete` | POST |
+
+### 💼 Tablas de Negocio
+| Tabla | Endpoint Base | Tipo |
+|-------|---------------|------|
+| Cliente Descuento | `/cliente-descuento-item` | B2B |
+| Convenio | `/convenio` | B2B |
+| Costo Tipo | `/costo-tipo` | B2B |
+| Descuento Call | `/descuento-call` | B2C |
+| Laboratorio | `/laboratorio` | General |
+| Precio Distribuidor | `/precio-distrib` | B2B |
+| **Item PTC** | `/item-ptc` | **🔴 PENDIENTE** |
+
+---
+
+## 🎓 7. Ejemplos de Integración
+
+### Node.js / Next.js
+```typescript
+// services/wordpress-api.ts
+const API_BASE = 'https://tienda.pharmaplus.com.co/wp-json/custom-api/v1';
+const API_KEY = process.env.WORDPRESS_API_KEY;
+
+export async function syncProductsFromERP(products: Product[]) {
+  const response = await fetch(`${API_BASE}/products/batch`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY
+    },
+    body: JSON.stringify({
+      mode: 'upsert',
+      products
+    })
+  });
+  
+  return response.json();
+}
+
+export async function getOrdersByStatus(status: string) {
+  const response = await fetch(
+    `${API_BASE}/orders?status=${status}&per_page=50`,
+    {
+      headers: { 'X-API-KEY': API_KEY }
+    }
+  );
+  
+  return response.json();
+}
+```
+
+### Python (ERP Integration)
+```python
+import requests
+
+API_BASE = "https://tienda.pharmaplus.com.co/wp-json/custom-api/v1"
+API_KEY = "rwYK B0nN kHbq ujB3 XRbZ slCt"
+
+def sync_products(products):
+    response = requests.post(
+        f"{API_BASE}/products/batch",
+        headers={
+            "Content-Type": "application/json",
+            "X-API-KEY": API_KEY
+        },
+        json={
+            "mode": "upsert",
+            "products": products
+        }
+    )
+    return response.json()
+
+def update_order_status(order_id, status):
+    response = requests.put(
+        f"{API_BASE}/order/{order_id}",
+        headers={"X-API-KEY": API_KEY},
+        json={"status": status}
+    )
+    return response.json()
+```
+
+---
+
+## 📖 Referencias Cruzadas
+
+### Documentos Relacionados
+- [CUSTOM_API_V3.3.md](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/snippets/CUSTOM_API_V3.3.md) → Implementación completa del snippet
+- [Snippet #21: Beneficios B2C](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/snippets/woocommerce_beneficios_b2c.php) → Lógica de promociones PTC
+- [Plan de Desarrollo 31 Puntos](file:///f:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/plan_desarrollo_31_puntos.md) → Estado de implementación
+
+### Archivos Fuente CSV
+1. [Base B2B B2C](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Base%20B2B%20B2C.csv)
+2. [Orders](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Orders.csv)
+3. [PostBatch Actualizado](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20PostBatch%20Actualizado.csv)
+4. [Productos](file:///F:/CLIENTES/PHARMAPLUS/pharma-headless-1a%20Vercel/docs/Apis/Api%20PharmaPlus%20V2%20-%20Productos.csv)
+
+---
+
+## ✅ Checklist de Implementación
+
+### Frontend (Headless)
+- [x] Consumir API de productos (`lib/woocommerce.ts`)
+- [x] Filtrado por stock (`stockStatus: 'instock'`)
+- [x] Búsqueda de productos (incluyendo agotados)
+- [ ] Integrar API de promociones PTC (pendiente endpoint)
+- [ ] Mostrar descuentos B2B según usuario logueado
+
+### Backend (WordPress)
+- [x] CUSTOM_API_V3.3 desplegado
+- [x] Endpoints de productos funcionando
+- [x] Endpoints de órdenes funcionando
+- [x] Tablas B2B/B2C registradas
+- [ ] **Agregar tabla `item_ptc` a CUSTOM_API**
+- [ ] Webhooks para notificar ERP de nuevas órdenes
+
+### ERP
+- [ ] Sincronización automática de inventario (batch)
+- [ ] Actualización de precios en tiempo real
+- [ ] Creación de órdenes desde WordPress
+- [ ] Gestión de promociones PTC
+
+---
+
+**Última Actualización:** 2026-02-06  
+**Versión API:** V2 (SKU-based)  
+**Estado:** ✅ Documentación Completa

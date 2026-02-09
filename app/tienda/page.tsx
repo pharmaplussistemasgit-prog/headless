@@ -11,11 +11,12 @@ export const metadata = {
 export const revalidate = 300;
 
 export default async function TiendaPage(props: {
-  searchParams: Promise<{ category?: string; page?: string; search?: string; min_price?: string; max_price?: string }>;
+  searchParams: Promise<{ category?: string; brand?: string; page?: string; search?: string; min_price?: string; max_price?: string }>;
 }) {
   const searchParams = await props.searchParams;
   // Extract params
   const categorySlug = searchParams?.category;
+  const brandId = searchParams?.brand;
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const search = searchParams?.search;
   const minPrice = searchParams?.min_price;
@@ -28,22 +29,30 @@ export default async function TiendaPage(props: {
     getAllProductCategories(),
   ]);
 
-  // 2. Resolve category slug to ID
+  // 2. Resolve category slug or ID
   let categoryId: string | undefined;
   if (categorySlug) {
-    const matchedCat = categories.find(c => c.slug.toLowerCase() === categorySlug.toLowerCase());
-    // If found, use ID. If not found, use '-1' to force empty result
-    categoryId = matchedCat ? matchedCat.id.toString() : '-1';
+    // If it's a numeric ID, use it directly. Otherwise, find by slug.
+    const isNumericId = /^\d+$/.test(categorySlug);
+    if (isNumericId) {
+      categoryId = categorySlug;
+    } else {
+      const matchedCat = categories.find(c => c.slug.toLowerCase() === categorySlug.toLowerCase());
+      // If not found by slug, use '-1' to force empty result
+      categoryId = matchedCat ? matchedCat.id.toString() : '-1';
+    }
   }
 
   // 3. Fetch products with resolved ID
   const productsData = await getProducts({
     category: categoryId,
+    laboratory: brandId,
     search: search,
     page: page,
     perPage: 12, // Standard page size
     minPrice: minPrice,
     maxPrice: maxPrice,
+    stockStatus: search ? null : 'instock', // Show OOS only in search
   });
 
   return (

@@ -1,0 +1,650 @@
+[
+  {
+    "id": 3289,
+    "name": "LAFRANCOL",
+    "slug": "lafrancol",
+    "count": 194
+  },
+  {
+    "id": 3293,
+    "name": "TECNOQUIMICAS MK",
+    "slug": "tecnoquimicas-mk",
+    "count": 144
+  },
+  {
+    "id": 3281,
+    "name": "PROCAPS FARMA RX",
+    "slug": "procaps-farma-rx",
+    "count": 138
+  },
+  {
+    "id": 3291,
+    "name": "SIEGFRIED FARMA",
+    "slug": "siegfried-farma",
+    "count": 110
+  },
+  {
+    "id": 3286,
+    "name": "BUSSIE FARMA",
+    "slug": "bussie-farma",
+    "count": 105
+  },
+  {
+    "id": 3282,
+    "name": "EUROFARMA",
+    "slug": "eurofarma",
+    "count": 103
+  },
+  {
+    "id": 3280,
+    "name": "PROCAPS GENERICOS COLMED",
+    "slug": "procaps-genericos-colmed",
+    "count": 85
+  },
+  {
+    "id": 3324,
+    "name": "MEGALABS MEDIHEALT",
+    "slug": "megalabs-medihealt",
+    "count": 76
+  },
+  {
+    "id": 3327,
+    "name": "PFIZER S.A.S",
+    "slug": "pfizer-s-a-s",
+    "count": 74
+  },
+  {
+    "id": 3290,
+    "name": "ABBOTT FORMAS NUTRICIONALES",
+    "slug": "abbott-formas-nutricionales",
+    "count": 72
+  },
+  {
+    "id": 3320,
+    "name": "HUMAX",
+    "slug": "humax",
+    "count": 71
+  },
+  {
+    "id": 3330,
+    "name": "ASPEN",
+    "slug": "aspen",
+    "count": 61
+  },
+  {
+    "id": 3283,
+    "name": "SIEGFRIED DERMA",
+    "slug": "siegfried-derma",
+    "count": 58
+  },
+  {
+    "id": 3313,
+    "name": "SEVEN PHARMA",
+    "slug": "seven-pharma",
+    "count": 52
+  },
+  {
+    "id": 3321,
+    "name": "FAGRON",
+    "slug": "fagron",
+    "count": 48
+  },
+  {
+    "id": 3298,
+    "name": "ASTRAZENECA COLOMBIA SAS",
+    "slug": "astrazeneca-colombia-sas",
+    "count": 42
+  },
+  {
+    "id": 3329,
+    "name": "EPIDERMIQUE S.A.",
+    "slug": "epidermique-s-a",
+    "count": 39
+  },
+  {
+    "id": 3322,
+    "name": "BIOHEALTHY SAS",
+    "slug": "biohealthy-sas",
+    "count": 38
+  },
+  {
+    "id": 3317,
+    "name": "MSD",
+    "slug": "msd",
+    "count": 38
+  },
+  {
+    "id": 3335,
+    "name": "SKINDRUG S.A.",
+    "slug": "skindrug-s-a",
+    "count": 38
+  },
+  {
+    "id": 3302,
+    "name": "TECNOQUIMICAS VISION",
+    "slug": "tecnoquimicas-vision",
+    "count": 37
+  },
+  {
+    "id": 3308,
+    "name": "AXON PHARMA SAS",
+    "slug": "axon-pharma-sas",
+    "count": 36
+  },
+  {
+    "id": 3287,
+    "name": "MEGALABS FARMA",
+    "slug": "megalabs-farma",
+    "count": 36
+  },
+  {
+    "id": 3300,
+    "name": "XINETIX PHARMA S.A.S",
+    "slug": "xinetix-pharma-s-a-s",
+    "count": 36
+  },
+  {
+    "id": 3296,
+    "name": "PROCAPS FARMA OTC",
+    "slug": "procaps-farma-otc",
+    "count": 35
+  },
+  {
+    "id": 3297,
+    "name": "FAES FARMA COLOMBIA S.A.S.",
+    "slug": "faes-farma-colombia-s-a-s",
+    "count": 34
+  },
+  {
+    "id": 3279,
+    "name": "PROCAPS CONSUMO",
+    "slug": "procaps-consumo",
+    "count": 32
+  },
+  {
+    "id": 3309,
+    "name": "PHARMALAB",
+    "slug": "pharmalab",
+    "count": 29
+  },
+  {
+    "id": 3362,
+    "name": "ROCHE",
+    "slug": "roche",
+    "count": 29
+  },
+  {
+    "id": 3315,
+    "name": "HAIKO NATURAL SAS",
+    "slug": "haiko-natural-sas",
+    "count": 28
+  },
+  {
+    "id": 3292,
+    "name": "ABBVIE EYE CARE",
+    "slug": "abbvie-eye-care",
+    "count": 23
+  },
+  {
+    "id": 3319,
+    "name": "BARIATRIC AND NUTRITIONAL SUPPORTS S A S",
+    "slug": "bariatric-and-nutritional-supports-s-a-s",
+    "count": 23
+  },
+  {
+    "id": 3359,
+    "name": "HUMANCARE DERMA",
+    "slug": "humancare-derma",
+    "count": 22
+  },
+  {
+    "id": 3303,
+    "name": "VESALIUS PHARMA S.A.S.",
+    "slug": "vesalius-pharma-s-a-s",
+    "count": 22
+  },
+  {
+    "id": 3341,
+    "name": "AULEN PHARMA S.A.",
+    "slug": "aulen-pharma-s-a",
+    "count": 21
+  },
+  {
+    "id": 3301,
+    "name": "OFTALMOQUIMICA",
+    "slug": "oftalmoquimica",
+    "count": 21
+  },
+  {
+    "id": 3284,
+    "name": "SOPHIA LABORATORIO",
+    "slug": "sophia-laboratorio",
+    "count": 21
+  },
+  {
+    "id": 3318,
+    "name": "CLOSTER DERMA",
+    "slug": "closter-derma",
+    "count": 20
+  },
+  {
+    "id": 3230,
+    "name": "1969",
+    "slug": "1969",
+    "count": 19
+  },
+  {
+    "id": 3217,
+    "name": "347",
+    "slug": "347",
+    "count": 19
+  },
+  {
+    "id": 3336,
+    "name": "GADOR DERMA",
+    "slug": "gador-derma",
+    "count": 18
+  },
+  {
+    "id": 3306,
+    "name": "SUIPHAR FARMA",
+    "slug": "suiphar-farma",
+    "count": 18
+  },
+  {
+    "id": 3304,
+    "name": "ALCON LABORATORIOS",
+    "slug": "alcon-laboratorios",
+    "count": 15
+  },
+  {
+    "id": 3294,
+    "name": "IPCA",
+    "slug": "ipca",
+    "count": 14
+  },
+  {
+    "id": 3316,
+    "name": "NEWFOUNDLAND DIAGNOSTICS S.A.S",
+    "slug": "newfoundland-diagnostics-s-a-s",
+    "count": 14
+  },
+  {
+    "id": 3305,
+    "name": "SUIPHAR DERMA",
+    "slug": "suiphar-derma",
+    "count": 14
+  },
+  {
+    "id": 3271,
+    "name": "1091",
+    "slug": "1091",
+    "count": 13
+  },
+  {
+    "id": 3350,
+    "name": "MEGALABS POEN",
+    "slug": "megalabs-poen",
+    "count": 13
+  },
+  {
+    "id": 3312,
+    "name": "TIES",
+    "slug": "ties",
+    "count": 13
+  },
+  {
+    "id": 3245,
+    "name": "2033",
+    "slug": "2033",
+    "count": 12
+  },
+  {
+    "id": 3263,
+    "name": "442",
+    "slug": "442",
+    "count": 12
+  },
+  {
+    "id": 3334,
+    "name": "ASTELLAS",
+    "slug": "astellas",
+    "count": 12
+  },
+  {
+    "id": 3288,
+    "name": "PROCAPS FARMIONI",
+    "slug": "procaps-farmioni",
+    "count": 12
+  },
+  {
+    "id": 3232,
+    "name": "1978",
+    "slug": "1978",
+    "count": 11
+  },
+  {
+    "id": 3342,
+    "name": "HUMANCARE FARMA",
+    "slug": "humancare-farma",
+    "count": 10
+  },
+  {
+    "id": 3363,
+    "name": "QUIMIDERM S.A.S",
+    "slug": "quimiderm-s-a-s",
+    "count": 10
+  },
+  {
+    "id": 3339,
+    "name": "EPITHELIUM",
+    "slug": "epithelium",
+    "count": 9
+  },
+  {
+    "id": 3356,
+    "name": "MEGALABS DERMATOLOGIA",
+    "slug": "megalabs-dermatologia",
+    "count": 9
+  },
+  {
+    "id": 3343,
+    "name": "NEILMED LATAM COLOMBIA S.A.S.",
+    "slug": "neilmed-latam-colombia-s-a-s",
+    "count": 9
+  },
+  {
+    "id": 3351,
+    "name": "SUIPHAR NUTRICION",
+    "slug": "suiphar-nutricion",
+    "count": 9
+  },
+  {
+    "id": 3257,
+    "name": "935",
+    "slug": "935",
+    "count": 8
+  },
+  {
+    "id": 3314,
+    "name": "CLOSTER FARMA",
+    "slug": "closter-farma",
+    "count": 8
+  },
+  {
+    "id": 3307,
+    "name": "INTERPHARM",
+    "slug": "interpharm",
+    "count": 8
+  },
+  {
+    "id": 3325,
+    "name": "MEGALABS LINEA DS",
+    "slug": "megalabs-linea-ds",
+    "count": 8
+  },
+  {
+    "id": 3285,
+    "name": "PHARMA PLUS",
+    "slug": "pharma-plus",
+    "count": 8
+  },
+  {
+    "id": 3096,
+    "name": "PHARMAPRIX COLOMBIA",
+    "slug": "864",
+    "count": 8
+  },
+  {
+    "id": 3244,
+    "name": "1967",
+    "slug": "1967",
+    "count": 7
+  },
+  {
+    "id": 3269,
+    "name": "663",
+    "slug": "663",
+    "count": 7
+  },
+  {
+    "id": 3332,
+    "name": "DIABETRICS",
+    "slug": "diabetrics",
+    "count": 7
+  },
+  {
+    "id": 3337,
+    "name": "GADOR SALUD FEMENINA",
+    "slug": "gador-salud-femenina",
+    "count": 7
+  },
+  {
+    "id": 3311,
+    "name": "NOVUM",
+    "slug": "novum",
+    "count": 7
+  },
+  {
+    "id": 3357,
+    "name": "ABBVIE FARMA",
+    "slug": "abbvie-farma",
+    "count": 6
+  },
+  {
+    "id": 3333,
+    "name": "I-LAB",
+    "slug": "i-lab",
+    "count": 6
+  },
+  {
+    "id": 3331,
+    "name": "PHARMAPRIX DERMA",
+    "slug": "pharmaprix-derma",
+    "count": 6
+  },
+  {
+    "id": 3256,
+    "name": "1901",
+    "slug": "1901",
+    "count": 5
+  },
+  {
+    "id": 3218,
+    "name": "433",
+    "slug": "433",
+    "count": 5
+  },
+  {
+    "id": 3352,
+    "name": "BUSSIE DERMA",
+    "slug": "bussie-derma",
+    "count": 5
+  },
+  {
+    "id": 3340,
+    "name": "KAHAI SAS",
+    "slug": "kahai-sas",
+    "count": 5
+  },
+  {
+    "id": 3354,
+    "name": "MEGALABS HIDRISAGE",
+    "slug": "megalabs-hidrisage",
+    "count": 5
+  },
+  {
+    "id": 3358,
+    "name": "PHARMAPRIX OFTA",
+    "slug": "pharmaprix-ofta",
+    "count": 5
+  },
+  {
+    "id": 3239,
+    "name": "1541",
+    "slug": "1541",
+    "count": 4
+  },
+  {
+    "id": 3255,
+    "name": "239",
+    "slug": "239",
+    "count": 4
+  },
+  {
+    "id": 3323,
+    "name": "MEGA LIFESCIENCES COLOMBIA S.A.S.",
+    "slug": "mega-lifesciences-colombia-s-a-s",
+    "count": 4
+  },
+  {
+    "id": 3270,
+    "name": "1174",
+    "slug": "1174",
+    "count": 3
+  },
+  {
+    "id": 3250,
+    "name": "1581",
+    "slug": "1581",
+    "count": 3
+  },
+  {
+    "id": 3219,
+    "name": "528",
+    "slug": "528",
+    "count": 3
+  },
+  {
+    "id": 3295,
+    "name": "FLETES",
+    "slug": "fletes",
+    "count": 3
+  },
+  {
+    "id": 3355,
+    "name": "SIEGFRIED NUTRICION",
+    "slug": "siegfried-nutricion",
+    "count": 3
+  },
+  {
+    "id": 3275,
+    "name": "1172",
+    "slug": "1172",
+    "count": 2
+  },
+  {
+    "id": 3353,
+    "name": "BUSSIE OFTA",
+    "slug": "bussie-ofta",
+    "count": 2
+  },
+  {
+    "id": 3344,
+    "name": "CLOSTER FARMA ESPECIAL",
+    "slug": "closter-farma-especial",
+    "count": 2
+  },
+  {
+    "id": 3326,
+    "name": "FRESENIUS KABI",
+    "slug": "fresenius-kabi",
+    "count": 2
+  },
+  {
+    "id": 3338,
+    "name": "GADOR SNC",
+    "slug": "gador-snc",
+    "count": 2
+  },
+  {
+    "id": 3299,
+    "name": "RA COMPANY",
+    "slug": "ra-company",
+    "count": 2
+  },
+  {
+    "id": 3360,
+    "name": "TECNOQUIMICAS ETIKOS",
+    "slug": "tecnoquimicas-etikos",
+    "count": 2
+  },
+  {
+    "id": 3276,
+    "name": "1178",
+    "slug": "1178",
+    "count": 1
+  },
+  {
+    "id": 3259,
+    "name": "1250",
+    "slug": "1250",
+    "count": 1
+  },
+  {
+    "id": 3254,
+    "name": "1255",
+    "slug": "1255",
+    "count": 1
+  },
+  {
+    "id": 3278,
+    "name": "1302",
+    "slug": "1302",
+    "count": 1
+  },
+  {
+    "id": 3222,
+    "name": "1423",
+    "slug": "1423",
+    "count": 1
+  },
+  {
+    "id": 3253,
+    "name": "1781",
+    "slug": "1781",
+    "count": 1
+  },
+  {
+    "id": 3262,
+    "name": "1919",
+    "slug": "1919",
+    "count": 1
+  },
+  {
+    "id": 3225,
+    "name": "2032",
+    "slug": "2032",
+    "count": 1
+  },
+  {
+    "id": 3328,
+    "name": "H C MEDICAL LTDA",
+    "slug": "h-c-medical-ltda",
+    "count": 1
+  },
+  {
+    "id": 3345,
+    "name": "HEEL",
+    "slug": "heel",
+    "count": 1
+  },
+  {
+    "id": 3310,
+    "name": "MERCK S.A",
+    "slug": "merck-s-a",
+    "count": 1
+  },
+  {
+    "id": 3364,
+    "name": "mk",
+    "slug": "mk",
+    "count": 1
+  },
+  {
+    "id": 3361,
+    "name": "PHARMADERM MAGISTRALES",
+    "slug": "pharmaderm-magistrales",
+    "count": 1
+  }
+]

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { MappedProduct } from "@/types/product";
 import { useQuickView } from "@/context/QuickViewContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { useCart } from "@/context/CartContext";
 import { Heart } from "lucide-react";
 import { isColdChain } from "@/lib/coldChain";
 import { getProductPromo } from "@/lib/promotions";
@@ -20,6 +21,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { openQuickView } = useQuickView();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { addItem } = useCart();
   const isFavorite = isInWishlist(product.id);
   const promoLabel = getProductPromo(product);
 
@@ -33,6 +35,25 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const handleOpenModal = () => {
     openQuickView(product);
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // Si el producto tiene variaciones (type === 'variable'), abrir modal
+    // De lo contrario, agregar directamente al carrito
+    if (product.type === 'variable') {
+      openQuickView(product);
+    } else {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0] || '/placeholder.png',
+        quantity: 1,
+        slug: product.slug,
+      });
+    }
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
@@ -151,13 +172,10 @@ export default function ProductCard({ product }: ProductCardProps) {
 
             </div>
             <div className="mt-auto">
-              {/* Stop Propagation on Button to allow direct Add To Cart if needed, OR just open modal too. User requested Open Modal. */}
+              {/* Agregar al carrito directamente, o abrir modal si tiene variaciones */}
               <Button
                 disabled={!product.isInStock}
-                onClick={(e) => {
-                  e.stopPropagation(); // Avoid double trigger if card also has logic, but we WANT modal.
-                  handleOpenModal();
-                }}
+                onClick={handleAddToCart}
                 className={cn(
                   "w-full h-10 rounded-xl font-bold text-sm uppercase tracking-wide shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2",
                   product.isInStock

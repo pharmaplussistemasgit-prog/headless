@@ -39,7 +39,7 @@ interface HeroSectionProps {
     featuredProds?: MinimalProduct[];
 }
 
-export default function HeroSection({ slides, featuredProds = [] }: HeroSectionProps) {
+export function HeroSection({ slides, featuredProds = [] }: HeroSectionProps) {
     const [category, setCategory] = useState('');
     const [brand, setBrand] = useState('');
     const swiperRef = useRef<SwiperType | null>(null);
@@ -99,7 +99,6 @@ export default function HeroSection({ slides, featuredProds = [] }: HeroSectionP
                                             alt={slide.title || 'PharmaPlus Offer'}
                                             fill
                                             priority={index === 0}
-                                            fetchPriority={index === 0 ? "high" : "auto"}
                                             className="object-cover object-center"
                                             sizes="(max-width: 1024px) 100vw, 70vw"
                                         />
@@ -175,13 +174,7 @@ export default function HeroSection({ slides, featuredProds = [] }: HeroSectionP
                     </div>
                 </div>
             </div>
-
-            <style jsx global>{`
-                /* Hide Swiper Pagination */
-                .swiper-pagination-custom {
-                    display: none;
-                }
-            `}</style>
         </section>
     );
 }
+

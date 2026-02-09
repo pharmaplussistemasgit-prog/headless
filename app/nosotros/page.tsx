@@ -19,7 +19,7 @@ export default function AboutUsPage() {
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
                         Nosotros
                     </h1>
-                    <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-xl text-blue-100 max-w-5xl mx-auto leading-relaxed">
                         Conectando a las personas de Colombia con sus tratamientos, con humanidad, tecnología y dedicación.
                     </p>
                 </div>
@@ -167,29 +167,29 @@ export default function AboutUsPage() {
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[
-                                { 
-                                    title: "1. Seguridad y cumplimiento", 
-                                    desc: "Garantizamos la integridad de los productos en toda la cadena logística, cumpliendo con normas INVIMA y BPA. Trabajamos con más de 120 compañías nacionales y multinacionales, asegurando productos confiables y una entrega segura y trazable." 
+                                {
+                                    title: "1. Seguridad y cumplimiento",
+                                    desc: "Garantizamos la integridad de los productos en toda la cadena logística, cumpliendo con normas INVIMA y BPA. Trabajamos con más de 120 compañías nacionales y multinacionales, asegurando productos confiables y una entrega segura y trazable."
                                 },
-                                { 
-                                    title: "2. Excelencia operativa", 
-                                    desc: "Ejecutamos procesos eficientes, trazables y medibles, orientados a resultados y a la satisfacción total del cliente." 
+                                {
+                                    title: "2. Excelencia operativa",
+                                    desc: "Ejecutamos procesos eficientes, trazables y medibles, orientados a resultados y a la satisfacción total del cliente."
                                 },
-                                { 
-                                    title: "3. Innovación y mejora continua", 
-                                    desc: "Promovemos una cultura de aprendizaje constante que impulsa la optimización tecnológica, la digitalización y la innovación en la cadena de suministro farmacéutica." 
+                                {
+                                    title: "3. Innovación y mejora continua",
+                                    desc: "Promovemos una cultura de aprendizaje constante que impulsa la optimización tecnológica, la digitalización y la innovación en la cadena de suministro farmacéutica."
                                 },
-                                { 
-                                    title: "4. Servicio centrado en el paciente", 
-                                    desc: "Cada decisión, acción y entrega está guiada por la empatía y el compromiso con las personas que dependen de nuestros servicios." 
+                                {
+                                    title: "4. Servicio centrado en el paciente",
+                                    desc: "Cada decisión, acción y entrega está guiada por la empatía y el compromiso con las personas que dependen de nuestros servicios."
                                 },
-                                { 
-                                    title: "5. Transparencia y ética empresarial", 
-                                    desc: "Actuamos con honestidad, integridad y responsabilidad en cada interacción, fortaleciendo la confianza con nuestros aliados, autoridades y comunidades, cumpliendo las normas SAGRILAFT y PTEE." 
+                                {
+                                    title: "5. Transparencia y ética empresarial",
+                                    desc: "Actuamos con honestidad, integridad y responsabilidad en cada interacción, fortaleciendo la confianza con nuestros aliados, autoridades y comunidades, cumpliendo las normas SAGRILAFT y PTEE."
                                 },
-                                { 
-                                    title: "6. Trabajo en equipo y desarrollo del talento", 
-                                    desc: "Fomentamos un entorno colaborativo donde la formación, el respeto y la comunicación abierta impulsan el crecimiento individual y colectivo." 
+                                {
+                                    title: "6. Trabajo en equipo y desarrollo del talento",
+                                    desc: "Fomentamos un entorno colaborativo donde la formación, el respeto y la comunicación abierta impulsan el crecimiento individual y colectivo."
                                 }
                             ].map((item, index) => (
                                 <div key={index} className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
@@ -225,7 +225,7 @@ export default function AboutUsPage() {
 
             {/* NUESTRO COMPROMISO */}
             <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--color-pharma-green)] text-white text-center">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-bold mb-6">Nuestro Compromiso</h2>
                     <p className="text-xl md:text-2xl font-medium leading-relaxed">
                         "En Pharmaplus, la calidad no es un proceso: es una actitud diaria.

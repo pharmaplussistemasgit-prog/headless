@@ -1,0 +1,231 @@
+Api V1 {id},
+Método,Endpoint
+POST,/wp-json/custom-api/v1/product
+GET,/wp-json/custom-api/v1/products
+GET,/wp-json/custom-api/v1/product/{id}
+PUT,/wp-json/custom-api/v1/product/id/{id}
+DELETE,/wp-json/custom-api/v1/product/{id}
+,
+Api V2 {sku},
+Método,Endpoint
+POST,/wp-json/custom-api/v1/product
+POST,/wp-json/custom-api/v1/products/batch
+GET,/wp-json/custom-api/v1/products
+GET,/wp-json/custom-api/v1/product/sku/{sku}
+PUT,/wp-json/custom-api/v1/product/sku/{sku}
+PUT,/wp-json/custom-api/v1/products/sku/batch
+DELETE,/wp-json/custom-api/v1/product/sku/{sku}
+DELETE,/wp-json/custom-api/v1/products/batch/delete
+,
+,
+Api V1 & V2,
+Post Json,/wp-json/custom-api/v1/product
+"{
+  ""title"": ""Test Product"",
+  ""sku"": ""SKU-123"",
+  ""regular_price"": ""19.99"",
+  ""sale_price"": ""12.50"",
+  ""description"": ""Descripción larga"",
+  ""short_description"": ""Descripción corta"",
+  ""categories"": [""cuidado-personal"", ""exfoliantes""],
+  ""tags"": [""agentes-aho""],
+  ""jet_taxonomies"": {
+    ""laboratorios"": [""mk""]
+  },
+  ""image"": ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/07/72225-_KINEX_CAJA_X_30_CAP.jpg"",
+  ""gallery"": [
+    ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/07/4652-_NASAMIST_HIPERTONICO_SPRAY_X_125_ML.jpgg"",
+    ""https://lavender-locust-203807.hostingersite.com/wp-content/uploads/2025/07/4652-_NASAMIST_HIPERTONICO_SPRAY_X_125_ML.jpg""
+  ],
+  ""upsell_skus"": [""68146"", ""4652""],
+  ""crosssell_skus"": [""4652"", ""68146""]
+}
+",
+,
+Api V2,
+Post Batch Json,/wp-json/custom-api/v1/products/batch
+"{
+  ""products"": [
+    {
+      ""sku"": ""AMOX500-21CAP"",
+      ""name"": ""Amoxicilina 500mg - 21 Cápsulas"",
+      ""type"": ""simple"",
+      ""description"": ""Antibiótico de amplio espectro para el tratamiento de infecciones bacterianas."",
+      ""short_description"": ""Amoxicilina 500mg, caja con 21 cápsulas."",
+      ""price"": ""12.50"",
+      ""regular_price"": ""15.00"",
+      ""sale_price"": ""12.50"",
+      ""stock_quantity"": 100,
+      ""manage_stock"": true,
+      ""status"": ""publish"",
+      ""categories"": [""antibioticos"", ""medicamentos-de-receta""],
+      ""tags"": [""infecciones"", ""antibiotico"", ""receta-medica""],
+      ""image"": ""https://midominio.com/uploads/amoxicilina-500mg.jpg"",
+      ""gallery"": [
+        ""https://midominio.com/uploads/amoxicilina-500mg-1.jpg"",
+        ""https://midominio.com/uploads/amoxicilina-500mg-2.jpg""
+      ],
+      ""jet_taxonomies"": {
+        ""laboratorios"": [""mk""],
+        ""principio-activo"": [""amoxicilina""]
+      }
+    },
+    {
+      ""sku"": ""PARA500-20TAB"",
+      ""name"": ""Paracetamol 500mg - 20 Tabletas"",
+      ""type"": ""simple"",
+      ""description"": ""Analgésico y antipirético para el alivio del dolor y la fiebre."",
+      ""short_description"": ""Paracetamol 500mg, caja con 20 tabletas."",
+      ""price"": ""4.20"",
+      ""regular_price"": ""5.00"",
+      ""sale_price"": ""4.20"",
+      ""stock_quantity"": 200,
+      ""manage_stock"": true,
+      ""status"": ""publish"",
+      ""categories"": [""analgesicos"", ""medicamentos-de-venta-libre""],
+      ""tags"": [""dolor"", ""fiebre"", ""analgesico""],
+      ""image"": ""https://midominio.com/uploads/paracetamol-500mg.jpg"",
+      ""gallery"": [
+        ""https://midominio.com/uploads/paracetamol-500mg-1.jpg"",
+        ""https://midominio.com/uploads/paracetamol-500mg-2.jpg""
+      ],
+      ""jet_taxonomies"": {
+        ""forma-farmaceutica"": [""tabletas""],
+        ""principio-activo"": [""paracetamol""]
+      }
+    },
+    {
+      ""sku"": ""IBUP400-30TAB"",
+      ""name"": ""Ibuprofeno 400mg - 30 Tabletas"",
+      ""type"": ""simple"",
+      ""description"": ""Antiinflamatorio no esteroideo para el alivio del dolor e inflamación."",
+      ""short_description"": ""Ibuprofeno 400mg, caja con 30 tabletas."",
+      ""price"": ""7.80"",
+      ""regular_price"": ""9.00"",
+      ""sale_price"": ""7.80"",
+      ""stock_quantity"": 150,
+      ""manage_stock"": true,
+      ""status"": ""publish"",
+      ""categories"": [""antiinflamatorios"", ""medicamentos-de-venta-libre""],
+      ""tags"": [""inflamacion"", ""dolor"", ""antiinflamatorio""],
+      ""image"": ""https://midominio.com/uploads/ibuprofeno-400mg.jpg"",
+      ""gallery"": [
+        ""https://midominio.com/uploads/ibuprofeno-400mg-1.jpg"",
+        ""https://midominio.com/uploads/ibuprofeno-400mg-2.jpg""
+      ],
+      ""jet_taxonomies"": {
+        ""laboratorios"": [""mk""],
+        ""principio-activo"": [""ibuprofeno""]
+      }
+    }
+  ]
+}
+",
+,
+Api V1 & V2,
+Get,/wp-json/custom-api/v1/product
+,
+Api V1,
+Get,/wp-json/custom-api/v1/product/{id}
+,
+Api V2,
+Get,/wp-json/custom-api/v1/product/sku/{sku}
+,
+Api V2,
+Get con Filtros,
+Obtener todos los productos de una categoría,/wp-json/custom-api/v1/products?category=corporal
+Buscar productos que contengan una palabra clave,/wp-json/custom-api/v1/products?search=XEROLAN
+Paginación de 10 en 10,/wp-json/custom-api/v1/products?per_page=10&page=3
+Por Status,/wp-json/custom-api/v1/products?status=publish
+Filtrar combinando parámetros,/wp-json/custom-api/v1/products?category=antibioticos&status=publish&per_page=5
+,
+Api V1,
+PUT Json,/wp-json/custom-api/v1/product/id/{id}
+"{
+  ""name"": ""Amoxicilina 500mg - 21 Cápsulas (Nuevo Precio)"",
+  ""regular_price"": ""16.00"",
+  ""sale_price"": ""13.50"",
+  ""stock_quantity"": 80,
+  ""status"": ""publish"",
+  ""description"": ""Antibiótico de amplio espectro para infecciones bacterianas."",
+  ""short_description"": ""Amoxicilina 500mg en cápsulas. Caja con 21 unidades."",
+  ""categories"": [""antibioticos""],
+  ""tags"": [""infecciones"", ""antibiotico"", ""receta-medica""],
+  ""image"": ""https://midominio.com/uploads/amoxicilina-500mg-nuevo.jpg"",
+  ""gallery"": [
+    ""https://midominio.com/uploads/amoxicilina-500mg-nuevo-1.jpg"",
+    ""https://midominio.com/uploads/amoxicilina-500mg-nuevo-2.jpg""
+  ],
+  ""jet_taxonomies"": {
+    ""laboratorios"": [""mk""],
+    ""principio-activo"": [""amoxicilina""]
+  }
+}
+",
+,
+Api V2,
+PUT Json,/wp-json/custom-api/v1/product/{sku}
+"{
+  ""name"": ""Amoxicilina 500mg - 21 Cápsulas (Nuevo Precio)"",
+  ""regular_price"": ""16.00"",
+  ""sale_price"": ""13.50"",
+  ""stock_quantity"": 80,
+  ""status"": ""publish"",
+  ""description"": ""Antibiótico de amplio espectro para infecciones bacterianas."",
+  ""short_description"": ""Amoxicilina 500mg en cápsulas. Caja con 21 unidades."",
+  ""categories"": [""antibioticos""],
+  ""tags"": [""infecciones"", ""antibiotico"", ""receta-medica""],
+  ""image"": ""https://midominio.com/uploads/amoxicilina-500mg-nuevo.jpg"",
+  ""gallery"": [
+    ""https://midominio.com/uploads/amoxicilina-500mg-nuevo-1.jpg"",
+    ""https://midominio.com/uploads/amoxicilina-500mg-nuevo-2.jpg""
+  ],
+  ""jet_taxonomies"": {
+    ""laboratorios"": [""mk""],
+    ""principio-activo"": [""amoxicilina""]
+  }
+}
+",
+,
+Api V2,
+PUT Batch Json,/wp-json/custom-api/v1/products/sku/batch
+"{
+    ""updates"":[
+    {
+        ""sku"": ""SKU-1233"",
+        ""title"": ""Paracetamol 500mg Caja x 16 ACTUALIZADO"",
+        ""regular_price"": ""15.90"",
+        ""sale_price"": ""13.50"",
+        ""stock_quantity"": 150,
+        ""manage_stock"": true,
+        ""stock_status"": ""instock"",
+        ""categories"": [""cuidado-personal"", ""exfoliantes""],
+        ""tags"": [""agentes-aho""]
+    },
+    {
+        ""sku"": ""SKU-4536"",
+        ""title"": ""Ibuprofeno 400mg Blister x 10"",
+        ""regular_price"": ""12.90"",
+        ""sale_price"": ""10.90"",
+        ""stock_quantity"": 200,
+        ""manage_stock"": true,
+        ""stock_status"": ""instock"",
+        ""categories"": [""cuidado-personal"", ""exfoliantes""],
+        ""tags"": [""agentes-aho""]
+    }
+  ]
+}",
+,
+Api V1,
+Delete Json,/wp-json/custom-api/v1/product/{id}
+,
+Api V2,
+Delete Json,/wp-json/custom-api/v1/product/sku/{sku}
+,
+Api V2,
+POST(Delete) Batch Json,/wp-json/custom-api/v1/products/batch/delete
+"{
+  ""ids"": [456, 789],
+  ""skus"": [""SKU-123"", ""SKU-456""]
+}
+",

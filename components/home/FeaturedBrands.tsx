@@ -1,77 +1,148 @@
 'use client';
 
-import Image from 'next/image';
+import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { FEATURED_BRANDS } from '@/lib/brands-data';
 
 export default function FeaturedBrands() {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const checkScroll = () => {
+        if (scrollContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+            setCanScrollLeft(scrollLeft > 0);
+            setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+        }
+    };
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            container.addEventListener('scroll', checkScroll);
+            checkScroll(); // Check initially
+            return () => container.removeEventListener('scroll', checkScroll);
+        }
+    }, [FEATURED_BRANDS.length]);
+
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = direction === 'left' ? -300 : 300;
+            scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    };
+
     return (
-        <section className="py-10 bg-white border-t border-gray-50">
-            <div className="container mx-auto px-4">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-800">
-                    Productos <span className="text-[var(--color-pharma-blue)]">Destacados</span>
-                </h2>
-
-                {/* Horizontal Marquee Container with "Diagonal" Style - Auto Scroll */}
-                <div className="relative group/slider overflow-hidden py-4">
-                    {/* Gradient Masks for fade effect */}
-                    <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-                    <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-
-                    <div className="flex gap-6 animate-scroll-slow px-4 w-max hover:[animation-play-state:paused] items-center">
-                        {/* Triple the list for smoother infinite loop */}
-                        {[...FEATURED_BRANDS, ...FEATURED_BRANDS, ...FEATURED_BRANDS].map((brand, index) => (
-                            <Link
-                                key={`marquee-${index}`}
-                                href={brand.slug ? `/marca/${brand.slug}` : '/tienda'}
-                                className="flex-shrink-0 relative group"
-                                title={brand.title}
-                            >
-                                {/* Diagonal Card Background "Ad Style" */}
-                                <div className="w-52 h-36 md:w-64 md:h-40 bg-white border border-gray-200 shadow-sm rounded-xl transform -skew-x-3 hover:skew-x-0 hover:scale-105 hover:shadow-xl hover:border-[var(--color-pharma-blue)] transition-all duration-300 flex items-center justify-center overflow-hidden relative">
-
-                                    {/* Background Effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-gray-50 to-white opacity-50"></div>
-                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-                                    {/* Ad Badge (Marketing Style) - Reverse Skew */}
-                                    <div className="absolute top-2 right-2 transform skew-x-3 group-hover:skew-x-0 transition-transform duration-300 z-20">
-                                        <span className="bg-[var(--color-pharma-yellow)] text-[var(--color-pharma-blue)] text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
-                                            Destacado
-                                        </span>
-                                    </div>
-
-                                    {/* Logo Container */}
-                                    <div className="transform skew-x-3 group-hover:skew-x-0 transition-transform duration-300 w-4/5 h-3/5 flex items-center justify-center z-10 p-2">
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={brand.url}
-                                            alt={brand.alt}
-                                            className="max-w-full max-h-full object-contain filter grayscale-0 group-hover:scale-110 transition-all duration-500"
-                                            loading="lazy"
-                                        />
-                                    </div>
-
-                                    {/* CTA Overlay (Hover) - "Ver Productos" */}
-                                    <div className="absolute bottom-0 left-0 right-0 bg-[var(--color-pharma-blue)] py-1.5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center skew-x-3 group-hover:skew-x-0">
-                                        <span className="text-white text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
-                                            Ver Productos <span className="text-[var(--color-pharma-yellow)]">→</span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
+        <section className="py-12 bg-white border-t border-gray-100">
+            <div className="container mx-auto px-4 max-w-7xl">
+                {/* Header with Nav Controls */}
+                <div className="flex flex-col md:flex-row justify-between items-end md:items-center mb-8 gap-4">
+                    <div>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+                            Nuestras <span className="text-[var(--color-pharma-blue)]">Marcas</span>
+                        </h2>
+                        <p className="text-gray-500 mt-2 text-sm md:text-base">
+                            Encuentra tus productos favoritos de los mejores laboratorios farmacéuticos.
+                        </p>
                     </div>
 
-                    <style jsx>{`
-                        @keyframes scroll {
-                            0% { transform: translateX(0); }
-                            100% { transform: translateX(-33.33%); } /* Move 1/3 of the total width (since we have 3 sets) */
-                        }
-                        .animate-scroll-slow {
-                            animation: scroll 60s linear infinite; /* Very slow smooth scroll */
-                        }
-                    `}</style>
+                    <div className="flex items-center gap-2">
+                        {/* Navigation Arrows (Desktop) */}
+                        <div className="hidden md:flex gap-2 mr-4">
+                            <button
+                                onClick={() => scroll('left')}
+                                disabled={!canScrollLeft}
+                                className={`p-2 rounded-full border transition-all ${canScrollLeft
+                                    ? 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)] cursor-pointer shadow-sm'
+                                    : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'
+                                    }`}
+                                aria-label="Anterior"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={() => scroll('right')}
+                                disabled={!canScrollRight}
+                                className={`p-2 rounded-full border transition-all ${canScrollRight
+                                    ? 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-[var(--color-pharma-blue)] hover:text-[var(--color-pharma-blue)] cursor-pointer shadow-sm'
+                                    : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'
+                                    }`}
+                                aria-label="Siguiente"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* View All Link */}
+                        <Link
+                            href="/laboratorios"
+                            className="text-[var(--color-pharma-blue)] font-bold text-sm md:text-base hover:text-[var(--color-pharma-green)] transition-colors flex items-center gap-1 group"
+                        >
+                            Ver todas
+                            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Scrollable Container */}
+                <div
+                    ref={scrollContainerRef}
+                    className="flex overflow-x-auto gap-4 py-4 pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+
+                    {FEATURED_BRANDS.map((brand, index) => {
+                        const isEven = index % 2 === 0;
+                        // Alternating styles
+                        const borderColor = isEven ? 'border-blue-100' : 'border-green-100';
+                        const hoverBorder = isEven ? 'group-hover:border-[var(--color-pharma-blue)]' : 'group-hover:border-[var(--color-pharma-green)]';
+                        const textColor = isEven ? 'text-[var(--color-pharma-blue)]' : 'text-[var(--color-pharma-green)]';
+                        const bgHover = isEven ? 'group-hover:bg-blue-50' : 'group-hover:bg-green-50';
+                        const shadowColor = isEven ? 'hover:shadow-blue-100' : 'hover:shadow-green-100';
+
+                        return (
+                            <Link
+                                key={`${brand.slug}-${index}`}
+                                href={`/laboratorios/${brand.slug}`}
+                                className={`snap-start flex-shrink-0 w-36 md:w-48 group bg-white rounded-xl border-2 ${borderColor} ${hoverBorder} ${bgHover} shadow-sm hover:shadow-xl ${shadowColor} transition-all duration-300 flex flex-col items-center justify-between p-4 h-32 md:h-40 relative overflow-hidden`}
+                            >
+                                {/* Decorative circle for "vivid" look */}
+                                <div className={`absolute -top-6 -right-6 w-12 h-12 rounded-full ${isEven ? 'bg-blue-50' : 'bg-green-50'} group-hover:scale-[8] transition-transform duration-500 opacity-20`}></div>
+
+                                <div className="w-full h-full flex items-center justify-center relative z-10">
+                                    {brand.url && brand.url.length > 5 ? (
+                                        /* eslint-disable-next-line @next/next/no-img-element */
+                                        <img
+                                            src={brand.url}
+                                            alt={brand.title || 'Marca'}
+                                            className="max-w-full max-h-20 md:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-105"
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <span className={`text-center font-extrabold ${textColor} text-sm md:text-base line-clamp-3 leading-tight uppercase tracking-tight`}>
+                                            {brand.title}
+                                        </span>
+                                    )}
+                                </div>
+                            </Link>
+                        );
+                    })}
+
+
+                    {/* "See More" Card at the end */}
+                    <Link
+                        href="/laboratorios"
+                        className="snap-start flex-shrink-0 w-36 md:w-48 group bg-gray-50 rounded-xl border border-gray-100 border-dashed hover:border-[var(--color-pharma-blue)] hover:bg-blue-50 transition-all duration-300 flex flex-col items-center justify-center p-4 h-32 md:h-40 cursor-pointer"
+                    >
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition-transform">
+                            <ArrowRight className="w-5 h-5 text-[var(--color-pharma-blue)]" />
+                        </div>
+                        <span className="text-xs md:text-sm font-bold text-gray-500 group-hover:text-[var(--color-pharma-blue)]">
+                            Ver más marcas
+                        </span>
+                    </Link>
                 </div>
             </div>
         </section>

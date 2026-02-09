@@ -143,20 +143,26 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                         Unitarios a ${(product.price / 1).toLocaleString('es-CO')}
                                     </span>
 
-                                    {/* T22: Stock Status Badges */}
-                                    <div className="mt-3">
+                                    {/* T22: Stock Status Badges - Always Show Quantity */}
+                                    <div className="mt-3 flex flex-col gap-2">
                                         {!product.isInStock ? (
-                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wide">
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wide w-fit">
                                                 <AlertCircle size={14} /> Agotado
                                             </span>
-                                        ) : (product.stock && product.stock <= 5) ? (
-                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wide animate-pulse">
-                                                <AlertCircle size={14} /> ¡Solo quedan {product.stock} unidades!
-                                            </span>
                                         ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wide">
-                                                <Check size={14} /> En Stock
+                                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide w-fit ${product.stock && product.stock <= 5 ? 'bg-amber-100 text-amber-700 animate-pulse' : 'bg-green-100 text-green-700'}`}>
+                                                {product.stock && product.stock <= 5 ? <AlertCircle size={14} /> : <Check size={14} />}
+                                                {product.stock ? `Disponibles: ${product.stock} unidades` : 'En Stock'}
                                             </span>
+                                        )}
+
+                                        {/* Promo Dates */}
+                                        {product.isOnSale && (product.dateOnSaleFrom || product.dateOnSaleTo) && (
+                                            <div className="text-xs text-[var(--color-pharma-blue)] font-medium mt-1 p-2 bg-blue-50 rounded border border-blue-100 inline-block w-fit">
+                                                📅 Oferta válida
+                                                {product.dateOnSaleFrom && ` desde ${new Date(product.dateOnSaleFrom).toLocaleDateString()}`}
+                                                {product.dateOnSaleTo && ` hasta ${new Date(product.dateOnSaleTo).toLocaleDateString()}`}
+                                            </div>
                                         )}
                                     </div>
 
@@ -235,6 +241,41 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                         )}
                                     </button>
                                 </div>
+
+                                {/* Out of Stock Explicit Message */}
+                                {!product.isInStock && (
+                                    <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+                                        <div className="bg-red-100 p-2 rounded-full text-red-600 shrink-0 mt-0.5">
+                                            <AlertCircle size={20} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="font-bold text-red-700 text-sm">Producto No Disponible</h4>
+                                            <p className="text-sm text-red-600 mt-1 leading-snug">
+                                                En el momento no hay producto en existencias, por favor comuníquese con nuestras líneas de atención para consultar disponibilidad:
+                                            </p>
+                                            <div className="mt-3 flex flex-col sm:flex-row gap-3">
+                                                <a
+                                                    href="tel:6015934010"
+                                                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-pharma-blue)] text-white rounded-lg hover:bg-blue-800 transition-colors text-sm font-semibold"
+                                                >
+                                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                                    </svg>
+                                                    PBX: (601) 593 - 4010
+                                                </a>
+                                                <a
+                                                    href="https://wa.me/573168397933"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-lg hover:bg-[#20BA5A] transition-colors text-sm font-semibold"
+                                                >
+                                                    <MessageCircle size={16} />
+                                                    WhatsApp: +57 316 839 7933
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="flex items-center gap-2 text-sm text-gray-400">
                                     <span>Comparte</span>

@@ -1,0 +1,131 @@
+/**
+ * Servicio de Promociones "Pague X Lleve Y"
+ * 
+ * ESTADO ACTUAL: Mock con datos hardcodeados
+ * 
+ * PRÓXIMOS PASOS:
+ * 1. Agregar tabla `item_ptc` a CUSTOM_API en WordPress
+ * 2. Reemplazar MOCK_PROMOTIONS con fetch real a:
+ *    GET /wp-json/custom-api/v1/item-ptc
+ * 
+ * Ver documentación completa en:
+ * - docs/erp_wordpress_api_complete.md
+ * - docs/plan_desarrollo_31_puntos.md (Punto 19)
+ */
+
+import type { PromotionRule, ActivePromotion } from '@/types/promotion';
+
+/**
+ * MOCK: Datos de ejemplo basados en el Snippet #21
+ * Estos datos simulan la tabla wp_item_ptc del ERP
+ */
+const MOCK_PROMOTIONS: PromotionRule[] = [
+    {
+        itemId: '4652', // NASAMIST HIPERTONICO
+        giftItemId: '68146',
+        buyQuantity: 2,
+        receiveQuantity: 1,
+        startDate: '2026-01-01',
+        endDate: '2026-12-31',
+    },
+    {
+        itemId: '3294', // Producto ejemplo
+        giftItemId: '76205',
+        buyQuantity: 1,
+        receiveQuantity: 1,
+        startDate: '2026-01-01',
+        endDate: '2026-06-30',
+    },
+    {
+        itemId: '68146',
+        giftItemId: '4652',
+        buyQuantity: 3,
+        receiveQuantity: 2,
+        startDate: '2026-02-01',
+        endDate: '2026-12-31',
+    },
+];
+
+/**
+ * Verifica si una promoción está activa en la fecha actual
+ */
+function isPromotionActive(rule: PromotionRule): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const start = new Date(rule.startDate);
+    const end = new Date(rule.endDate);
+
+    return today >= start && today <= end;
+}
+
+/**
+ * Genera texto descriptivo de la promoción
+ */
+function getPromotionDescription(rule: PromotionRule): string {
+    if (rule.buyQuantity === 1 && rule.receiveQuantity === 1) {
+        return '🎁 Pague 1 Lleve 2';
+    }
+    if (rule.buyQuantity === 2 && rule.receiveQuantity === 1) {
+        return '🎁 Pague 2 Lleve 3';
+    }
+    if (rule.buyQuantity === 3 && rule.receiveQuantity === 2) {
+        return '🎁 Pague 3 Lleve 5';
+    }
+
+    return `🎁 Pague ${rule.buyQuantity} Lleve ${rule.buyQuantity + rule.receiveQuantity}`;
+}
+
+/**
+ * Obtiene todas las promociones activas
+ * 
+ * TODO: Reemplazar con llamada real a la API cuando esté disponible:
+ * ```typescript
+ * const today = new Date().toISOString().split('T')[0];
+ * const response = await fetch(
+ *   `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/item-ptc?` +
+ *   `filters[FECHA_INICIO]<=${today}&filters[FECHA_FIN]>=${today}`,
+ *   {
+ *     headers: {
+ *       'X-API-KEY': process.env.WORDPRESS_API_KEY || ''
+ *     }
+ *   }
+ * );
+ * return response.json();
+ * ```
+ */
+export async function getActivePromotions(): Promise<ActivePromotion[]> {
+    // Simular delay de red para realismo
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const activePromotions: ActivePromotion[] = [];
+
+    for (const rule of MOCK_PROMOTIONS) {
+        if (isPromotionActive(rule)) {
+            activePromotions.push({
+                sku: rule.itemId,
+                rule,
+                description: getPromotionDescription(rule),
+            });
+        }
+    }
+
+    return activePromotions;
+}
+
+/**
+ * Verifica si un producto específico tiene promoción activa
+ */
+export async function getPromotionForProduct(sku: string): Promise<ActivePromotion | null> {
+    const promotions = await getActivePromotions();
+    return promotions.find(p => p.sku === sku) || null;
+}
+
+/**
+ * Obtiene todos los SKUs con promociones activas
+ * Útil para filtrar productos en la página de ofertas
+ */
+export async function getPromotedProductSkus(): Promise<string[]> {
+    const promotions = await getActivePromotions();
+    return promotions.map(p => p.sku);
+}

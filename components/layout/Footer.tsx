@@ -144,8 +144,8 @@ export default function Footer() {
                 <div className="space-y-6 w-full">
                   <div>
                     <h4 className="text-xs text-blue-200 uppercase mb-1">PBX:</h4>
-                    <Link href="tel:6015934005" className="block text-xl md:text-2xl font-bold text-white hover:text-[var(--color-pharma-green)] transition-colors">
-                      (601) 593 - 4005
+                    <Link href="tel:6015934010" className="block text-xl md:text-2xl font-bold text-white hover:text-[var(--color-pharma-green)] transition-colors">
+                      (601) 593 - 4010
                     </Link>
                   </div>
 
@@ -157,8 +157,8 @@ export default function Footer() {
                   </div>
 
                   <div className="space-y-1 text-sm text-blue-100">
-                    <p><span className="font-semibold text-white">Lunes - Viernes:</span> 7:00 am - 9:00 pm</p>
-                    <p><span className="font-semibold text-white">Sábados:</span> 8:00 am - 8:00 pm</p>
+                    <p><span className="font-semibold text-white">Lunes - Viernes:</span> 7:00 am - 6:00 pm</p>
+                    <p><span className="font-semibold text-white">Sábados:</span> 8:00 am - 12:00 pm</p>
                   </div>
 
                   <Link href="mailto:auraolarte@pharmaplus.com.co" className="flex items-center gap-2 text-sm text-white hover:underline break-words hover:text-[var(--color-pharma-green)] transition-colors">
@@ -178,6 +178,8 @@ export default function Footer() {
                   </Link>
                 </h3>
                 <ul className="space-y-3 w-full">
+                  <li><Link href="/pqrs" className="text-sm font-bold text-white hover:text-[var(--color-pharma-green)] transition-colors flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Radicar P.Q.R.S.</Link></li>
+                  <li><Link href="/politicas" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas</Link></li>
                   <li><Link href="/politicas/preguntas-frecuentes" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preguntas Frecuentes</Link></li>
                   <li><Link href="/politicas/terminos-condiciones" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Términos y Condiciones</Link></li>
                   <li><Link href="/politicas/politicas-devolucion" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Políticas de Devoluciones</Link></li>

@@ -154,8 +154,8 @@ export default function PharmaPrimePage() {
                             <div
                                 key={plan.id}
                                 className={`relative bg-white rounded-3xl p-8 border-2 transition-all duration-300 transform hover:-translate-y-2 ${plan.popular
-                                        ? 'border-[var(--color-pharma-blue)] shadow-2xl scale-105 z-10'
-                                        : 'border-transparent shadow-xl hover:border-gray-200'
+                                    ? 'border-[var(--color-pharma-blue)] shadow-2xl scale-105 z-10'
+                                    : 'border-transparent shadow-xl hover:border-gray-200'
                                     }`}
                             >
                                 {plan.popular && (
@@ -184,8 +184,8 @@ export default function PharmaPrimePage() {
                                 </ul>
 
                                 <button className={`w-full py-4 rounded-xl font-bold transition-colors ${plan.popular
-                                        ? 'bg-[var(--color-pharma-blue)] text-white hover:bg-blue-700 shadow-lg shadow-blue-900/20'
-                                        : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                                    ? 'bg-[var(--color-pharma-blue)] text-white hover:bg-blue-700 shadow-lg shadow-blue-900/20'
+                                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                                     }`}>
                                     {plan.cta}
                                 </button>
@@ -197,7 +197,7 @@ export default function PharmaPrimePage() {
 
             {/* FAQ Section */}
             <div className="bg-white py-24 px-4 sm:px-6">
-                <div className="max-w-3xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Preguntas Frecuentes</h2>
                     <div className="space-y-4">
                         {faqs.map((faq, idx) => (

@@ -8,6 +8,7 @@ import ProductCard from '@/components/product/ProductCard';
 import { mapWooProduct } from '@/lib/mappers';
 import { WooProduct } from '@/types/product';
 
+
 interface FeaturedProductsProps {
     title?: ReactNode | string;
     products: Product[];
@@ -46,6 +47,9 @@ export default function FeaturedProducts({
 
     const visibleProducts = products.slice(currentIndex, currentIndex + itemsPerView);
 
+    // Filtrar primero todas las marcas válidas y luego tomar 60
+
+
     return (
         <div className="w-full bg-[var(--color-bg-light)] py-4">
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-[5%]">
@@ -77,7 +81,7 @@ export default function FeaturedProducts({
                         </div>
 
                         {/* Products Carousel */}
-                        <div className="relative">
+                        <div className="relative mb-12">
                             {/* Left Arrow */}
                             <button
                                 onClick={() => scroll('left')}
@@ -108,6 +112,9 @@ export default function FeaturedProducts({
                                 <ChevronRight className="w-6 h-6" />
                             </button>
                         </div>
+
+                        {/* Brands Section - REFACTORIZADA DESDE CERO */}
+
                     </div>
                 </div>
             </div>

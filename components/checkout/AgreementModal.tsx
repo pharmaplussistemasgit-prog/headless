@@ -12,6 +12,7 @@ interface AgreementModalProps {
 
 export default function AgreementModal({ onAuthorized, onCancel }: AgreementModalProps) {
     const [idNumber, setIdNumber] = useState('');
+    const [provider, setProvider] = useState<'coopmsd' | 'inicio_tx'>('inicio_tx'); // Default provider
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -25,17 +26,29 @@ export default function AgreementModal({ onAuthorized, onCancel }: AgreementModa
         setError(null);
 
         try {
-            console.log('Validating ID:', idNumber);
-            // Call our proxy
-            const result = await orbisService.init(idNumber);
-            console.log('Orbis Result:', result);
+            console.log(`Validating ID: ${idNumber} with Provider: ${provider}`);
 
-            // Validate success based on response structure
-            if (result.errorid === 0 && result.transactionid) {
-                toast.success('Convenio Validado Correctamente');
-                onAuthorized(result);
+            // Call our unified proxy
+            const response = await fetch('/api/checkout/validate-agreement', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    provider,
+                    documentId: idNumber
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                toast.success(`Convenio ${provider === 'coopmsd' ? 'Coopmsd' : 'Inicio TX'} Validado`);
+                // Standardize response for the parent component
+                onAuthorized({
+                    ...result,
+                    provider // Pass back which provider was used
+                });
             } else {
-                setError(result.message || 'No se encontró convenio activo para este documento.');
+                setError(result.message || 'No se encontró convenio activo o cupo disponible.');
             }
 
         } catch (err: any) {
@@ -63,6 +76,19 @@ export default function AgreementModal({ onAuthorized, onCancel }: AgreementModa
                 {/* Input */}
                 <div className="space-y-4">
                     <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Selecciona tu Convenio / Fondo
+                        </label>
+                        <select
+                            value={provider}
+                            onChange={(e) => setProvider(e.target.value as 'coopmsd' | 'inicio_tx')}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[var(--color-pharma-blue)] focus:border-transparent outline-none transition-all text-base mb-4 bg-white"
+                            disabled={isLoading}
+                        >
+                            <option value="inicio_tx">Inicio TX (OrbisFarma)</option>
+                            <option value="coopmsd">Coopmsd</option>
+                        </select>
+
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Número de Cédula / Identificación
                         </label>

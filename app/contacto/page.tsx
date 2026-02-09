@@ -69,177 +69,136 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* HERO SECTION */}
-      <div className="bg-[var(--color-pharma-blue)] py-16 px-4 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="relative max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Contáctanos</h1>
-          <p className="text-blue-100 max-w-2xl mx-auto text-lg">
-            Estamos aquí para ayudarte. Escríbenos y nuestro equipo te responderá lo antes posible.
-          </p>
-        </div>
+    <div className="min-h-screen bg-white">
+      {/* HERO SECTION - Keep it but maybe simpler or just the header */}
+      <div className="bg-white py-12 px-4 text-center border-b border-gray-100">
+        <h1 className="text-4xl font-bold text-[var(--color-pharma-green)] mb-4">Contáctenos</h1>
+        <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          Bienvenido a <span className="font-bold text-[var(--color-pharma-blue)]">Pharmaplus</span>, estamos aquí para ayudarte. <br />
+          Completa el formulario a continuación, y nos pondremos en contacto contigo lo antes posible.
+        </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12 -mt-8 relative z-10">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-12 gap-12">
 
-          {/* INFORMACIÓN DE CONTACTO */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
-                <Phone className="w-6 h-6 text-[var(--color-pharma-blue)]" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Línea Nacional</h3>
-              <p className="text-gray-600 mb-4 text-sm">Lunes a Viernes 7:00 am - 6:00 pm<br />Sábados 8:00 am - 12:00 pm</p>
-              <a href="tel:6015934005" className="text-2xl font-bold text-[var(--color-pharma-blue)] hover:underline">
-                (601) 593 4005
-              </a>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
-                <Mail className="w-6 h-6 text-[var(--color-pharma-green)]" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Correo Electrónico</h3>
-              <p className="text-gray-600 mb-4 text-sm">Para consultas generales y soporte.</p>
-              <a href="mailto:atencionalusuario@pharmaplus.com.co" className="text-[var(--color-pharma-green)] font-semibold hover:underline break-words">
-                atencionalusuario@pharmaplus.com.co
-              </a>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
-                <MapPin className="w-6 h-6 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Sede Principal</h3>
-              <p className="text-gray-600 text-sm">
-                Calle 86 # 27-54<br />
-                Bogotá D.C., Colombia
-              </p>
-            </div>
-          </div>
-
-          {/* FORMULARIO */}
-          <div className="lg:col-span-2">
-            <div className="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <MessageCircle className="w-6 h-6 text-[var(--color-pharma-blue)]" />
-                Envíanos un mensaje
-              </h2>
-
-              {success ? (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center animate-in fade-in zoom-in duration-300">
-                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-bold text-green-800 mb-2">¡Mensaje Enviado!</h3>
-                  <p className="text-green-700">
-                    Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad posible.
-                  </p>
-                  <button
-                    onClick={() => setSuccess(false)}
-                    className="mt-6 px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
-                  >
-                    Enviar otro mensaje
-                  </button>
+          {/* FORMULARIO - Centered or Prominent */}
+          <div className="lg:col-span-10 lg:col-start-2">
+            {success ? (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center animate-in fade-in zoom-in duration-300">
+                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Send className="w-8 h-8" />
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {errorMsg && (
-                    <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm mb-4">
-                      {errorMsg}
-                    </div>
-                  )}
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700">Nombre Completo *</label>
-                      <input
-                        type="text"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                        placeholder="Tu nombre"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700">Teléfono / Celular</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                        placeholder="300 123 4567"
-                      />
-                    </div>
+                <h3 className="text-xl font-bold text-green-800 mb-2">¡Mensaje Enviado!</h3>
+                <p className="text-green-700">
+                  Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad posible.
+                </p>
+                <button
+                  onClick={() => setSuccess(false)}
+                  className="mt-6 px-6 py-2 bg-[var(--color-pharma-green)] text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                >
+                  Enviar otro mensaje
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {errorMsg && (
+                  <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm mb-4">
+                    {errorMsg}
                   </div>
+                )}
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Correo Electrónico *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                      placeholder="tucorreo@ejemplo.com"
-                    />
-                  </div>
+                <div className="space-y-1">
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded border border-blue-100 focus:border-[var(--color-pharma-blue)] outline-none transition-all placeholder-blue-300 text-blue-900"
+                    placeholder="Nombres"
+                  />
+                </div>
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Asunto *</label>
-                    <select
-                      name="subject"
-                      required
-                      value={formData.subject}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all bg-white"
-                    >
-                      <option value="">Selecciona un asunto</option>
-                      <option value="Servicio al Cliente">Servicio al Cliente</option>
-                      <option value="Pedidos y Domicilios">Pedidos y Domicilios</option>
-                      <option value="Convenios">Convenios Empresariales</option>
-                      <option value="Reclamos">Quejas y Reclamos (PQRS)</option>
-                      <option value="Otro">Otro</option>
-                    </select>
-                  </div>
+                <div className="space-y-1">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded border border-blue-100 focus:border-[var(--color-pharma-blue)] outline-none transition-all placeholder-blue-300 text-blue-900"
+                    placeholder="Email"
+                  />
+                </div>
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Mensaje *</label>
-                    <textarea
-                      name="message"
-                      required
-                      rows={5}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
-                      placeholder="¿En qué podemos ayudarte?"
-                    ></textarea>
-                  </div>
+                <div className="space-y-1">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded border border-blue-100 focus:border-[var(--color-pharma-blue)] outline-none transition-all placeholder-blue-300 text-blue-900"
+                    placeholder="Teléfono"
+                  />
+                </div>
 
+                <div className="space-y-1">
+                  <input
+                    type="hidden"
+                    name="subject"
+                    value="Contacto desde Web"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <textarea
+                    name="message"
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded border border-blue-100 focus:border-[var(--color-pharma-blue)] outline-none transition-all placeholder-blue-300 text-blue-900 resize-none"
+                    placeholder="Mensaje"
+                  ></textarea>
+                </div>
+
+                <div className="pt-4 flex justify-center lg:justify-start">
+                  {/* Screenshot shows button bottom left or full width? Screenshot cut off. 
+                      User said "boton verde". I will make it full width or consistent. 
+                      Standard clean forms often have it left or centered. 
+                  */}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[var(--color-pharma-blue)] text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
+                    className="px-12 py-3 bg-[var(--color-pharma-green)] text-white font-bold rounded hover:bg-green-700 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    {loading ? (
-                      'Enviando...'
-                    ) : (
-                      <>
-                        Enviar Mensaje
-                        <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
+                    {loading ? 'Enviando...' : 'Enviar'}
                   </button>
-                </form>
-              )}
+                </div>
+              </form>
+            )}
+          </div>
+
+          {/* INFO LATERAL (Opcional, maybe below or removed if mimicking exact simple form?) 
+               User said "Incluir formularios... con los mismos campos". 
+               I'll keep the contact details below or to the side but simplified.
+           */}
+          <div className="lg:col-span-12 mt-12 grid md:grid-cols-3 gap-6 text-center border-t border-gray-100 pt-8">
+            <div>
+              <h4 className="font-bold text-[var(--color-pharma-blue)]">Calle 86 # 27-54</h4>
+              <p className="text-sm text-gray-500">Bogotá D.C., Colombia</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-[var(--color-pharma-blue)]">(601) 593 4005</h4>
+              <p className="text-sm text-gray-500">Línea Nacional</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-[var(--color-pharma-green)]">atencionalusuario@pharmaplus.com.co</h4>
+              <p className="text-sm text-gray-500">Email de Soporte</p>
             </div>
           </div>
+
         </div>
       </div>
     </div>

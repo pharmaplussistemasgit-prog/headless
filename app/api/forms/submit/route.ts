@@ -6,6 +6,11 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { formId, data } = body;
 
+        console.log(`[API/forms/submit] Received request for Form ID: ${formId}`, {
+            email: data?.user_email, // Log only safe fields
+            hasPassword: !!data?.user_password
+        });
+
         if (!formId || !data) {
             return NextResponse.json(
                 { success: false, message: 'Faltan datos obligatorios (Form ID o Data)' },

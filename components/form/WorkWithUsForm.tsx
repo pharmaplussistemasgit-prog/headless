@@ -93,66 +93,84 @@ export default function WorkWithUsForm() {
     };
 
     return (
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            <div className="bg-[var(--color-pharma-blue)] p-8 text-white text-center">
-                <h3 className="text-2xl font-bold mb-2">Regístrate en nuestra Base de Datos</h3>
-                <p className="text-blue-100 text-sm">Completa el formulario y nos pondremos en contacto.</p>
+        <div className="bg-[#f8faff] rounded-2xl overflow-hidden">
+            <div className="pt-8 px-8 text-center">
+                <h3 className="text-3xl font-bold text-[#1e3a8a] mb-2">Registra Tus Datos</h3>
+                <p className="text-[#1e3a8a] text-sm">
+                    Bienvenido a <span className="font-bold">Pharmaplus</span>, estamos aquí para ayudarte.<br />
+                    Completa el formulario a continuación, y nos pondremos en contacto contigo lo antes posible.
+                </p>
             </div>
 
             <form
                 ref={formRef}
                 action={handleSubmit}
-                className="p-8 space-y-6"
+                className="p-8 space-y-4"
             >
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Nombre Completo *</label>
+                    {/* No label in screenshot, just placeholder? Screenshot shows labels ABOVE input in blue text? 
+                        Screenshot 1 (Contact): Labels above? No, placeholders.
+                        Screenshot 2 (Registra): "Nombres" is a placeholder or label inside? Looks like placeholder in white box.
+                        Wait, usually cleaner forms have placeholders. I will use placeholder as primary label visually if that matches.
+                        Actually, let's keep it simple: No Visible Label, just placeholder, or Floating Label.
+                        The screenshot has "Nombres", "Email" inside the white box. So simple placeholders.
+                     */}
                     <input
                         type="text"
                         name="name"
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                        placeholder="Tu nombre completo"
+                        className="w-full px-4 py-3 rounded bg-white border border-blue-100 text-blue-900 placeholder-blue-300 outline-none focus:ring-1 focus:ring-blue-200"
+                        placeholder="Nombres"
                     />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Correo Electrónico *</label>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                            placeholder="tucorreo@ejemplo.com"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Teléfono / Celular *</label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            required
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-pharma-blue)] focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                            placeholder="300 123 4567"
-                        />
-                    </div>
+                <div className="space-y-4">
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        className="w-full px-4 py-3 rounded bg-white border border-blue-100 text-blue-900 placeholder-blue-300 outline-none focus:ring-1 focus:ring-blue-200"
+                        placeholder="Email"
+                    />
+                    <input
+                        type="tel"
+                        name="phone"
+                        required
+                        className="w-full px-4 py-3 rounded bg-white border border-blue-100 text-blue-900 placeholder-blue-300 outline-none focus:ring-1 focus:ring-blue-200"
+                        placeholder="Teléfono"
+                    />
                 </div>
 
-                {/* File Upload Area */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Adjuntar Hoja de Vida (PDF) *</label>
+                    <textarea
+                        name="message"
+                        rows={4}
+                        // Message field is in screenshot? Yes "Mensaje".
+                        className="w-full px-4 py-3 rounded bg-white border border-blue-100 text-blue-900 placeholder-blue-300 outline-none focus:ring-1 focus:ring-blue-200 resize-none"
+                        placeholder="Mensaje"
+                    ></textarea>
+                </div>
 
-                    <div
-                        className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer group
-                            ${dragActive ? 'border-[var(--color-pharma-blue)] bg-blue-50' : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'}
-                            ${file ? 'bg-green-50 border-green-200' : ''}
-                        `}
-                        onDragEnter={handleDrag}
-                        onDragLeave={handleDrag}
-                        onDragOver={handleDrag}
-                        onDrop={handleDrop}
-                        onClick={() => fileInputRef.current?.click()}
-                    >
+                {/* File Upload Area - Text "Adjuntar Hoja De Vida" blue link style? 
+                    The screenshot shows "Adjuntar Hoja De Vida" as a text link, then a file input below?
+                    I will replicate a simple file input or the existing upload area but simplified.
+                    Let's use a simple file input for "cleanliness" as per the screenshot or keep the drag drop but make it look cleaner.
+                */}
+                <div>
+                    <label className="block text-blue-800 font-medium mb-2 text-sm cursor-pointer hover:underline">
+                        Adjuntar Hoja De Vida
+                    </label>
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="bg-[#f0f0f0] text-gray-700 px-4 py-2 rounded text-sm border border-gray-300 hover:bg-gray-200"
+                        >
+                            Seleccionar archivo
+                        </button>
+                        <span className="text-gray-500 text-sm italic">
+                            {file ? file.name : 'Ningún archivo seleccionado'}
+                        </span>
                         <input
                             ref={fileInputRef}
                             type="file"
@@ -160,49 +178,27 @@ export default function WorkWithUsForm() {
                             className="hidden"
                             onChange={handleFileChange}
                         />
-
-                        {file ? (
-                            <div className="flex flex-col items-center animate-in fade-in zoom-in duration-300">
-                                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-3">
-                                    <CheckCircle className="w-6 h-6" />
-                                </div>
-                                <span className="font-semibold text-green-800 text-sm">{file.name}</span>
-                                <span className="text-xs text-green-600 mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setFile(null); }}
-                                    className="mt-3 text-xs font-bold text-red-500 hover:text-red-700 flex items-center gap-1 bg-white px-3 py-1.5 rounded-full shadow-sm hover:shadow"
-                                >
-                                    <X className="w-3 h-3" /> Eliminar archivo
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center">
-                                <div className="w-12 h-12 bg-blue-50 text-[var(--color-pharma-blue)] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                    <Upload className="w-6 h-6" />
-                                </div>
-                                <span className="font-semibold text-gray-700 text-sm">Haz clic o arrastra tu PDF aquí</span>
-                                <span className="text-xs text-gray-400 mt-2">Máximo 2MB · Solo formato PDF</span>
-                            </div>
+                        {file && (
+                            <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setFile(null); }}
+                                className="text-red-500 hover:text-red-700 text-xs font-bold"
+                            >
+                                <X size={14} />
+                            </button>
                         )}
                     </div>
+                    <p className="text-xs text-gray-400 mt-1">Maximum file size: 2 MB. Solo Pdf</p>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-4">
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-[var(--color-pharma-green)] text-white font-bold py-4 rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-900/10 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
+                        className="w-full bg-[var(--color-pharma-green)] text-white font-bold py-3 rounded hover:bg-green-700 transition-colors shadow-sm disabled:opacity-70"
                     >
-                        {loading ? 'Enviando postulación...' : (
-                            <>
-                                Enviar Postulación
-                                <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </>
-                        )}
+                        {loading ? 'Enviando...' : 'Enviar'}
                     </button>
-                    <p className="text-center text-xs text-gray-400 mt-4">
-                        Al enviar este formulario aceptas nuestra política de tratamiento de datos personales.
-                    </p>
                 </div>
             </form>
         </div>

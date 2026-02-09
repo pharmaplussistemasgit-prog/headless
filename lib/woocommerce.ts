@@ -24,7 +24,15 @@ export function getWooApi(): API {
   const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY || "";
   const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET || "";
 
-  _api = new API({ url, consumerKey, consumerSecret, version: "wc/v3" });
+  _api = new API({
+    url,
+    consumerKey,
+    consumerSecret,
+    version: "wc/v3",
+    axiosConfig: {
+      timeout: 30000 // 30 seconds timeout
+    }
+  });
   return _api;
 }
 
@@ -221,15 +229,17 @@ export async function wcFetchRaw<T>(endpoint: string, params: Record<string, unk
   const url = buildUrl(endpoint, params);
   console.log(`[WooCommerce] Fetching: ${url}`);
 
-  const fetchOptions: RequestInit = {};
-  if (revalidate === 0) {
-    fetchOptions.cache = 'no-store';
-  } else {
-    fetchOptions.next = { revalidate };
-  }
-
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
+    const fetchOptions: RequestInit = {
+      signal: controller.signal,
+      ...((revalidate === 0) ? { cache: 'no-store' } : { next: { revalidate } })
+    };
+
     const res = await fetch(url, fetchOptions);
+    clearTimeout(timeoutId);
+
     if (!res.ok) {
       const msg = `WooCommerce fetch failed: ${res.status} ${res.statusText}`;
       if (res.status === 401 || res.status === 403) {
@@ -385,6 +395,9 @@ export async function getProducts(params: {
   featured?: boolean;
   minPrice?: string;
   maxPrice?: string;
+  laboratory?: string;
+  laboratorySlug?: string;
+  stockStatus?: 'instock' | 'outofstock' | 'onbackorder' | null;
 } = {}): Promise<{ products: Product[]; total: number; totalPages: number }> {
   try {
     const {
@@ -399,17 +412,24 @@ export async function getProducts(params: {
       featured,
       minPrice,
       maxPrice,
+      laboratory,
+      laboratorySlug,
+      stockStatus = 'instock', // Default to instock
     } = params;
 
-    // Build query params including min/max price which were manually added before
+    // Build query params
     const queryParams: any = {
       per_page: perPage,
       page,
       orderby,
       order,
       status: 'publish',
-      stock_status: 'instock', // Force only in-stock products globally
     };
+
+    // Only apply stock status filter if not explicitly null (null means show all)
+    if (stockStatus) {
+      queryParams.stock_status = stockStatus;
+    }
 
     if (sku) queryParams.sku = sku;
     if (category) queryParams.category = category;
@@ -418,6 +438,11 @@ export async function getProducts(params: {
     if (featured !== undefined) queryParams.featured = featured;
     if (minPrice) queryParams.min_price = minPrice;
     if (maxPrice) queryParams.max_price = maxPrice;
+
+    // El snippet PHP en WordPress espera 'laboratorios' para filtrar por esta taxonomía
+    if (laboratory || laboratorySlug) {
+      queryParams.laboratorios = laboratory || laboratorySlug;
+    }
 
     // Use wcFetchRaw for caching (default 600s revalidation)
     // cache-tag could be added here for on-demand revalidation if needed

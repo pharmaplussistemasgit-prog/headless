@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText, CreditCard, Building, CheckCircle, Loader2 } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText, CreditCard, Building, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/product/ProductCard';
@@ -19,10 +19,13 @@ interface CheckoutFormProps {
 import { COLOMBIA_STATES, COLOMBIA_CITIES, ISO_TO_DANE_MAP } from '@/lib/colombia-data';
 import PrescriptionUploader from './PrescriptionUploader';
 
+import { isHoliday, isSunday } from '@/lib/holidays';
+
 export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     const { items, cartTotal, removeItem, updateQuantity, clearCart, requiresColdChain, coldChainFee, requiresPrescription } = useCart();
     const [isLoading, setIsLoading] = useState(false);
     const [isCompany, setIsCompany] = useState(false);
+    const [marketingAccepted, setMarketingAccepted] = useState(false); // T25: Marketing Consent
 
     // T25: OrbisFarma / Convenios State
     const [agreementTransactionId, setAgreementTransactionId] = useState<string | null>(null);
@@ -30,6 +33,7 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
 
     const [deliveryMethod, setDeliveryMethod] = useState<'shipping' | 'pickup'>('shipping');
     const [deliveryDate, setDeliveryDate] = useState('');
+    const [dateError, setDateError] = useState(''); // NEW: Date Error State
     const [prescriptionConfirmed, setPrescriptionConfirmed] = useState(false);
     const [prescriptionFileUrl, setPrescriptionFileUrl] = useState<string | null>(null);
 
@@ -221,9 +225,14 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     };
 
     const handleAgreementAuthorized = (data: any) => {
-        setAgreementTransactionId(data.transactionid || data.response?.transactionid);
+        // data: { ...response, provider }
+        setAgreementTransactionId(data.transactionid || data.response?.transactionid || data.transactionId);
+        // We might want to store the provider to send it later, or encoded in the ID if needed.
+        // For now, we assume the backend handles the ID validation downstream or we just pass the ID.
+        // Ideally we should pass the provider too.
         setShowAgreementModal(false);
-        toast.success(`Cupo autorizado. Saldo disponible: ${data.response?.cardbalance || 'N/A'}`);
+        const msg = data.provider === 'coopmsd' ? 'Cupo Coopmsd autorizado' : 'Cupo Inicio TX autorizado';
+        toast.success(`${msg}. Saldo: ${data.balance || data.response?.cardbalance || 'N/A'}`);
     };
 
     const handleCheckout = async (isAgreement = false) => {
@@ -237,8 +246,8 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
         }
 
         // ... validation continued
-        if (!customerData.firstName || !customerData.email || !customerData.documentId) {
-            toast.error("Completa tus datos personales");
+        if (!customerData.firstName || !customerData.email || !customerData.documentId || !customerData.phone) {
+            toast.error("Completa tus datos personales (incluyendo celular)");
             return;
         }
 
@@ -282,6 +291,7 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         items: items,
                         agreementId: agreementTransactionId,
                         agreementCardNumber: customerData.documentId, // Assuming ID is the card number used
+                        marketingAccepted, // T25: Pass marketing consent
                         shippingLine: {
                             method_id: deliveryMethod === 'pickup' ? 'local_pickup' : 'flat_rate',
                             method_title: shippingMethodName,
@@ -337,7 +347,7 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             params.append('billing_first_name', customerData.firstName);
             params.append('billing_last_name', customerData.lastName);
             params.append('billing_email', customerData.email);
-            params.append('billing_phone', customerData.phone);
+            params.append('billing_phone', customerData.phone); // Ensure phone is passed
 
             // T24: If Pickup, use Store Address as Shipping Address (Billing remains user's generally, but for simplicity we set both)
             if (deliveryMethod === 'pickup') {
@@ -358,6 +368,11 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             params.append('billing_country', 'CO');
             params.append('billing_postcode', '000000');
             params.append('shipping_country', 'CO');
+
+            // T25: Marketing Consent
+            if (marketingAccepted) {
+                params.append('marketing_optin', 'yes');
+            }
 
             if (isCompany && customerData.companyName) {
                 params.append('billing_company', customerData.companyName);
@@ -392,8 +407,10 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             const handoverUrl = `${baseUrl}?${params.toString()}`;
             toast.success("Redirigiendo a pasarela de pagos segura...");
 
-            // Clear cart before handover
-            clearCart();
+            // T25: FIX - DO NOT CLEAR CART HERE
+            // clearCart(); 
+            // We rely on the backend (WordPress) to handle the cart or the user to clear it on success page return.
+            // Clearing it here causes data loss if the user hits "Back" from the checkout page.
 
             setTimeout(() => {
                 window.location.href = handoverUrl;
@@ -634,20 +651,56 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         )}
 
                         {/* T25: Delivery Schedule */}
-                        <div className="pt-4 border-t border-gray-100">
+                        <div className="pt-4 border-t border-gray-100 relative">
                             <label className="text-xs font-bold uppercase text-gray-500 mb-1 flex items-center gap-2">
                                 <Calendar className="w-4 h-4" />
                                 ¿Cuándo quieres recibir tu pedido?
                             </label>
+
+                            {/* Inline Error Message */}
+                            {dateError && (
+                                <div className="absolute top-0 right-0 -mt-2 bg-red-100 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full animate-in fade-in slide-in-from-bottom-1 flex items-center gap-1">
+                                    <AlertCircle className="w-3 h-3" />
+                                    {dateError}
+                                </div>
+                            )}
+
                             <input
                                 type="date"
-                                className="w-full p-2 border border-gray-200 rounded-lg outline-none text-gray-700 bg-white"
+                                className={`w-full p-2 border rounded-lg outline-none text-gray-700 bg-white transition-colors ${dateError ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'}`}
                                 min={new Date().toISOString().split('T')[0]} // Min today
                                 value={deliveryDate}
-                                onChange={(e) => setDeliveryDate(e.target.value)}
+                                onChange={(e) => {
+                                    if (!e.target.value) {
+                                        setDeliveryDate('');
+                                        setDateError('');
+                                        return;
+                                    }
+                                    const [year, month, day] = e.target.value.split('-').map(Number);
+                                    // Create date in local time (months are 0-indexed)
+                                    const date = new Date(year, month - 1, day);
+
+                                    // 0 = Sunday
+                                    if (isSunday(date)) {
+                                        setDateError("No entregamos domingos. Selecciona otra fecha.");
+                                        setDeliveryDate('');
+                                        return;
+                                    }
+
+                                    // Checks for Colombia Holidays
+                                    if (isHoliday(e.target.value)) {
+                                        setDateError("Es festivo. No hay servicio.");
+                                        setDeliveryDate('');
+                                        return;
+                                    }
+
+                                    // Valid date
+                                    setDateError('');
+                                    setDeliveryDate(e.target.value);
+                                }}
                             />
-                            <p className="text-[10px] text-gray-400 mt-1">
-                                * Sujeto a disponibilidad y horarios de ruta. Domingos y festivos pueden variar.
+                            <p className="text-[10px] text-gray-500 mt-1 font-medium">
+                                * Horario de entregas: Lunes a Sábado. Domingos y festivos no hay servicio de domicilio.
                             </p>
                         </div>
 
@@ -844,6 +897,25 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                             </div>
                             <span className="text-xs text-gray-600">
                                 Acepto la <Link href="/politicas/proteccion-datos" target="_blank" className="text-[var(--color-pharma-blue)] underline">Política de Tratamiento de Datos</Link> y el uso de cookies.
+                            </span>
+                        </label>
+
+                        <label className="flex items-start gap-3 cursor-pointer group">
+                            <div className="relative flex items-center mt-0.5">
+                                <input
+                                    type="checkbox"
+                                    checked={marketingAccepted}
+                                    onChange={(e) => setMarketingAccepted(e.target.checked)}
+                                    className="peer h-4 w-4 cursor-pointer appearance-none border border-gray-300 rounded bg-white transition-all checked:border-[var(--color-pharma-blue)] checked:bg-[var(--color-pharma-blue)] hover:border-[var(--color-pharma-blue)]"
+                                />
+                                <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <span className="text-xs text-gray-600 font-medium">
+                                Quiero recibir promociones, descuentos y novedades exclusivas en mi correo o celular.
                             </span>
                         </label>
                     </div>

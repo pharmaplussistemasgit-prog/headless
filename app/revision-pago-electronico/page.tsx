@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ReversionPage() {
     return (
         <div className="min-h-screen bg-white py-12 text-gray-800">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="mb-8">
                     <Link href="/tienda" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[var(--color-pharma-blue)] transition-colors">
