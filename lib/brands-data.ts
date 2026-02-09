@@ -7,12 +7,15 @@
  */
 
 export interface Brand {
+  id?: number;
+  name?: string;
   title: string;
   slug: string;
   url: string;
   alt: string;
-  brandId: number; 
+  brandId: number;
   count?: number;
+  searchTerm?: string;
 }
 
 export const ALL_BRANDS_SLIDER: Brand[] = [
