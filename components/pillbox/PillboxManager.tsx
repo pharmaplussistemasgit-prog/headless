@@ -145,27 +145,38 @@ export default function PillboxManager({ userId, userName }: PillboxManagerProps
 
         // Smart Search Handler
         useEffect(() => {
+            let active = true; // Race condition protection
+
             const delayDebounce = setTimeout(async () => {
                 if (query.length > 2) {
                     setIsSearching(true);
                     try {
                         // Dynamically import to ensure server-client boundary respect
-                        const { searchProducts } = await import('@/app/actions/products');
-                        const products = await searchProducts(query);
-                        setResults(products);
-                        setShowResults(true);
+                        const { searchProductsLight } = await import('@/app/actions/products');
+
+                        // Use the optimized light search
+                        const products = await searchProductsLight(query);
+
+                        // Only update if this effect is still active (latest query)
+                        if (active) {
+                            setResults(products);
+                            setShowResults(true);
+                        }
                     } catch (e) {
                         console.error("Search error", e);
                     } finally {
-                        setIsSearching(false);
+                        if (active) setIsSearching(false);
                     }
                 } else {
                     setResults([]);
                     setShowResults(false);
                 }
-            }, 300);
+            }, 500); // Increased debounce to 500ms
 
-            return () => clearTimeout(delayDebounce);
+            return () => {
+                active = false; // Cancel this run on cleanup
+                clearTimeout(delayDebounce);
+            };
         }, [query]);
 
         const selectProduct = (name: string) => {

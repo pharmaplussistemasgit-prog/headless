@@ -169,8 +169,33 @@ export async function searchProducts(query: string): Promise<MappedProduct[]> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return Array.from(uniqueProducts.values()).map((p: any) => mapWooProduct(p));
 
+
     } catch (error) {
         console.error(`Error searching products for query "${query}":`, error);
         return [];
     }
 }
+
+export async function searchProductsLight(query: string): Promise<{ id: number; name: string; sku: string }[]> {
+    try {
+        if (!query || query.length < 3) return [];
+
+        const api = getWooApi();
+        // Request strictly needed fields to reduce latency and payload size
+        const response = await api.get("products", {
+            search: query,
+            per_page: 10,
+            status: 'publish',
+            _fields: 'id,name,sku'
+        });
+
+        if (response.status === 200) {
+            return response.data;
+        }
+        return [];
+    } catch (error) {
+        console.error(`Error in light search for query "${query}":`, error);
+        return [];
+    }
+}
+
