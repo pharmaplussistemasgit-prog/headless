@@ -51,13 +51,20 @@ export async function POST(req: Request) {
             body: params,
         });
 
+        // Log response status for debugging
+        console.log(`Credibanco Request to ${registerUrl} returned status: ${response.status}`);
+
         const data = await response.json();
 
+        // Log full response for debugging
+        console.log('Credibanco Response Body:', JSON.stringify(data, null, 2));
+
         if (data.errorCode && data.errorCode != '0') {
-            console.error('Credibanco Error:', data);
+            console.error('Credibanco API Error:', data);
             return NextResponse.json({
-                error: data.errorMessage || 'Error registering payment with Credibanco',
-                errorCode: data.errorCode
+                error: `Credibanco Error (${data.errorCode}): ${data.errorMessage}`,
+                errorCode: data.errorCode,
+                details: data
             }, { status: 400 });
         }
 
