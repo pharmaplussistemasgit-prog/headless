@@ -7,9 +7,14 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { orderId, amount, tax, returnUrl, description, installments } = body;
 
-        const username = process.env.CREDIBANCO_USER;
-        const password = process.env.CREDIBANCO_PASSWORD;
-        const environment = process.env.CREDIBANCO_ENV || 'test';
+        const username = (process.env.CREDIBANCO_USER || '').trim();
+        const password = (process.env.CREDIBANCO_PASSWORD || '').trim();
+
+        // Auto-detect production environment based on username prefix
+        // If username is PHARMA_PLUS_..., it MUST be production
+        const environment = username.startsWith('PHARMA_PLUS') ? 'prod' : (process.env.CREDIBANCO_ENV || 'test');
+
+        console.log(`Credibanco Config -> User: ${username} | Env: ${environment}`);
 
         // Base URL depending on environment
         const baseUrl = environment === 'prod'
