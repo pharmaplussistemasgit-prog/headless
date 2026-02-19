@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { getCategoryTreeData, getProducts } from '@/lib/woocommerce';
 import CategoryCatalogue from '@/components/category/CategoryCatalogue';
-import { analyzeProductsForFilters } from '@/lib/filterUtils';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { mapWooProduct } from '@/lib/mappers';
 import CategoryLoading from '@/app/categoria/[slug]/loading';
@@ -43,7 +42,6 @@ export default async function TiendaPage({
   ]);
 
   const mappedProducts = (productsData.products || []).map((p: any) => mapWooProduct(p));
-  const facets = analyzeProductsForFilters(mappedProducts);
 
   return (
     <Suspense fallback={<CategoryLoading />}>
@@ -63,7 +61,6 @@ export default async function TiendaPage({
           totalPages={productsData.totalPages}
           searchParams={resolvedSearchParams}
           categoryTree={categoryTree}
-          facets={facets}
           basePath="/tienda"
         />
       </div>

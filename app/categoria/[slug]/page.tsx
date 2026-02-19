@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getCategoryBySlug, getProductsByCategory } from '@/app/actions/products';
 import { getCategoryTreeData, getAllProductCategories } from '@/lib/woocommerce';
-import { analyzeProductsForFilters } from '@/lib/filterUtils';
 import CategorySidebar from '@/components/category/CategorySidebar';
 import ProductCard from '@/components/product/ProductCard';
 import Breadcrumbs from '@/components/ui/breadcrumbs';

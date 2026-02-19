@@ -1,5 +1,5 @@
 import { getCategoryBySlug } from '@/app/actions/products';
-import { getCategoryTreeData, getProducts, getCategoryGlobalFacets } from '@/lib/woocommerce';
+import { getCategoryTreeData, getProducts } from '@/lib/woocommerce';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ export default async function ColdChainPage(props: {
     };
 
     // 2. Parallel Fetch: Tree, Products (for Grid), and Global Facets (for Sidebar)
-    const [categoryTree, productsRes, facets] = await Promise.all([
+    const [categoryTree, productsRes] = await Promise.all([
         getCategoryTreeData(),
         getProducts({
             category: currentCategory.id.toString(),
@@ -42,7 +42,6 @@ export default async function ColdChainPage(props: {
             perPage: 12, // Pagination enabled (12 items)
             page: page
         }),
-        getCategoryGlobalFacets(currentCategory.id)
     ]);
 
     const products = productsRes.products.map(p => {
@@ -134,7 +133,6 @@ export default async function ColdChainPage(props: {
                     searchParams={searchParams}
                     categoryTree={categoryTree}
                     customHeader={ColdChainHeader}
-                    facets={facets}
                 />
             </div>
         </div>

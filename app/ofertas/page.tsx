@@ -5,7 +5,6 @@ import { getPromotedProductSkus } from "@/services/promotions";
 import { enrichProductsWithPromotions } from "@/lib/enrichProducts";
 import type { Product } from "@/types/woocommerce";
 import CategoryCatalogue from "@/components/category/CategoryCatalogue";
-import { analyzeProductsForFilters } from "@/lib/filterUtils";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
@@ -59,7 +58,6 @@ export default async function OfertasPage({
     const mappedProducts = (allRawProducts as any[]).map(mapWooProduct);
     const enrichedProducts = await enrichProductsWithPromotions(mappedProducts);
 
-    const facets = analyzeProductsForFilters(enrichedProducts);
 
     const HeroHeader = (
         <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white py-10 px-6 rounded-2xl mb-8 relative overflow-hidden shadow-sm">
@@ -92,7 +90,6 @@ export default async function OfertasPage({
                 totalPages={totalPages}
                 searchParams={params}
                 categoryTree={categoryTree}
-                facets={facets}
                 basePath="/ofertas"
                 customHeader={HeroHeader}
             />
