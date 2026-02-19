@@ -41,10 +41,9 @@ export default function AccountNav() {
             title: "Tu cuenta",
             items: [
                 { name: 'Pharma Prime', href: '/prime', icon: Crown, color: 'text-blue-500' },
-                { name: 'Mi perfil', href: '/mi-cuenta/detalles', icon: User },
+                { name: 'Mi perfil', href: '/mi-cuenta/editar-perfil', icon: User },
                 { name: 'Mis direcciones', href: '/mi-cuenta/direcciones', icon: MapPin },
                 { name: 'Mis tarjetas', href: '/mi-cuenta/tarjetas', icon: CreditCard },
-                { name: 'Cambia tu contraseña', href: '/mi-cuenta/password', icon: Lock },
                 { name: 'Mis compras', href: '/mi-cuenta/pedidos', icon: Package },
                 { name: 'Notificaciones', href: '/mi-cuenta/notificaciones', icon: Bell },
                 { name: 'Pastillero virtual', href: '/mi-cuenta/pastillero', icon: Pill, color: 'text-[var(--color-pharma-blue)]' },
@@ -53,7 +52,7 @@ export default function AccountNav() {
         {
             title: "Favoritos y Tiendas",
             items: [
-                { name: 'Mis favoritos', href: '/wishlist', icon: Heart },
+                { name: 'Mis favoritos', href: '/mi-cuenta/favoritos', icon: Heart },
                 { name: 'Mis tiendas', href: '/tiendas', icon: Store },
             ]
         },

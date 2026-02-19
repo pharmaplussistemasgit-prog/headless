@@ -4,7 +4,7 @@ import React from 'react';
 import { MessageCircle } from 'lucide-react';
 
 export default function WhatsAppButton() {
-    const phoneNumber = "573001234567"; // Replace with real number
+    const phoneNumber = "573168397933"; // Updated with real number
     const message = "Hola PharmaPlus, quisiera hacer un pedido.";
 
     return (

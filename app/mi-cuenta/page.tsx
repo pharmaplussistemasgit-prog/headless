@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { LogOut, Package, MapPin, User, ChevronRight, Loader2 } from 'lucide-react';
+import { LogOut, Package, MapPin, User, ChevronRight, Loader2, Heart, Pill, Crown } from 'lucide-react';
 import Link from 'next/link';
 
 export default function MyAccountPage() {
@@ -83,8 +83,8 @@ export default function MyAccountPage() {
                         </div>
                     </div>
 
-                    {/* Direcciones - Placeholder functionality for now */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                    {/* Direcciones */}
+                    <Link href="/mi-cuenta/direcciones" className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                             <MapPin className="w-24 h-24 text-[var(--color-pharma-green)]" />
                         </div>
@@ -94,12 +94,59 @@ export default function MyAccountPage() {
                             </div>
                             <h3 className="text-lg font-bold text-gray-900 mb-2">Mis Direcciones</h3>
                             <p className="text-sm text-gray-500 mb-4">Administra tus lugares de entrega para un checkout más rápido.</p>
-                            <button className="inline-flex items-center text-[var(--color-pharma-green)] font-bold text-sm hover:underline" onClick={() => alert('Próximamente: Gestión de direcciones')}>
+                            <span className="inline-flex items-center text-[var(--color-pharma-green)] font-bold text-sm hover:underline">
                                 Gestionar direcciones <ChevronRight className="w-4 h-4 ml-1" />
-                            </button>
+                            </span>
                         </div>
-                    </div>
+                    </Link>
 
+                    {/* Favoritos */}
+                    <Link href="/mi-cuenta/favoritos" className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Heart className="w-24 h-24 text-red-500" />
+                        </div>
+                        <div className="relative z-10">
+                            <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-500 mb-4 group-hover:scale-110 transition-transform">
+                                <Heart className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">Mis Favoritos</h3>
+                            <p className="text-sm text-gray-500 mb-4">Vuelve a ver los productos que guardaste para después.</p>
+                            <span className="inline-flex items-center text-red-600 font-bold text-sm hover:underline">
+                                Ver favoritos <ChevronRight className="w-4 h-4 ml-1" />
+                            </span>
+                        </div>
+                    </Link>
+
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    {/* Pastillero */}
+                    <Link href="/mi-cuenta/pastillero" className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden text-left">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Pill className="w-24 h-24 text-[var(--color-pharma-blue)]" />
+                        </div>
+                        <div className="relative z-10">
+                            <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-[var(--color-pharma-blue)] mb-4 group-hover:scale-110 transition-transform">
+                                <Pill className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">Pastillero Virtual</h3>
+                            <p className="text-sm text-gray-500">Configura tus recordatorios de medicamentos.</p>
+                        </div>
+                    </Link>
+
+                    {/* Pharma Prime */}
+                    <Link href="/prime" className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden text-left">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Crown className="w-24 h-24 text-yellow-500" />
+                        </div>
+                        <div className="relative z-10">
+                            <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center text-yellow-600 mb-4 group-hover:scale-110 transition-transform">
+                                <Crown className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">Pharma Prime</h3>
+                            <p className="text-sm text-gray-500">Disfruta de envíos gratis y beneficios exclusivos.</p>
+                        </div>
+                    </Link>
                 </div>
 
                 {/* Account Settings */}

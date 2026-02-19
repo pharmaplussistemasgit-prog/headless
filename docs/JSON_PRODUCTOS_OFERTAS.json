@@ -1,0 +1,24 @@
+{
+    "products": [
+        {
+            "sku": "TEST-OFFER-001",
+            "title": "Producto Oferta Noviembre",
+            "regular_price": "25000",
+            "sale_price": "20000",
+            "date_on_sale_from": "2023-11-01",
+            "date_on_sale_to": "2023-11-30",
+            "stock_quantity": 50,
+            "stock_status": "instock"
+        },
+        {
+            "sku": "TEST-OFFER-002",
+            "title": "Producto Oferta Flash",
+            "regular_price": "100000",
+            "sale_price": "80000",
+            "date_on_sale_from": "2023-10-27",
+            "date_on_sale_to": "2023-10-28",
+            "manage_stock": true,
+            "stock_quantity": 10
+        }
+    ]
+}

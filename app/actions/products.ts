@@ -1,6 +1,6 @@
 'use server';
 
-import { getWooApi, wcFetchRaw } from "@/lib/woocommerce";
+import { getWooApi, wcFetchRaw, getCategoryFromStatic } from "@/lib/woocommerce";
 import { mapWooProduct } from "@/lib/mappers";
 import { MappedProduct, MappedCategory, WooCategory } from "@/types/product";
 
@@ -43,7 +43,20 @@ export async function getProductBySlug(slug: string): Promise<MappedProduct | nu
 // category logic
 export async function getCategoryBySlug(slug: string): Promise<MappedCategory | null> {
     try {
-        // Optimizing with wcFetchRaw for ISR Caching
+        // PERF: Check Static Mirror first (Instant)
+        const staticCat = getCategoryFromStatic(slug);
+        if (staticCat) {
+            return {
+                id: staticCat.id,
+                name: staticCat.name,
+                slug: staticCat.slug,
+                description: staticCat.description || '',
+                count: staticCat.count || 0,
+                parent: staticCat.parent || 0
+            };
+        }
+
+        // FALLBACK: Optimizing with wcFetchRaw for ISR Caching
         const { data } = await wcFetchRaw<WooCategory[]>("products/categories", {
             slug: slug
         });
@@ -77,12 +90,14 @@ export async function getProductsByCategory(categoryId: number, options: {
             category: categoryId.toString(),
             per_page: options.perPage || 12,
             status: 'publish',
-            stock_status: 'instock', // Strict filter: No OOS products
             page: options.page || 1
         };
 
         if (options.minPrice) params.min_price = options.minPrice;
         if (options.maxPrice) params.max_price = options.maxPrice;
+
+        // Optimization: Request only necessary fields
+        params._fields = 'id,name,slug,sku,price,regular_price,on_sale,stock_status,stock_quantity,images,categories,tags,short_description,average_rating,rating_count,date_on_sale_from,date_on_sale_to,meta_data';
 
         // Use wcFetchRaw to enable Next.js ISR Caching (default 10 mins)
         // This fixes the slow 4s loading time on repeated visits

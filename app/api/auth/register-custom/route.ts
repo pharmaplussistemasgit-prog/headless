@@ -84,6 +84,28 @@ export async function POST(request: NextRequest) {
         const response = await api.post("customers", payload);
 
         if (response.status === 201) {
+
+            // --- Send Welcome Email via Resend ---
+            const resendApiKey = process.env.RESEND_API_KEY;
+            if (resendApiKey) {
+                try {
+                    const { Resend } = await import('resend'); // Dynamic import to avoid build issues if missing deps
+                    const resend = new Resend(resendApiKey);
+
+                    await resend.emails.send({
+                        from: 'PharmaPlus <bienvenida@pharmaplus.com.co>',
+                        to: [email],
+                        subject: '¡Bienvenido a PharmaPlus! 🌿',
+                        react: (await import('@/emails/WelcomeEmail')).WelcomeEmail({ firstName: first_name }),
+                    });
+                    console.log(`[RegisterAPI] Welcome email sent to ${email}`);
+                } catch (emailError) {
+                    console.error('[RegisterAPI] Failed to send welcome email:', emailError);
+                    // Non-blocking error
+                }
+            }
+            // -------------------------------------
+
             return NextResponse.json({
                 success: true,
                 message: 'Cuenta creada exitosamente.',

@@ -24,6 +24,52 @@ export async function POST(request: NextRequest) {
 
         const result = await submitToJetForm(formId, data, token);
 
+        // --- Send Emails via Resend (Notification & Receipt) ---
+        if (result.success) {
+            const resendApiKey = process.env.RESEND_API_KEY;
+            if (resendApiKey) {
+                try {
+                    const { Resend } = await import('resend');
+                    const resend = new Resend(resendApiKey);
+
+                    // Extract email from form data (handle common keys)
+                    // The data object comes from JFB/Client, keys might be 'email', 'user_email', 'correo', etc.
+                    const userEmail = typeof data === 'object' ? (data.email || data.user_email || data.correo || data['e-mail']) as string : undefined;
+                    const userName = typeof data === 'object' ? (data.name || data.nombre || data.first_name || 'Cliente') as string : 'Cliente';
+                    const formType = formId === 23124 ? 'P.Q.R.S.' : 'Contacto'; // Simple ID check
+
+                    // 1. Notify Admin
+                    await resend.emails.send({
+                        from: 'PharmaPlus Web <alertas@pharmaplus.com.co>',
+                        to: ['pedidos@pharmaplus.com.co'], // Primary Admin Email
+                        subject: `Nueva solicitud recibida: ${formType}`,
+                        react: (await import('@/emails/FormNotificationEmail')).FormNotificationEmail({
+                            formId: String(formId),
+                            data: data as Record<string, string>, // Cast for safety
+                            title: `Nuevo formulario de ${formType}`
+                        }),
+                    });
+
+                    // 2. Receipt to User (if email exists)
+                    if (userEmail && userEmail.includes('@')) {
+                        await resend.emails.send({
+                            from: 'PharmaPlus <servicioalcliente@pharmaplus.com.co>',
+                            to: [userEmail],
+                            subject: `Hemos recibido tu solicitud (${formType})`,
+                            react: (await import('@/emails/FormReceiptEmail')).FormReceiptEmail({
+                                userName: userName,
+                                formType: formType
+                            }),
+                        });
+                    }
+
+                } catch (emailError) {
+                    console.error('[FormsAPI] Failed to send emails:', emailError);
+                }
+            }
+        }
+        // -------------------------------------------------------
+
         return NextResponse.json(result);
 
     } catch (error) {

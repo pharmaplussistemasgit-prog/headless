@@ -122,6 +122,14 @@ export default function CartDrawer() {
                                                         </div>
                                                     )}
 
+                                                    {/* PTC Promotion Badge */}
+                                                    {item.promotion && (
+                                                        <div className="text-[10px] text-purple-600 font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-100 w-fit mb-2 flex items-center gap-1">
+                                                            <span>🎁</span>
+                                                            {item.promotion.description}
+                                                        </div>
+                                                    )}
+
                                                     {/* Precio Unitario */}
                                                     <p className="text-xs text-slate-400 font-medium">
                                                         {fmt.format(item.price)} c/u

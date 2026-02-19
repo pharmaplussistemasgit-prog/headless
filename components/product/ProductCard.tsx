@@ -14,11 +14,14 @@ import { Heart } from "lucide-react";
 import { isColdChain } from "@/lib/coldChain";
 import { getProductPromo } from "@/lib/promotions";
 
+import OfferCountDown from "./OfferCountDown";
+
 interface ProductCardProps {
   product: MappedProduct;
+  variant?: 'default' | 'offer';
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, variant = 'default' }: ProductCardProps) {
   const { openQuickView } = useQuickView();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { addItem } = useCart();
@@ -52,6 +55,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         image: product.images[0] || '/placeholder.png',
         quantity: 1,
         slug: product.slug,
+        promotion: product.promotion,
+        // Categories and Rx Flag for Logic
+        categories: product.categories,
+        requiresPrescription: product.requiresRx
       });
     }
   };
@@ -129,6 +136,13 @@ export default function ProductCard({ product }: ProductCardProps) {
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
               />
             </div>
+
+            {/* Offer Timer Overlay */}
+            {variant === 'offer' && product.isOnSale && product.dateOnSaleTo && (
+              <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-1.5 border-t border-red-100 flex justify-center">
+                <OfferCountDown targetDate={product.dateOnSaleTo} size="sm" className="scale-90 origin-bottom" />
+              </div>
+            )}
           </div>
 
           {/* Separator */}

@@ -96,6 +96,15 @@ export default function CartPage() {
                                                         ))}
                                                     </div>
                                                 )}
+
+                                                {/* PTC Promotion Badge */}
+                                                {item.promotion && (
+                                                    <div className="mt-2 inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 px-2.5 py-1 rounded-lg border border-purple-100/50 w-fit">
+                                                        <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                                                            🎁 {item.promotion.description}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="flex justify-between items-end">

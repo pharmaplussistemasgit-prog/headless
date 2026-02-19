@@ -80,7 +80,7 @@ export default function AccountButton() {
                         </Link>
 
                         {/* Pastillero */}
-                        <Link href="/pastillero" className="flex items-center gap-3 px-5 py-2.5 hover:bg-blue-50 transition-colors group/item">
+                        <Link href="/mi-cuenta/pastillero" className="flex items-center gap-3 px-5 py-2.5 hover:bg-blue-50 transition-colors group/item">
                             <Pill className="w-4 h-4 text-[var(--color-pharma-blue)] group-hover/item:scale-110 transition-transform" />
                             <span className="text-sm font-medium text-gray-600 group-hover/item:text-gray-900">Pastillero Virtual</span>
                         </Link>
@@ -104,7 +104,7 @@ export default function AccountButton() {
                         </Link>
 
                         {/* Favoritos */}
-                        <Link href="/wishlist" className="flex items-center gap-3 px-5 py-2.5 hover:bg-blue-50 transition-colors group/item">
+                        <Link href="/mi-cuenta/favoritos" className="flex items-center gap-3 px-5 py-2.5 hover:bg-blue-50 transition-colors group/item">
                             <Heart className="w-4 h-4 text-red-500 group-hover/item:scale-110 transition-transform" />
                             <span className="text-sm font-medium text-gray-600 group-hover/item:text-gray-900">Mis Favoritos</span>
                         </Link>

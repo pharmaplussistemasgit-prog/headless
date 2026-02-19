@@ -9,4 +9,17 @@ export interface CartItem {
     slug: string;
     sku?: string; // T19: ERP Support
     categories?: { id: number; name: string; slug: string }[];
+    requiresPrescription?: boolean;
+
+    promotion?: {
+        description: string;
+        rule: {
+            itemId: string;
+            giftItemId: string;
+            buyQuantity: number;
+            receiveQuantity: number;
+            startDate: string;
+            endDate: string;
+        };
+    } | null;
 }

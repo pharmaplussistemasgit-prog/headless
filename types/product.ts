@@ -20,6 +20,15 @@ export interface WooProduct {
     rating_count?: number;
     date_on_sale_from?: string | null;
     date_on_sale_to?: string | null;
+    ptc_rule?: {
+        is_active: boolean;
+        buy_x: number;
+        get_y: number;
+        gift_sku: string;
+        max_global: number;
+        max_user: number;
+        display_label: string;
+    } | null;
 }
 
 export interface MappedProduct {

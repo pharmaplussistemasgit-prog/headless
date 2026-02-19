@@ -1,0 +1,146 @@
+Fetching: https://tienda.pharmaplus.com.co/wp-json/wc/v3/products?search=KOACT&consumer_key=ck_8a5d527d010ded41d42939106a8ba2729bc91bf6&consumer_secret=cs_569502dcbef8c40937719b5fa3511cb0e40f6aac
+Found 1 products for "KOACT"
+---------------------------------------------------
+ID: 16017
+Name: KOACT 642.9 X75ML POLVO PARA SUSP 5 ML (AMOXICILINA+CLAVULANICO ACIDO)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2048931,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+Fetching: https://tienda.pharmaplus.com.co/wp-json/wc/v3/products?search=BEXON&consumer_key=ck_8a5d527d010ded41d42939106a8ba2729bc91bf6&consumer_secret=cs_569502dcbef8c40937719b5fa3511cb0e40f6aac
+Found 3 products for "BEXON"
+---------------------------------------------------
+ID: 13950
+Name: BEXON 100 MG X 7 OVULOS (CLINDAMICINA)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2034210,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+---------------------------------------------------
+ID: 6855
+Name: BEXON DUO 100/400 MG X 7 OVU (CLINDAMICINA+KETOCONAZOL)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2000419,"key":"_needs_rx","value":"true"}
+LOGIC CHECK:
+- Meta Match: true
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: true
+---------------------------------------------------
+ID: 5429
+Name: BEXON 100 MG X 3 OVULOS (CLINDAMICINA)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":1996078,"key":"_needs_rx","value":"true"}
+LOGIC CHECK:
+- Meta Match: true
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: true
+Fetching: https://tienda.pharmaplus.com.co/wp-json/wc/v3/products?search=CLINDAMICINA&consumer_key=ck_8a5d527d010ded41d42939106a8ba2729bc91bf6&consumer_secret=cs_569502dcbef8c40937719b5fa3511cb0e40f6aac
+Found 10 products for "CLINDAMICINA"
+---------------------------------------------------
+ID: 16683
+Name: DALACIN C 300MG X 32 CAPSULAS CAJA X 32 CAP (CLORHIDRATO DE CLINDAMICINA)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2058696,"key":"_needs_rx","value":"true"}
+LOGIC CHECK:
+- Meta Match: true
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: true
+---------------------------------------------------
+ID: 14008
+Name: GYNCLOX 200/100 MG X 3 ÓVULOS VAG (CLINDAMICINA+CLOTRIMAZOL) (CLINDAMICINA+CLOTRIMAZOL)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2035523,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+---------------------------------------------------
+ID: 13964
+Name: CLUVAX FORTE CREMA X 40 GRM (CLINDAMICINA+CLOTRIMAZOL) (CLINDAMICINA+CLOTRIMAZOL)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2034537,"key":"_needs_rx","value":"true"}
+LOGIC CHECK:
+- Meta Match: true
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: true
+---------------------------------------------------
+ID: 13950
+Name: BEXON 100 MG X 7 OVULOS (CLINDAMICINA)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2034210,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+---------------------------------------------------
+ID: 13662
+Name: CLINDAMIZOL 100MG/400MG CJA X 7OVULOS CAJA X 7 OVU
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2027284,"key":"_needs_rx","value":"true"}
+LOGIC CHECK:
+- Meta Match: true
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: true
+---------------------------------------------------
+ID: 8607
+Name: ADAPCLIN TUBO X 30 GR (ADAPALENO+CLINDAMICINA)
+Categories: [3384] PIEL GRASA Y ACNE (piel-grasa-y-acne)
+Rx Meta: {"id":1994836,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+---------------------------------------------------
+ID: 8315
+Name: CLINDAMICINA 100MG + CLOTRIMAZOL 200MG MK CJA X 3 OVULOS VAGINALES (CLINDAMICINA+CLOTRIMAZOL)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2005293,"key":"_needs_rx","value":"true"}
+LOGIC CHECK:
+- Meta Match: true
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: true
+---------------------------------------------------
+ID: 7987
+Name: SINAC TUBO X 30 GR (BENZOILO PEROXIDO+CLINDAMICINA)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":2004122,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+---------------------------------------------------
+ID: 7887
+Name: VAXIDUO OVULOS CAJA X 7 CAP (CLINDAMICINA+KETOCONAZOL) (CLINDAMICINA+KETOCONAZOL)
+Categories: [289] SALUD Y MEDICAMENTOS (salud-y-medicamentos)
+Rx Meta: {"id":1991719,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false
+---------------------------------------------------
+ID: 7753
+Name: CLINACYN GEL X 30 GR (ADAPALENO+CLINDAMICINA) (ADAPALENO+CLINDAMICINA)
+Categories: [3384] PIEL GRASA Y ACNE (piel-grasa-y-acne)
+Rx Meta: {"id":2003263,"key":"_needs_rx","value":"false"}
+LOGIC CHECK:
+- Meta Match: false
+- Category Match: false
+- Keyword Match: false
+=> REQUIRES RX: false

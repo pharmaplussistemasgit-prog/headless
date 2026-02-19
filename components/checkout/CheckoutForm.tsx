@@ -11,6 +11,7 @@ import ProductCard from '@/components/product/ProductCard';
 
 import { auth } from '@/lib/auth';
 import AgreementModal from './AgreementModal';
+import WompiButton from './WompiButton';
 
 interface CheckoutFormProps {
     shippingRules: import('@/lib/shipping').ShippingRule[];
@@ -47,18 +48,31 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     const [availableCities, setAvailableCities] = useState<Array<{ code: string, name: string }>>([]);
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [privacyAccepted, setPrivacyAccepted] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState<'wompi' | 'credibanco'>('wompi');
 
     const [customerData, setCustomerData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
+        documentType: 'CC',
         documentId: '',
         address: '',
+        address2: '', // Apartamento/Unidad (Opcional)
+        country: 'CO', // Colombia
         city: '',
         state: '',
+        zipCode: '',
         companyName: '',
     });
+
+    const DOCUMENT_TYPES = [
+        { value: 'CC', label: 'Cédula de Ciudadanía' },
+        { value: 'CE', label: 'Cédula de Extranjería' },
+        { value: 'NIT', label: 'NIT' },
+        { value: 'PAS', label: 'Pasaporte' },
+        { value: 'PEP', label: 'PEP' },
+    ];
 
     const [userRoles, setUserRoles] = useState<string[]>([]);
 
@@ -235,42 +249,169 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
         toast.success(`${msg}. Saldo: ${data.balance || data.response?.cardbalance || 'N/A'}`);
     };
 
-    const handleCheckout = async (isAgreement = false) => {
+    // Validaciones comunes antes de pago
+    const validateForm = (): boolean => {
         if (!selectedState) {
             toast.error("Selecciona un departamento de envío");
-            return;
+            return false;
         }
         if (shippingMethodName === 'Sin cobertura') {
             toast.error("No tenemos cobertura en esta zona");
-            return;
+            return false;
         }
-
-        // ... validation continued
         if (!customerData.firstName || !customerData.email || !customerData.documentId || !customerData.phone) {
             toast.error("Completa tus datos personales (incluyendo celular)");
-            return;
+            return false;
         }
-
         if (deliveryMethod === 'shipping' && !customerData.address) {
             toast.error("Ingresa la dirección de envío");
-            return;
+            return false;
         }
-
         if (isCompany && !customerData.companyName) {
             toast.error("Ingresa la Razón Social de la empresa");
-            return;
+            return false;
         }
-
         if (!termsAccepted || !privacyAccepted) {
             toast.error("Debes aceptar los Términos y la Política de Datos para continuar");
-            return;
+            return false;
         }
+        if (requiresPrescription && !prescriptionFileUrl) {
+            toast.error("Debes adjuntar la fórmula médica para continuar");
+            return false;
+        }
+        return true;
+    };
 
-        // T25: Prescription Validation
-        if (requiresPrescription && !prescriptionConfirmed) {
-            toast.error("Debes confirmar que tienes la fórmula médica");
-            return;
+    // Formulario listo para Wompi (validaciones OK sin necesidad de click)
+    const isFormReady =
+        !!selectedState &&
+        shippingMethodName !== 'Sin cobertura' &&
+        !!customerData.firstName &&
+        !!customerData.email &&
+        !!customerData.documentId &&
+        !!customerData.phone &&
+        (deliveryMethod !== 'shipping' || !!customerData.address) &&
+        (!isCompany || !!customerData.companyName) &&
+        termsAccepted &&
+        privacyAccepted &&
+        (!requiresPrescription || !!prescriptionFileUrl) &&
+        !isBelowMinAmount;
+
+    // Generar referencia única para Wompi (usa ID de sesión + timestamp)
+    const wompiReference = `PP-${Date.now()}-${customerData.documentId || 'G'}`.slice(0, 30);
+
+    // Callback cuando Wompi termina el pago
+    const handleWompiResult = async (transaction: any) => {
+        if (!transaction) return;
+
+        const status = transaction.status;
+
+        if (status === 'APPROVED') {
+            // Crear la orden en WooCommerce con estado 'processing'
+            try {
+                await fetch('/api/checkout/process-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer: {
+                            ...customerData,
+                            shippingZone: selectedState,
+                        },
+                        billing: customerData,
+                        cartItems: items,
+                        cartTotal: finalTotal,
+                        paymentMethod: 'wompi',
+                        shippingCost,
+                        wompiTransactionId: transaction.id,
+                        wompiReference: transaction.reference,
+                        // Add Prescription Data
+                        prescriptionUrl: prescriptionFileUrl,
+                        requiresPrescription: requiresPrescription
+                    }),
+                });
+            } catch (e) {
+                console.error('Error registrando orden tras Wompi:', e);
+            }
+            clearCart();
+            window.location.href = `/checkout/resultado?id=${transaction.id}`;
+        } else if (status === 'PENDING') {
+            toast.info('Tu pago está en proceso. Te notificaremos por correo.');
+            window.location.href = `/checkout/resultado?id=${transaction.id}`;
+        } else {
+            toast.error('El pago fue rechazado. Intenta con otro método.');
         }
+    };
+
+    const handleCredibancoPayment = async () => {
+        if (!validateForm()) return;
+        setIsLoading(true);
+
+        try {
+            // 1. Create Pending Order in WooCommerce
+            const createRes = await fetch('/api/checkout/create-pending-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customer: customerData,
+                    items: items,
+                    paymentMethod: 'credibanco',
+                    paymentMethodTitle: 'Credibanco',
+                    shippingLine: {
+                        method_id: deliveryMethod === 'pickup' ? 'local_pickup' : 'flat_rate',
+                        method_title: shippingMethodName,
+                        total: shippingCost.toString()
+                    },
+                    metaData: [
+                        { key: "fee_amount", value: requiresColdChain ? coldChainFee.toString() : "0" },
+                        // Standard Keys from Snippet
+                        { key: "_cl_rx_attachment_url", value: prescriptionFileUrl || "" },
+                        { key: "_cl_rx_missing", value: (requiresPrescription && !prescriptionFileUrl) ? "1" : "0" }
+                    ],
+                    amount: finalTotal
+                })
+            });
+
+            const createData = await createRes.json();
+            if (!createData.success) {
+                toast.error(createData.message || 'Error creando el pedido');
+                setIsLoading(false);
+                return;
+            }
+
+            const orderId = createData.orderId;
+
+            // 2. Register Payment with Credibanco
+            const registerRes = await fetch('/api/checkout/credibanco', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderId: orderId.toString(),
+                    amount: finalTotal,
+                    tax: 0,
+                    returnUrl: `${window.location.origin}/checkout/resultado?ref=${orderId}`,
+                    description: `Pedido #${orderId} - PharmaPlus`,
+                })
+            });
+
+            const registerData = await registerRes.json();
+
+            if (registerData.formUrl) {
+                // 3. Redirect User
+                window.location.href = registerData.formUrl;
+            } else {
+                toast.error(registerData.error || 'Error iniciando pago con Credibanco');
+                setIsLoading(false);
+            }
+
+        } catch (error) {
+            console.error('Credibanco Error:', error);
+            toast.error('Ocurrió un error al procesar el pago');
+            setIsLoading(false);
+        }
+    };
+
+    const handleCheckout = async (isAgreement = false) => {
+        if (!validateForm()) return;
 
         // Agreement Validation
         if (isAgreement && !agreementTransactionId) {
@@ -299,8 +440,9 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         },
                         metaData: [
                             { key: "fee_amount", value: requiresColdChain ? coldChainFee.toString() : "0" },
-                            { key: "meta_has_prescription", value: requiresPrescription ? "yes" : "no" },
-                            { key: "meta_prescription_url", value: prescriptionFileUrl || "" }
+                            // Standard Keys from Snippet
+                            { key: "_cl_rx_attachment_url", value: prescriptionFileUrl || "" },
+                            { key: "_cl_rx_missing", value: (requiresPrescription && !prescriptionFileUrl) ? "1" : "0" }
                         ]
                     })
                 });
@@ -323,103 +465,9 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             }
             return;
         }
-
-
-        // LEGACY FLOW (Wompi/WordPress Handover)
-        try {
-            // Handover URL (Legacy/Backend)
-            const baseUrl = (process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://tienda.pharmaplus.com.co").replace(/\/$/, "") + "/finalizar-compra/";
-
-            const itemsString = items.map(item => {
-                const idToUse = item.variationId || item.id;
-                return `${idToUse}:${item.quantity}`;
-            }).join(',');
-
-            const params = new URLSearchParams();
-            params.append('saprix_handover', 'true');
-            // Removed agreement params here as we handle it headless now
-            params.append('items', itemsString);
-
-            // Send selected state as shipping zone context
-            params.append('shipping_zone', selectedState); // We send the state code now
-            params.append('shipping_method', deliveryMethod === 'pickup' ? 'local_pickup' : shippingMethodName); // Pickup flag
-
-            params.append('billing_first_name', customerData.firstName);
-            params.append('billing_last_name', customerData.lastName);
-            params.append('billing_email', customerData.email);
-            params.append('billing_phone', customerData.phone); // Ensure phone is passed
-
-            // T24: If Pickup, use Store Address as Shipping Address (Billing remains user's generally, but for simplicity we set both)
-            if (deliveryMethod === 'pickup') {
-                params.append('billing_address_1', 'Calle 86 # 27-54 (RETIRO EN TIENDA)');
-                params.append('billing_city', 'Bogotá D.C.');
-                params.append('billing_state', 'CO-DC');
-                params.append('shipping_method_title', 'Retiro en Tienda'); // Extra hint
-            } else {
-                params.append('billing_address_1', customerData.address);
-                params.append('billing_city', customerData.city);
-                params.append('billing_state', selectedState);
-            }
-
-            params.append('documentId', customerData.documentId);
-            params.append('billing_cedula', customerData.documentId);
-            params.append('billing_type_document', 'cedula');
-
-            params.append('billing_country', 'CO');
-            params.append('billing_postcode', '000000');
-            params.append('shipping_country', 'CO');
-
-            // T25: Marketing Consent
-            if (marketingAccepted) {
-                params.append('marketing_optin', 'yes');
-            }
-
-            if (isCompany && customerData.companyName) {
-                params.append('billing_company', customerData.companyName);
-            }
-
-            // T23: Cold Chain Fee
-            if (requiresColdChain) {
-                params.append('fee_name', 'Nevera de Icopor + Gel Refrigerante');
-                params.append('fee_amount', coldChainFee.toString());
-            }
-
-            // T25: Delivery Date & Prescription
-            let orderComments = '';
-            if (deliveryDate) orderComments += `Fecha de entrega preferida: ${deliveryDate}. `;
-
-            if (orderComments) {
-                params.append('order_comments', orderComments);
-            }
-
-            if (requiresPrescription) {
-                params.append('meta_has_prescription', 'yes');
-                if (prescriptionFileUrl) {
-                    params.append('meta_prescription_url', prescriptionFileUrl);
-                    orderComments += " [FÓRMULA ADJUNTA]";
-                } else {
-                    orderComments += " [FÓRMULA PENDIENTE/DECLARACIÓN]";
-                }
-            }
-
-            params.append('billing_address_2', '');
-
-            const handoverUrl = `${baseUrl}?${params.toString()}`;
-            toast.success("Redirigiendo a pasarela de pagos segura...");
-
-            // T25: FIX - DO NOT CLEAR CART HERE
-            // clearCart(); 
-            // We rely on the backend (WordPress) to handle the cart or the user to clear it on success page return.
-            // Clearing it here causes data loss if the user hits "Back" from the checkout page.
-
-            setTimeout(() => {
-                window.location.href = handoverUrl;
-            }, 1000);
-
-        } catch (error) {
-            setIsLoading(false);
-            toast.error("Error al procesar la solicitud");
-        }
+        // Si llega aquí sin ser convenio, no hace nada
+        // (Wompi se maneja con WompiButton directamente)
+        setIsLoading(false);
     };
 
     if (items.length === 0) {
@@ -442,323 +490,312 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             {/* Left Column: Form */}
             <div className="lg:col-span-7 space-y-6">
                 {/* 1. Datos Personales */}
+                {/* 1. Detalles de Facturación y Envío */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-4 flex items-center gap-2">
-                        <span className="bg-[var(--color-pharma-blue)] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-                        Datos Personales
+                    <h2 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-6 flex items-center gap-2 border-b border-gray-100 pb-2">
+                        <FileText className="w-5 h-5" />
+                        Detalles de facturación
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold uppercase text-gray-500">Nombre</label>
-                            <input type="text" name="firstName" value={customerData.firstName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold uppercase text-gray-500">Apellido</label>
-                            <input type="text" name="lastName" value={customerData.lastName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold uppercase text-gray-500">Cédula</label>
-                            <input type="text" name="documentId" value={customerData.documentId} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold uppercase text-gray-500">Celular</label>
-                            <input type="tel" name="phone" value={customerData.phone} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
-                        </div>
-                        <div className="col-span-1 sm:col-span-2 space-y-1">
-                            <label className="text-xs font-bold uppercase text-gray-500">Email</label>
-                            <input type="email" name="email" value={customerData.email} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
-                        </div>
 
-                        {/* Company Toggle */}
-                        <div className="col-span-1 sm:col-span-2 pt-2 border-t border-gray-50 mt-2">
-                            <label className="flex items-center gap-3 cursor-pointer group">
-                                <div className="relative flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        checked={isCompany}
-                                        onChange={(e) => toggleCompanyMode(e.target.checked)}
-                                        className="peer h-5 w-5 cursor-pointer appearance-none border-2 border-gray-300 rounded-md bg-white transition-all checked:border-[var(--color-pharma-blue)] checked:bg-[var(--color-pharma-blue)] hover:border-[var(--color-pharma-blue)]"
-                                    />
-                                    <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <span className="text-sm font-bold text-gray-700">Comprar como Empresa (Requiere Factura Electrónica)</span>
-                            </label>
-                        </div>
+                    <div className="space-y-4">
 
-                        {isCompany && (
-                            <div className="col-span-1 sm:col-span-2 space-y-1 animate-in fade-in slide-in-from-top-1">
-                                <label className="text-xs font-bold uppercase text-gray-500">Razón Social</label>
+                        {/* Tipo y Número de Documento */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Tipo de documento <span className="text-red-500">*</span></label>
+                                <select
+                                    name="documentType"
+                                    value={customerData.documentType}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-white h-[42px]"
+                                >
+                                    {DOCUMENT_TYPES.map(type => (
+                                        <option key={type.value} value={type.value}>{type.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Número de documento <span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
-                                    name="companyName"
-                                    value={customerData.companyName}
+                                    name="documentId"
+                                    value={customerData.documentId}
                                     onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-blue-50/30"
-                                    placeholder="Nombre de la empresa"
-                                    required={isCompany}
+                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none h-[42px]"
+                                    required
                                 />
                             </div>
-                        )}
-                    </div>
-                </div>
+                        </div>
 
-                {/* 2. Envío */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-[var(--color-pharma-blue)] mb-4 flex items-center gap-2">
-                        <span className="bg-[var(--color-pharma-blue)] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
-                        Datos de Envío
-                    </h2>
-                    <div className="space-y-4">
+                        {/* Nombres y Apellidos */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Nombre <span className="text-red-500">*</span></label>
+                                <input type="text" name="firstName" value={customerData.firstName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Apellidos <span className="text-red-500">*</span></label>
+                                <input type="text" name="lastName" value={customerData.lastName} onChange={handleInputChange} className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none" required />
+                            </div>
+                        </div>
+
+                        {/* País / Región */}
                         <div className="space-y-1">
-                            <label className="text-xs font-bold uppercase text-gray-500">Ubicación (Departamento)</label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
+                            <label className="text-xs font-bold uppercase text-gray-500">País / Región <span className="text-red-500">*</span></label>
+                            <input type="text" value="Colombia" disabled className="w-full p-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed font-medium" />
+                        </div>
+
+                        {/* Departamento y Ciudad */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Departamento <span className="text-red-500">*</span></label>
                                 <select
                                     value={selectedState}
                                     onChange={(e) => setSelectedState(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-white font-medium"
+                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-white h-[42px]"
                                 >
-                                    <option value="">-- Seleccionar Departamento --</option>
+                                    <option value="">-- Seleccionar --</option>
                                     {COLOMBIA_STATES.map(st => (
                                         <option key={st.code} value={st.code}>{st.name}</option>
                                     ))}
                                 </select>
                             </div>
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Ciudad <span className="text-red-500">*</span></label>
+                                <div className="relative">
+                                    <select
+                                        name="city"
+                                        value={customerData.city}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border border-gray-200 rounded-lg outline-none bg-white h-[42px]"
+                                        required
+                                        disabled={!selectedState}
+                                    >
+                                        <option value="">-- Seleccionar --</option>
+                                        {availableCities.map((city) => (
+                                            <option key={city.code} value={city.name}>{city.name}</option>
+                                        ))}
+                                    </select>
+                                    {selectedState && availableCities.length === 0 && (
+                                        <span className="text-[10px] text-gray-400 absolute right-2 top-3">Cargando...</span>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
+                        {/* Lógica de Método de Entrega (integrada sutilmente) */}
                         {selectedState && (
-                            <>
-                                {/* T24: Pickup Store Logic */}
+                            <div className="py-2 animate-in fade-in">
                                 {(selectedState === 'CO-DC' || customerData.city === 'Bogotá D.C.') && (
-                                    <div className="mb-4 bg-blue-50/50 p-3 rounded-xl border border-blue-100">
-                                        <p className="text-xs font-bold uppercase text-gray-500 mb-2">Método de Entrega</p>
-                                        <div className="flex gap-2">
-                                            <label className={`
-                                                flex-1 cursor-pointer p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 text-center
-                                                ${deliveryMethod === 'shipping'
-                                                    ? 'bg-white border-[var(--color-pharma-blue)] shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
-                                                    : 'bg-transparent border-transparent hover:bg-white hover:border-gray-200'
-                                                }
-                                            `}>
-                                                <input
-                                                    type="radio"
-                                                    name="deliveryMethod"
-                                                    value="shipping"
-                                                    checked={deliveryMethod === 'shipping'}
-                                                    onChange={() => setDeliveryMethod('shipping')}
-                                                    className="hidden"
-                                                />
-                                                <Truck className={`w-5 h-5 ${deliveryMethod === 'shipping' ? 'text-[var(--color-pharma-blue)]' : 'text-gray-400'}`} />
-                                                <span className={`text-xs font-bold ${deliveryMethod === 'shipping' ? 'text-[var(--color-pharma-blue)]' : 'text-gray-500'}`}>Domicilio</span>
-                                            </label>
-
-                                            <label className={`
-                                                flex-1 cursor-pointer p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 text-center
-                                                ${deliveryMethod === 'pickup'
-                                                    ? 'bg-white border-[var(--color-pharma-green)] shadow-sm ring-1 ring-[var(--color-pharma-green)]'
-                                                    : 'bg-transparent border-transparent hover:bg-white hover:border-gray-200'
-                                                }
-                                            `}>
-                                                <input
-                                                    type="radio"
-                                                    name="deliveryMethod"
-                                                    value="pickup"
-                                                    checked={deliveryMethod === 'pickup'}
-                                                    onChange={() => setDeliveryMethod('pickup')}
-                                                    className="hidden"
-                                                />
-                                                <MapPin className={`w-5 h-5 ${deliveryMethod === 'pickup' ? 'text-[var(--color-pharma-green)]' : 'text-gray-400'}`} />
-                                                <span className={`text-xs font-bold ${deliveryMethod === 'pickup' ? 'text-[var(--color-pharma-green)]' : 'text-gray-500'}`}>Retiro en Tienda</span>
-                                            </label>
-                                        </div>
+                                    <div className="flex items-center gap-4 mb-3 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                        <span className="text-xs font-bold uppercase text-gray-500">Método:</span>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input type="radio" name="deliveryMethod" value="shipping" checked={deliveryMethod === 'shipping'} onChange={() => setDeliveryMethod('shipping')} className="text-[var(--color-pharma-blue)] focus:ring-[var(--color-pharma-blue)]" />
+                                            <span className="text-sm font-medium">Domicilio</span>
+                                        </label>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input type="radio" name="deliveryMethod" value="pickup" checked={deliveryMethod === 'pickup'} onChange={() => setDeliveryMethod('pickup')} className="text-[var(--color-pharma-green)] focus:ring-[var(--color-pharma-green)]" />
+                                            <span className="text-sm font-medium">Retiro en Tienda</span>
+                                        </label>
                                     </div>
                                 )}
 
                                 {deliveryMethod === 'pickup' ? (
-                                    <div className="p-4 bg-green-50 rounded-lg border border-green-100 animate-in fade-in slide-in-from-top-2 mb-4">
-                                        <div className="flex gap-3">
-                                            <div className="bg-white p-2 rounded-full h-fit shadow-sm text-green-600">
-                                                <MapPin className="w-5 h-5" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-green-800 text-sm">Punto de Retiro: Sede Principal</h4>
-                                                <p className="text-xs text-green-700 mt-1">
-                                                    Calle 86 # 27-54, Bogotá D.C.<br />
-                                                    Horario: Lunes a Viernes 7am - 7pm
-                                                </p>
-                                                <div className="flex items-center gap-1 mt-2 text-[10px] font-bold text-green-600 uppercase">
-                                                    <span className="bg-green-100 px-2 py-0.5 rounded">Entrega Inmediata</span>
-                                                </div>
-                                            </div>
+                                    <div className="p-3 bg-green-50 rounded-lg border border-green-100 text-sm text-green-800 flex items-start gap-2">
+                                        <MapPin className="w-5 h-5 text-green-600 shrink-0" />
+                                        <div>
+                                            <strong>Punto de Retiro: Sede Principal</strong><br />
+                                            Calle 86 # 27-54, Bogotá D.C. (Lunes a Viernes 7am - 7pm)
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="p-3 bg-blue-50/50 rounded-lg border border-blue-100 mb-4">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <Truck className="w-5 h-5 text-[var(--color-pharma-blue)]" />
-                                                <div>
-                                                    <p className="text-sm font-bold text-gray-800">
-                                                        {loadingShipping ? 'Calculando...' : (shippingMethodName || 'Selecciona una ciudad')}
-                                                    </p>
-                                                    {deliveryDays > 0 && (
-                                                        <p className="text-xs text-gray-500">
-                                                            Entrega: {deliveryDays} {deliveryDays === 1 ? 'día' : 'días'}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="font-bold text-[var(--color-pharma-blue)]">
-                                                {loadingShipping ? '...' : (shippingCost === 0 ? 'Selecciona ciudad' : `$${shippingCost.toLocaleString()}`)}
-                                            </div>
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100 text-sm">
+                                        <div className="flex items-center gap-2">
+                                            <Truck className="w-4 h-4 text-gray-500" />
+                                            <span className="font-medium text-gray-700">{loadingShipping ? 'Calculando envío...' : (shippingMethodName || 'Envío estándar')}</span>
                                         </div>
+                                        <span className="font-bold text-[var(--color-pharma-blue)]">{shippingCost > 0 ? `$${shippingCost.toLocaleString()}` : (loadingShipping ? '...' : '$0')}</span>
                                     </div>
                                 )}
-
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold uppercase text-gray-500">Ciudad / Municipio</label>
-                                    <div className="relative">
-                                        <select
-                                            name="city"
-                                            value={customerData.city}
-                                            onChange={handleInputChange}
-                                            className="w-full p-2 border border-gray-200 rounded-lg outline-none bg-white font-medium appearance-none"
-                                            required
-                                            disabled={!selectedState || availableCities.length === 0}
-                                        >
-                                            <option value="">-- Seleccionar Ciudad --</option>
-                                            {availableCities.map((city) => (
-                                                <option key={city.code} value={city.name}>{city.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    {selectedState && availableCities.length === 0 && (
-                                        <p className="text-xs text-gray-500 mt-1">Cargando ciudades...</p>
-                                    )}
-                                </div>
-
-                                {deliveryMethod === 'shipping' && (
-                                    <div className="space-y-1 animate-in fade-in">
-                                        <label className="text-xs font-bold uppercase text-gray-500">Dirección Exacta</label>
-                                        <input type="text" name="address" value={customerData.address} onChange={handleInputChange} placeholder="Calle 123 # 45 - 67, Apto 101" className="w-full p-2 border border-gray-200 rounded-lg outline-none" required />
-                                    </div>
-                                )}
-                            </>
-                        )}
-
-                        {/* T25: Delivery Schedule */}
-                        <div className="pt-4 border-t border-gray-100 relative">
-                            <label className="text-xs font-bold uppercase text-gray-500 mb-1 flex items-center gap-2">
-                                <Calendar className="w-4 h-4" />
-                                ¿Cuándo quieres recibir tu pedido?
-                            </label>
-
-                            {/* Inline Error Message */}
-                            {dateError && (
-                                <div className="absolute top-0 right-0 -mt-2 bg-red-100 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full animate-in fade-in slide-in-from-bottom-1 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {dateError}
-                                </div>
-                            )}
-
-                            <input
-                                type="date"
-                                className={`w-full p-2 border rounded-lg outline-none text-gray-700 bg-white transition-colors ${dateError ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'}`}
-                                min={new Date().toISOString().split('T')[0]} // Min today
-                                value={deliveryDate}
-                                onChange={(e) => {
-                                    if (!e.target.value) {
-                                        setDeliveryDate('');
-                                        setDateError('');
-                                        return;
-                                    }
-                                    const [year, month, day] = e.target.value.split('-').map(Number);
-                                    // Create date in local time (months are 0-indexed)
-                                    const date = new Date(year, month - 1, day);
-
-                                    // 0 = Sunday
-                                    if (isSunday(date)) {
-                                        setDateError("No entregamos domingos. Selecciona otra fecha.");
-                                        setDeliveryDate('');
-                                        return;
-                                    }
-
-                                    // Checks for Colombia Holidays
-                                    if (isHoliday(e.target.value)) {
-                                        setDateError("Es festivo. No hay servicio.");
-                                        setDeliveryDate('');
-                                        return;
-                                    }
-
-                                    // Valid date
-                                    setDateError('');
-                                    setDeliveryDate(e.target.value);
-                                }}
-                            />
-                            <p className="text-[10px] text-gray-500 mt-1 font-medium">
-                                * Horario de entregas: Lunes a Sábado. Domingos y festivos no hay servicio de domicilio.
-                            </p>
-                        </div>
-
-                        {/* T25: Prescription Check */}
-                        {requiresPrescription && (
-                            <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 animate-in fade-in slide-in-from-top-2">
-                                <div className="flex items-start gap-3">
-                                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                                    <div>
-                                        <h4 className="font-bold text-amber-800 text-sm">Medicamento bajo Fórmula Médica</h4>
-                                        <p className="text-xs text-amber-700 mt-2 mb-3 leading-relaxed">
-                                            Algunos productos de tu carrito requieren prescripción médica vigente. Por normativa, adjunta una foto de tu fórmula o firma la declaración.
-                                        </p>
-
-                                        {/* T25: File Uploader */}
-                                        <div className="mb-4">
-                                            <PrescriptionUploader
-                                                onUploadComplete={(url) => {
-                                                    setPrescriptionFileUrl(url);
-                                                    setPrescriptionConfirmed(true); // Auto-confirm on upload
-                                                }}
-                                                onRemove={() => {
-                                                    setPrescriptionFileUrl(null);
-                                                    setPrescriptionConfirmed(false);
-                                                }}
-                                                currentUrl={prescriptionFileUrl || undefined}
-                                            />
-                                        </div>
-
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">O firma manualmente</span>
-                                            <div className="h-px bg-gray-200 flex-1"></div>
-                                        </div>
-
-                                        <label className="flex items-start gap-3 cursor-pointer group p-3 bg-white/50 rounded-lg hover:bg-white transition-colors border border-amber-100">
-                                            <div className="relative flex items-center mt-0.5">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={prescriptionConfirmed}
-                                                    onChange={(e) => setPrescriptionConfirmed(e.target.checked)}
-                                                    className="peer h-5 w-5 cursor-pointer appearance-none border-2 border-gray-400 rounded bg-white transition-all checked:border-amber-600 checked:bg-amber-600 hover:border-amber-600"
-                                                />
-                                                <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <span className="text-xs font-semibold text-gray-700">
-                                                No tengo el archivo a la mano, pero declaro bajo juramento tener la fórmula vigente.
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
                             </div>
                         )}
+
+                        {/* Dirección de la calle */}
+                        <div className="space-y-1">
+                            <label className="text-sm font-semibold text-gray-700 mb-1 block">Dirección de entrega <span className="text-red-500">*</span></label>
+                            <input
+                                type="text"
+                                name="address"
+                                value={customerData.address}
+                                onChange={handleInputChange}
+                                placeholder="Número de casa y nombre de la calle"
+                                className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none"
+                                required
+                            />
+                        </div>
+
+                        {/* Apartamento (Opcional) */}
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold uppercase text-gray-500">Apartamento, habitación, etc. (opcional)</label>
+                            <input
+                                type="text"
+                                name="address2"
+                                value={customerData.address2}
+                                onChange={handleInputChange}
+                                placeholder="Apartamento, suite, unidad, etc. (opcional)"
+                                className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none"
+                            />
+                        </div>
+
+                        {/* ZIP y Teléfono */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold uppercase text-gray-500">Código postal / ZIP (opcional)</label>
+                                <input
+                                    type="text"
+                                    name="zipCode"
+                                    value={customerData.zipCode}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-gray-700 mb-1 block">Teléfono / Celular <span className="text-red-500">*</span></label>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={customerData.phone}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Email */}
+                        <div className="space-y-1">
+                            <label className="text-sm font-semibold text-gray-700 mb-1 block">Correo electrónico <span className="text-red-500">*</span></label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={customerData.email}
+                                onChange={handleInputChange}
+                                className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none"
+                                required
+                            />
+                        </div>
+
+                        {/* Empresa Toggle */}
+                        <div className="pt-4 mt-2 border-t border-gray-100">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={isCompany}
+                                    onChange={(e) => toggleCompanyMode(e.target.checked)}
+                                    className="w-4 h-4 text-[var(--color-pharma-blue)] rounded border-gray-300 focus:ring-[var(--color-pharma-blue)]"
+                                />
+                                <span className="text-sm font-bold text-gray-700">¿Requieres Factura Electrónica para Empresa?</span>
+                            </label>
+
+                            {isCompany && (
+                                <div className="mt-3 space-y-1 animate-in fade-in">
+                                    <label className="text-xs font-bold uppercase text-gray-500">Razón Social</label>
+                                    <input
+                                        type="text"
+                                        name="companyName"
+                                        value={customerData.companyName}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border border-gray-200 rounded-lg focus:border-[var(--color-pharma-blue)] outline-none bg-blue-50/20"
+                                        placeholder="Nombre de la empresa"
+                                        required={isCompany}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
+
+                {/* T25: Delivery Schedule */}
+                <div className="pt-4 border-t border-gray-100 relative">
+                    <label className="text-xs font-bold uppercase text-gray-500 mb-1 flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        ¿Cuándo quieres recibir tu pedido?
+                    </label>
+
+                    {/* Inline Error Message */}
+                    {dateError && (
+                        <div className="absolute top-0 right-0 -mt-2 bg-red-100 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full animate-in fade-in slide-in-from-bottom-1 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {dateError}
+                        </div>
+                    )}
+
+                    <input
+                        type="date"
+                        className={`w-full p-2 border rounded-lg outline-none text-gray-700 bg-white transition-colors ${dateError ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'}`}
+                        min={new Date().toISOString().split('T')[0]} // Min today
+                        value={deliveryDate}
+                        onChange={(e) => {
+                            if (!e.target.value) {
+                                setDeliveryDate('');
+                                setDateError('');
+                                return;
+                            }
+                            const [year, month, day] = e.target.value.split('-').map(Number);
+                            // Create date in local time (months are 0-indexed)
+                            const date = new Date(year, month - 1, day);
+
+                            // 0 = Sunday
+                            if (isSunday(date)) {
+                                setDateError("No entregamos domingos. Selecciona otra fecha.");
+                                setDeliveryDate('');
+                                return;
+                            }
+
+                            // Checks for Colombia Holidays
+                            if (isHoliday(e.target.value)) {
+                                setDateError("Es festivo. No hay servicio.");
+                                setDeliveryDate('');
+                                return;
+                            }
+
+                            // Valid date
+                            setDateError('');
+                            setDeliveryDate(e.target.value);
+                        }}
+                    />
+                    <p className="text-[10px] text-gray-500 mt-1 font-medium">
+                        * Horario de entregas: Lunes a Sábado. Domingos y festivos no hay servicio de domicilio.
+                    </p>
+                </div>
+
+                {/* T25: Prescription Check */}
+                {requiresPrescription && (
+                    <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 animate-in fade-in slide-in-from-top-2">
+                        <div className="flex items-start gap-3">
+                            <ShieldCheck className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                            <div className="w-full">
+                                <h4 className="font-bold text-emerald-800 text-sm">Requiere Fórmula Médica</h4>
+                                <p className="text-xs text-emerald-700 mt-1 mb-3 leading-relaxed">
+                                    Este producto requiere prescripción. Adjunta el soporte digital.
+                                </p>
+
+                                {/* T25: File Uploader */}
+                                <PrescriptionUploader
+                                    onUploadComplete={(url) => {
+                                        setPrescriptionFileUrl(url);
+                                        setPrescriptionConfirmed(true); // Auto-confirm on upload for state consistency
+                                    }}
+                                    onRemove={() => {
+                                        setPrescriptionFileUrl(null);
+                                        setPrescriptionConfirmed(false);
+                                    }}
+                                    currentUrl={prescriptionFileUrl || undefined}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Right Column: Order Summary */}
@@ -775,7 +812,14 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                                 </div>
                                 <div className="flex-1 text-sm">
                                     <p className="font-medium text-[var(--color-pharma-blue)] line-clamp-1">{item.name}</p>
-                                    <p className="text-gray-500 text-xs">Cant: {item.quantity}</p>
+                                    <div className="flex flex-col">
+                                        <p className="text-gray-500 text-xs">Cant: {item.quantity}</p>
+                                        {item.promotion && (
+                                            <p className="text-[10px] text-purple-600 font-bold mt-0.5 flex items-center gap-1">
+                                                🎁 {item.promotion.description}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="text-right text-sm font-bold text-gray-900">
                                     ${(item.price * item.quantity).toLocaleString()}
@@ -921,15 +965,119 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                     </div>
 
                     <div className="space-y-3">
+                        {/* WOMPI – Pago con tarjeta/PSE/Nequi/Efectivo */}
+                        {/* Payment Method Selector */}
                         {!agreementTransactionId && (
-                            <button
-                                onClick={() => handleCheckout(false)}
-                                disabled={isLoading || !selectedState || isBelowMinAmount}
-                                className="w-full py-4 bg-[var(--color-pharma-green)] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed group"
-                            >
-                                {isLoading ? 'Procesando...' : 'Pagar con Tarjeta / PSE / Efectivo'}
-                                {!isLoading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
-                            </button>
+                            <div className="space-y-4">
+                                <h3 className="font-bold text-gray-800 text-sm">Selecciona el método de pago:</h3>
+                                <div className="space-y-3">
+                                    {/* Option: Wompi */}
+                                    <button
+                                        onClick={() => setPaymentMethod('wompi')}
+                                        className={`w-full text-left p-4 border rounded-xl flex items-center justify-between transition-all duration-200 group ${paymentMethod === 'wompi'
+                                            ? 'border-[var(--color-pharma-blue)] bg-blue-50/50 shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
+                                            : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            {/* Icon/Logo Placeholder */}
+                                            <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm">
+                                                <CreditCard size={20} className="text-gray-600" />
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-gray-800 text-sm">Wompi</div>
+                                                <div className="text-xs text-gray-500 font-medium">
+                                                    Nequi, PSE, Bancolombia, Tarjetas
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${paymentMethod === 'wompi'
+                                            ? 'bg-[var(--color-pharma-blue)] border-[var(--color-pharma-blue)]'
+                                            : 'border-gray-300 bg-white group-hover:border-gray-400'
+                                            }`}>
+                                            {paymentMethod === 'wompi' && <CheckCircle size={14} className="text-white" />}
+                                        </div>
+                                    </button>
+
+                                    {/* Option: Credibanco */}
+                                    <button
+                                        onClick={() => setPaymentMethod('credibanco')}
+                                        className={`w-full text-left p-4 border rounded-xl flex items-center justify-between transition-all duration-200 group ${paymentMethod === 'credibanco'
+                                            ? 'border-[var(--color-pharma-blue)] bg-blue-50/50 shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
+                                            : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm">
+                                                <CreditCard size={20} className="text-gray-600" />
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-gray-800 text-sm">Credibanco</div>
+                                                <div className="text-xs text-gray-500 font-medium">
+                                                    Tarjetas Crédito y Débito
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${paymentMethod === 'credibanco'
+                                            ? 'bg-[var(--color-pharma-blue)] border-[var(--color-pharma-blue)]'
+                                            : 'border-gray-300 bg-white group-hover:border-gray-400'
+                                            }`}>
+                                            {paymentMethod === 'credibanco' && <CheckCircle size={14} className="text-white" />}
+                                        </div>
+                                    </button>
+                                </div>
+
+                                {paymentMethod === 'wompi' && (
+                                    <WompiButton
+                                        amountCOP={finalTotal}
+                                        reference={wompiReference}
+                                        customerData={{
+                                            email: customerData.email,
+                                            fullName: `${customerData.firstName} ${customerData.lastName}`.trim(),
+                                            phoneNumber: customerData.phone,
+                                            legalId: customerData.documentId,
+                                            legalIdType: isCompany ? 'NIT' : 'CC',
+                                        }}
+                                        shippingAddress={deliveryMethod === 'shipping' ? {
+                                            addressLine1: customerData.address,
+                                            city: customerData.city,
+                                            region: COLOMBIA_STATES.find(s => s.code === selectedState)?.name || selectedState,
+                                            phoneNumber: customerData.phone,
+                                        } : undefined}
+                                        redirectUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/checkout/resultado`}
+                                        onResult={handleWompiResult}
+                                        disabled={!isFormReady}
+                                    />
+                                )}
+
+                                {paymentMethod === 'credibanco' && (
+                                    <button
+                                        onClick={handleCredibancoPayment}
+                                        disabled={!isFormReady || isLoading}
+                                        className={`
+                                            w-full py-4 rounded-xl font-bold text-base
+                                            flex items-center justify-center gap-3
+                                            transition-all duration-200 shadow-md
+                                            bg-[var(--color-pharma-blue)] hover:bg-blue-700 text-white
+                                            disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+                                        `}
+                                    >
+                                        {isLoading ? (
+                                            <>
+                                                <Loader2 size={20} className="animate-spin" />
+                                                <span>Procesando...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <CreditCard size={20} />
+                                                <span>Pagar con Credibanco</span>
+                                            </>
+                                        )}
+                                    </button>
+                                )}
+                            </div>
                         )}
 
                         <button
@@ -980,14 +1128,15 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         </p>
                     </div>
                 </div>
-            </div>
+            </div >
 
             {showAgreementModal && (
                 <AgreementModal
                     onAuthorized={handleAgreementAuthorized}
                     onCancel={() => setShowAgreementModal(false)}
                 />
-            )}
+            )
+            }
         </div >
     );
 }

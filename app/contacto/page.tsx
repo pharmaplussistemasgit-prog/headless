@@ -190,8 +190,12 @@ export default function ContactPage() {
               <p className="text-sm text-gray-500">Bogotá D.C., Colombia</p>
             </div>
             <div>
-              <h4 className="font-bold text-[var(--color-pharma-blue)]">(601) 593 4005</h4>
+              <h4 className="font-bold text-[var(--color-pharma-blue)]">(601) 593 4010</h4>
               <p className="text-sm text-gray-500">Línea Nacional</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-[var(--color-pharma-blue)]">+57 316 839 7933</h4>
+              <p className="text-sm text-gray-500">WhatsApp</p>
             </div>
             <div>
               <h4 className="font-bold text-[var(--color-pharma-green)]">atencionalusuario@pharmaplus.com.co</h4>

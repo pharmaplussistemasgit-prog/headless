@@ -1,12 +1,13 @@
 import { HeroSection } from "@/components/home/HeroSection";
-import type { HeroSlide } from "@/components/home/HeroSection";
+import { HERO_MARKETING_CONFIG } from "@/lib/marketing";
 import CategoryIconsSection from "@/components/home/CategoryIconsSection";
 import FeaturedBrands from "@/components/home/FeaturedBrands";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import ColdChainSection from "@/components/home/ColdChainSection";
 import RecommendedSection from "@/components/home/RecommendedSection";
 import ValueProposition from "@/components/home/ValueProposition";
-import { getProducts, getCategoryTreeData, getOnSaleProducts } from "@/lib/woocommerce";
+import { getProducts, getCategoryTreeData, getOnSaleProducts, getCustomApiOffers } from "@/lib/woocommerce";
+import { Product, CategoryTree } from '@/types/woocommerce';
 import { getShippingRates } from '@/lib/shipping';
 import dynamic from 'next/dynamic';
 
@@ -27,59 +28,6 @@ const FAQSection = dynamic(() => import('@/components/home/FAQSection'), {
 // Enable ISR - revalidate every 1 minute for homepage (high traffic)
 export const revalidate = 0;
 
-// Professional Hero Slides with local images
-const heroSlides: HeroSlide[] = [
-  {
-    id: '1',
-    image: '/Sliders/banner-1.png',
-    title: 'Ofertas Especiales',
-    subtitle: 'Promociones exclusivas',
-    ctaText: 'Ver más',
-    ctaLink: '/ofertas',
-    discount: '65% OFF',
-    bgColor: '#F5F0FF',
-  },
-  {
-    id: '2',
-    image: '/Sliders/Nuevo-Banner-Vitybell.jpg',
-    title: 'Vitybell',
-    subtitle: 'Suplementos vitamínicos',
-    ctaText: 'Comprar ahora',
-    ctaLink: '/tienda',
-    discount: '45% OFF',
-    bgColor: '#E8F4F8',
-  },
-  {
-    id: '3',
-    image: '/Sliders/Banner-Ties.jpg',
-    title: 'Ties',
-    subtitle: 'Cuidado personal',
-    ctaText: 'Explorar',
-    ctaLink: '/categoria/cuidado-personal',
-    discount: '30% OFF',
-    bgColor: '#F0F9F4',
-  },
-  {
-    id: '4',
-    image: '/Sliders/WhatsApp-Image-2025-11-11-at-9.01.56-AM.jpeg',
-    title: 'Promoción Especial',
-    subtitle: 'Productos seleccionados',
-    ctaText: 'Ver ofertas',
-    ctaLink: '/ofertas',
-    discount: '50% OFF',
-    bgColor: '#FFF8F0',
-  },
-  {
-    id: '5',
-    image: '/Sliders/WhatsApp-Image-2025-11-13-at-9.10.58-AM.jpeg',
-    title: 'Nuevos Productos',
-    subtitle: 'Recién llegados',
-    ctaText: 'Descubrir',
-    ctaLink: '/tienda',
-    discount: '40% OFF',
-    bgColor: '#FFF3E0',
-  },
-];
 
 export default async function HomePage() {
   // Parallelize Data Fetching using Promise.all
@@ -108,16 +56,31 @@ export default async function HomePage() {
       return res;
     })(),
 
-    // 2. Flash Deals (Real Offers Only - No Fallback)
+    // 2. Flash Deals (Custom API con fallback silencioso)
     (async () => {
+      // getCustomApiOffers ya es tolerante a fallos (retorna [] si falla)
+      const { products: realOffers } = await getCustomApiOffers(1, 12);
+
+      if (realOffers.length >= 4) {
+        return realOffers;
+      }
+
+      // Fallback: completar con productos populares en oferta desde WooCommerce estándar
+      const needed = Math.max(4, 8 - realOffers.length);
       try {
-        const { products } = await getOnSaleProducts(1, 12);
-        return products;
-      } catch (error) {
-        console.error('Error fetching flash deals:', error);
-        return [];
+        const { products: fillers } = await getProducts({
+          perPage: needed,
+          orderby: 'popularity',
+          stockStatus: 'instock',
+        });
+        const offerIds = new Set(realOffers.map(p => p.id));
+        const uniqueFillers = fillers.filter((p: Product) => !offerIds.has(p.id));
+        return [...realOffers, ...uniqueFillers];
+      } catch {
+        return realOffers; // Devolver lo que tengamos aunque sea vacío
       }
     })(),
+
 
     // 3. Cold Chain
     getProducts({ search: 'insulina', perPage: 24, orderby: 'popularity' }),
@@ -138,7 +101,14 @@ export default async function HomePage() {
 
     // 6. Categories (New)
     getCategoryTreeData(),
-  ]);
+  ]) as unknown as [
+      { products: Product[]; total: number; totalPages: number },
+      Product[],
+      { products: Product[]; total: number; totalPages: number },
+      { products: Product[]; total: number; totalPages: number },
+      { products: Product[]; total: number; totalPages: number },
+      CategoryTree[]
+    ];
 
   // Helper function for shuffling
   const shuffleArray = <T,>(array: T[]): T[] => {
@@ -171,8 +141,9 @@ export default async function HomePage() {
     <div className="w-full bg-[var(--color-bg-light)]">
       {/* Hero Section */}
       <HeroSection
-        slides={heroSlides}
-        featuredProds={shuffledFeaturedTotal.slice(0, 2)}
+        slides={HERO_MARKETING_CONFIG.slides}
+        bannerTop={HERO_MARKETING_CONFIG.banners.top}
+        bannerBottom={HERO_MARKETING_CONFIG.banners.bottom}
       />
 
       {/* Category Icons */}

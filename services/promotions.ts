@@ -76,42 +76,73 @@ function getPromotionDescription(rule: PromotionRule): string {
     return `🎁 Pague ${rule.buyQuantity} Lleve ${rule.buyQuantity + rule.receiveQuantity}`;
 }
 
+
+import { wcFetchRaw } from '@/lib/woocommerce';
+
 /**
- * Obtiene todas las promociones activas
- * 
- * TODO: Reemplazar con llamada real a la API cuando esté disponible:
- * ```typescript
- * const today = new Date().toISOString().split('T')[0];
- * const response = await fetch(
- *   `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/item-ptc?` +
- *   `filters[FECHA_INICIO]<=${today}&filters[FECHA_FIN]>=${today}`,
- *   {
- *     headers: {
- *       'X-API-KEY': process.env.WORDPRESS_API_KEY || ''
- *     }
- *   }
- * );
- * return response.json();
- * ```
+ * Obtiene todas las promociones activas desde la API real
  */
 export async function getActivePromotions(): Promise<ActivePromotion[]> {
-    // Simular delay de red para realismo
-    await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+        const today = new Date().toISOString().split('T')[0];
 
-    const activePromotions: ActivePromotion[] = [];
+        // Llamada a la API con filtro de fechas validas
+        const { data } = await wcFetchRaw<any[]>('item-ptc', {
+            fecha_valida: today
+        }, 3600, 'custom-api/v1'); // Cache 1 hora
 
-    for (const rule of MOCK_PROMOTIONS) {
-        if (isPromotionActive(rule)) {
-            activePromotions.push({
-                sku: rule.itemId,
-                rule,
-                description: getPromotionDescription(rule),
-            });
+        if (!Array.isArray(data)) {
+            console.error('Invalid API response for promotions:', data);
+            return [];
         }
-    }
 
-    return activePromotions;
+        const activePromotions: ActivePromotion[] = [];
+
+        for (const item of data) {
+            // Mapear respuesta SQL a nuestra estructura
+            const rule: PromotionRule = {
+                itemId: item.ITEM_ID,
+                giftItemId: item.ITEM_ID_RECAMBIO,
+                buyQuantity: Number(item.POR_COMPRA_DE),
+                receiveQuantity: Number(item.RECIBE_PTC),
+                startDate: item.FECHA_INICIO,
+                endDate: item.FECHA_FIN,
+                maxQuantity: item.TOPE_MAXIMO ? Number(item.TOPE_MAXIMO) : undefined
+            };
+
+            // Validar fechas nuevamente por seguridad (aunque la API ya filtra)
+            if (isPromotionActive(rule)) {
+                activePromotions.push({
+                    sku: rule.itemId,
+                    rule,
+                    description: getPromotionDescription(rule),
+                });
+            }
+        }
+
+        return activePromotions;
+
+    } catch (error) {
+        console.error('Error fetching active promotions:', error);
+        // Fallback a MOCK solo en desarrollo si falla la API
+        if (process.env.NODE_ENV === 'development') {
+            console.warn('Falling back to MOCK promotions due to API error');
+            const mockPromos: ActivePromotion[] = [];
+            for (const rule of MOCK_PROMOTIONS) {
+                if (isPromotionActive(rule)) {
+                    mockPromos.push({
+                        sku: rule.itemId,
+                        rule,
+                        description: getPromotionDescription(rule),
+                    });
+                }
+            }
+            return mockPromos;
+        }
+        return [];
+    }
 }
+
 
 /**
  * Verifica si un producto específico tiene promoción activa

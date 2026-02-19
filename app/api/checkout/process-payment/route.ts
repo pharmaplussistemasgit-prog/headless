@@ -34,10 +34,41 @@ export async function POST(request: Request) {
         const methodId = paymentMethod === 'addi' ? 'addi' : 'wompi';
         const methodTitle = paymentMethod === 'addi' ? 'Pago con Addi' : 'Pago con Wompi (Tarjetas/PSE)';
 
+        // 3. META DATA (Prescription & Billing)
+        const metaData = [
+            // ID Keys for standard WooCommerce
+            { key: '_billing_cedula', value: customer.documentId }, // Common
+            { key: 'billing_cedula', value: customer.documentId },
+            { key: 'tipo_documento', value: 'CC' },
+            { key: 'numero_documento', value: customer.documentId },
+            // ID Keys for Addi Plugin for WooCommerce
+            { key: '_billing_document_id', value: customer.documentId },
+            { key: 'billing_document_id', value: customer.documentId },
+            { key: '_billing_identification', value: customer.documentId },
+            { key: 'billing_identification', value: customer.documentId },
+            // ID Keys for Wompi Plugin for WooCommerce
+            { key: '_billing_dni', value: customer.documentId },
+            { key: 'billing_dni', value: customer.documentId }
+        ];
+
+        // Add Prescription Data if available
+        if (body.prescriptionUrl) {
+            metaData.push({ key: '_cl_rx_attachment_url', value: body.prescriptionUrl });
+            metaData.push({ key: '_cl_rx_missing', value: '0' });
+        } else if (body.requiresPrescription) {
+            metaData.push({ key: '_cl_rx_missing', value: '1' });
+        }
+
+        // Add Wompi Transaction ID if available
+        if (body.wompiTransactionId) {
+            metaData.push({ key: '_wompi_transaction_id', value: body.wompiTransactionId });
+        }
+
         const orderData = {
             payment_method: methodId,
             payment_method_title: methodTitle,
-            set_paid: false,
+            set_paid: body.wompiTransactionId ? true : false,
+            status: body.wompiTransactionId ? 'processing' : 'pending',
             billing: {
                 first_name: billing?.firstName || customer.firstName,
                 last_name: billing?.lastName || customer.lastName,
@@ -61,21 +92,7 @@ export async function POST(request: Request) {
                 country: 'CO',
             },
             line_items: line_items,
-            meta_data: [
-                // ID Keys for standard WooCommerce
-                { key: '_billing_cedula', value: customer.documentId }, // Common
-                { key: 'billing_cedula', value: customer.documentId },
-                { key: 'tipo_documento', value: 'CC' },
-                { key: 'numero_documento', value: customer.documentId },
-                // ID Keys for Addi Plugin for WooCommerce
-                { key: '_billing_document_id', value: customer.documentId },
-                { key: 'billing_document_id', value: customer.documentId },
-                { key: '_billing_identification', value: customer.documentId },
-                { key: 'billing_identification', value: customer.documentId },
-                // ID Keys for Wompi Plugin for WooCommerce
-                { key: '_billing_dni', value: customer.documentId },
-                { key: 'billing_dni', value: customer.documentId }
-            ],
+            meta_data: metaData,
             shipping_lines: [
                 {
                     method_id: 'flat_rate',

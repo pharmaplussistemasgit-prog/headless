@@ -85,11 +85,32 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
     let subtotal = 0;
     let totalDiscount = 0;
     const appliedPromos: Set<string> = new Set();
+    const processedItemIds = new Set<number>(); // Track items that already have a promo applied
 
+    // 1. Calculate Subtotal & Apply Item-Level Promotions (PTC from API)
     items.forEach(item => {
         subtotal += item.price * item.quantity;
+
+        // check for item-level promotion
+        if (item.promotion && item.promotion.rule) {
+            const rule = item.promotion.rule;
+            const buyQty = rule.buyQuantity;        // e.g. 2
+            const getFreeQty = rule.receiveQuantity; // e.g. 1
+            const setSize = buyQty + getFreeQty;    // e.g. 3 (Buy 2 Get 1 Free -> total 3)
+
+            if (item.quantity >= setSize) {
+                const sets = Math.floor(item.quantity / setSize);
+                const totalFreeItems = sets * getFreeQty;
+
+                const discountAmount = totalFreeItems * item.price;
+                totalDiscount += discountAmount;
+                appliedPromos.add(item.promotion.description);
+                processedItemIds.add(item.id);
+            }
+        }
     });
 
+    // 2. Apply Global Promotions to remaining items
     for (const promo of ACTIVE_PROMOTIONS) {
         // Date Check
         const now = new Date();
@@ -97,11 +118,16 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
         if (promo.endDate && new Date(promo.endDate) < now) continue;
 
         items.forEach(item => {
+            // Skip if already promoted
+            if (processedItemIds.has(item.id)) return;
+
             if (isItemEligible(item, promo)) {
 
-                // --- BUY X GET Y ---
+                // --- BUY X GET Y (Legacy / Global Config) ---
                 if (promo.type === 'buy_x_get_y' && promo.buyQuantity && promo.getQuantity) {
                     const quantity = item.quantity;
+                    // Note: In this legacy structure, getQuantity is usually the TOTAL (e.g. 3 for 3x2)
+                    // We keep this logic as is for backward compatibility if used.
                     if (quantity >= promo.getQuantity!) {
                         const sets = Math.floor(quantity / promo.getQuantity!);
                         const freeItemsPerSet = promo.getQuantity! - promo.buyQuantity!;
@@ -110,6 +136,7 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
                         const discountAmount = totalFreeItems * item.price;
                         totalDiscount += discountAmount;
                         appliedPromos.add(promo.name);
+                        processedItemIds.add(item.id);
                     }
                 }
 
@@ -118,6 +145,7 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
                     const discountAmount = (item.price * item.quantity) * (promo.percentage! / 100);
                     totalDiscount += discountAmount;
                     appliedPromos.add(promo.name);
+                    processedItemIds.add(item.id);
                 }
 
                 // --- B2B FIXED PRICE ---
@@ -127,6 +155,7 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
                         const diffPerUnit = item.price - promo.fixedPrice;
                         totalDiscount += diffPerUnit * item.quantity;
                         appliedPromos.add(promo.name);
+                        processedItemIds.add(item.id);
                     }
                 }
 
@@ -144,6 +173,7 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
                         if (currentItemDiscount > 0) {
                             totalDiscount += currentItemDiscount;
                             appliedPromos.add(promo.name);
+                            processedItemIds.add(item.id);
                         }
                     }
                 }
@@ -164,6 +194,12 @@ export function calculateCartTotal(items: CartItem[]): { subtotal: number; disco
 
 // Function to check if a single product has active promo (for badges)
 export function getProductPromo(product: any): string | null {
+    // 1. Check direct promotion from API (PTC / Buy X Get Y)
+    if (product.promotion && product.promotion.description) {
+        return product.promotion.description; // e.g. "Pague 2 Lleve 3"
+    }
+
+    // 2. Adapter to check against ACTIVE_PROMOTIONS
     // Adapter to check against ACTIVE_PROMOTIONS
 
     // Minimal CartItem for check

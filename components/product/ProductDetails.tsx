@@ -10,6 +10,8 @@ import { MappedProduct } from '@/types/product';
 import RecommendedSection from '@/components/home/RecommendedSection';
 import ColdChainAlert from './ColdChainAlert';
 
+import { getProductPromo } from '@/lib/promotions'; // Import added
+
 interface ProductDetailsProps {
     product: MappedProduct;
     relatedProducts?: any[];
@@ -20,6 +22,9 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
     const { addItem } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [activeImage, setActiveImage] = useState(product.images[0]);
+
+    // Get Promo Label
+    const promoLabel = getProductPromo(product);
 
     // Helper to get image URL safely
     const getImgSrc = (img: any) => {
@@ -45,6 +50,8 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
             slug: product.slug,
             sku: product.sku || undefined, // T19: ERP Support
             categories: product.categories, // T23: Cold Chain
+            requiresPrescription: product.requiresRx,
+            promotion: product.promotion, // T27: PTC Promotion
         });
         toast.success(`Agregado al carrito: ${product.name}`);
     };
@@ -80,8 +87,13 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                     priority
                                 />
                                 {product.isOnSale && product.discountPercentage && (
-                                    <div className="absolute top-4 left-4 bg-[#FF4D8D] text-white text-sm font-bold px-3 py-1 rounded-full shadow-sm">
+                                    <div className="absolute top-4 left-4 bg-[#FF4D8D] text-white text-sm font-bold px-3 py-1 rounded-full shadow-sm z-10">
                                         -{product.discountPercentage}%
+                                    </div>
+                                )}
+                                {promoLabel && (
+                                    <div className="absolute top-4 right-4 bg-[#9333ea] text-white text-sm font-bold px-3 py-1 rounded-full shadow-sm z-10 animate-pulse border-2 border-white">
+                                        {promoLabel}
                                     </div>
                                 )}
                             </div>
@@ -121,8 +133,6 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                         <span className="bg-gray-100 px-2 py-1 rounded text-xs tracking-wider uppercase">REFERENCIA: {product.sku}</span>
                                     )}
                                     <div className="flex items-center gap-1 text-yellow-400">
-                                        {/* Valoración falsa fija para replicar UI "5 estrellas (1)" si se requiere, pero usuario dijo quitar sistema de reseñas.
-                                           Mantengo limpio según instrucción "eliminemos sistema de reseñas". */}
                                     </div>
                                 </div>
 
@@ -162,6 +172,19 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                                 📅 Oferta válida
                                                 {product.dateOnSaleFrom && ` desde ${new Date(product.dateOnSaleFrom).toLocaleDateString()}`}
                                                 {product.dateOnSaleTo && ` hasta ${new Date(product.dateOnSaleTo).toLocaleDateString()}`}
+                                            </div>
+                                        )}
+
+                                        {/* NEW: PTC Promo Banner */}
+                                        {promoLabel && (
+                                            <div className="mt-2 p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center gap-3 animate-pulse">
+                                                <div className="bg-purple-100 p-2 rounded-full text-purple-600">
+                                                    <span className="font-extrabold text-xs">🎁</span>
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-purple-800 text-sm">{promoLabel}</h4>
+                                                    <p className="text-xs text-purple-600">¡Aprovecha esta promoción especial!</p>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -251,11 +274,13 @@ export default function ProductDetails({ product, relatedProducts = [], alsoView
                                         <div className="flex-1">
                                             <h4 className="font-bold text-red-700 text-sm">Producto No Disponible</h4>
                                             <p className="text-sm text-red-600 mt-1 leading-snug">
-                                                En el momento no hay producto en existencias, por favor comuníquese con nuestras líneas de atención para consultar disponibilidad:
+                                                En el momento no hay producto en existencias, por favor comuniquese con nuestras lineas de atencion para consultar disponibilidad
                                             </p>
                                             <div className="mt-3 flex flex-col sm:flex-row gap-3">
                                                 <a
                                                     href="tel:6015934010"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
                                                     className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-pharma-blue)] text-white rounded-lg hover:bg-blue-800 transition-colors text-sm font-semibold"
                                                 >
                                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

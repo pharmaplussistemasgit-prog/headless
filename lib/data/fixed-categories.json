@@ -1,0 +1,1753 @@
+[
+  {
+    "id": 3366,
+    "name": "ALIMENTACION ESPECIAL",
+    "slug": "alimentacion-especial",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 37,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3366",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3401,
+        "name": "NIÑOS",
+        "slug": "ninos-alimentacion",
+        "parent": 3366,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 8,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3401",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3366"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 3368,
+    "name": "CADENA DE FRIO",
+    "slug": "cadena-de-frio",
+    "parent": 0,
+    "description": "",
+    "display": "both",
+    "image": null,
+    "menu_order": 0,
+    "count": 96,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3368",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": []
+  },
+  {
+    "id": 3419,
+    "name": "CUIDADO CAPILAR",
+    "slug": "cuidado-capilar",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 0,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3410,
+        "name": "ANTICAIDA",
+        "slug": "anticaida-capilar",
+        "parent": 3419,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 43,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3410",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": 3370,
+            "name": "FORTALECIMIENTO Y REPARACION",
+            "slug": "fortalecimiento-y-reparacion-anticaida",
+            "parent": 3410,
+            "description": "",
+            "display": "default",
+            "image": null,
+            "menu_order": 0,
+            "count": 8,
+            "_links": {
+              "self": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3370",
+                  "targetHints": {
+                    "allow": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "PATCH",
+                      "DELETE"
+                    ]
+                  }
+                }
+              ],
+              "collection": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+                }
+              ],
+              "up": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3410"
+                }
+              ]
+            },
+            "children": []
+          },
+          {
+            "id": 313,
+            "name": "PIEL GRASA",
+            "slug": "piel-grasa-anticaida",
+            "parent": 3410,
+            "description": "",
+            "display": "default",
+            "image": null,
+            "menu_order": 0,
+            "count": 1,
+            "_links": {
+              "self": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/313",
+                  "targetHints": {
+                    "allow": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "PATCH",
+                      "DELETE"
+                    ]
+                  }
+                }
+              ],
+              "collection": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+                }
+              ],
+              "up": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3410"
+                }
+              ]
+            },
+            "children": []
+          },
+          {
+            "id": 3417,
+            "name": "PIEL SECA",
+            "slug": "piel-seca-capilar",
+            "parent": 3410,
+            "description": "",
+            "display": "default",
+            "image": null,
+            "menu_order": 0,
+            "count": 1,
+            "_links": {
+              "self": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3417",
+                  "targetHints": {
+                    "allow": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "PATCH",
+                      "DELETE"
+                    ]
+                  }
+                }
+              ],
+              "collection": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+                }
+              ],
+              "up": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3410"
+                }
+              ]
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 3400,
+        "name": "ANTICASPA",
+        "slug": "anticaspa-capilar",
+        "parent": 3419,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 23,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3400",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3414,
+        "name": "FORTALECIMIENTO Y REPARACION",
+        "slug": "fortalecimiento-y-reparacion-capilar",
+        "parent": 3419,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 21,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3414",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3412,
+        "name": "PIEL GRASA",
+        "slug": "piel-grasa-capilar",
+        "parent": 3419,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 5,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3412",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3413,
+        "name": "PIEL SECA",
+        "slug": "piel-seca-cuidado",
+        "parent": 3419,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3413",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3372,
+        "name": "PIEL SENSIBLE",
+        "slug": "piel-sensible",
+        "parent": 3419,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 4,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3372",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3419"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 297,
+    "name": "CUIDADO CORPORAL",
+    "slug": "cuidado-corporal",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 46,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3411,
+        "name": "DESODORANTES",
+        "slug": "desodorantes-corporal",
+        "parent": 297,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 8,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3411",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3415,
+        "name": "DESPIGMENTANTES",
+        "slug": "despigmentantes-corporal",
+        "parent": 297,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 5,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3415",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3399,
+        "name": "HIDRATANTES",
+        "slug": "hidratantes-corporal",
+        "parent": 297,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 76,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3399",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 322,
+        "name": "LIMPIADORES",
+        "slug": "limpiadores",
+        "parent": 297,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 46,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/322",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3404,
+        "name": "NIÑOS",
+        "slug": "ninos-cuidado",
+        "parent": 297,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 4,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3404",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3409,
+        "name": "OTROS",
+        "slug": "otros-corporal",
+        "parent": 297,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 11,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3409",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/297"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 299,
+    "name": "CUIDADO FACIAL",
+    "slug": "cuidado-facial",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 444,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3402,
+        "name": "ANTIEDAD",
+        "slug": "antiedad-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 115,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3402",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 318,
+        "name": "DESPIGMENTANTES",
+        "slug": "despigmentantes-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 41,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/318",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 319,
+        "name": "EXFOLIANTES",
+        "slug": "exfoliantes",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 9,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/319",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3405,
+        "name": "HIDRATANTES",
+        "slug": "hidratantes-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 90,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3405",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": 3418,
+            "name": "MAQUILLAJE",
+            "slug": "maquillaje-hidratante",
+            "parent": 3405,
+            "description": "",
+            "display": "default",
+            "image": null,
+            "menu_order": 0,
+            "count": 2,
+            "_links": {
+              "self": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3418",
+                  "targetHints": {
+                    "allow": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "PATCH",
+                      "DELETE"
+                    ]
+                  }
+                }
+              ],
+              "collection": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+                }
+              ],
+              "up": [
+                {
+                  "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3405"
+                }
+              ]
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 323,
+        "name": "LIMPIADORES Y DESMAQUILLANTES",
+        "slug": "limpiadores-y-desmaquillantes",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 82,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/323",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3416,
+        "name": "MAQUILLAJE",
+        "slug": "maquillaje-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 8,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3416",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3407,
+        "name": "NIÑOS",
+        "slug": "ninos-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3407",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3393,
+        "name": "OJOS Y PESTAÑAS",
+        "slug": "ojos-y-pestanas",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 39,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3393",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 328,
+        "name": "OTROS",
+        "slug": "otros-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/328",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3394,
+        "name": "PIEL GRASA Y ACNE",
+        "slug": "piel-grasa-y-acne-cuidado-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 0,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3394",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3406,
+        "name": "PROTECCION SOLAR",
+        "slug": "proteccion-solar-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3406",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3403,
+        "name": "REPARADOR Y CICATRIZANTE",
+        "slug": "reparador-y-cicatrizante-facial",
+        "parent": 299,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 52,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3403",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/299"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 300,
+    "name": "KITS",
+    "slug": "kits",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 66,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/300",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3384,
+        "name": "PIEL GRASA Y ACNE",
+        "slug": "piel-grasa-y-acne",
+        "parent": 300,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 27,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3384",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/300"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 330,
+        "name": "REPARADOR Y CICRATIZANTE",
+        "slug": "reparador-y-cicratizante-kits",
+        "parent": 300,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/330",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/300"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 306,
+    "name": "PROTECCION SOLAR",
+    "slug": "proteccion-solar",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 119,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/306",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3397,
+        "name": "MAQUILLAJE",
+        "slug": "maquillaje-protector",
+        "parent": 306,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 50,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3397",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/306"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3398,
+        "name": "NIÑOS",
+        "slug": "ninos-protector",
+        "parent": 306,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 15,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3398",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/306"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 289,
+    "name": "SALUD Y MEDICAMENTOS",
+    "slug": "salud-y-medicamentos",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 2168,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/289",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 298,
+        "name": "DISPOSITIVOS E INSUMOS MEDICOS",
+        "slug": "dispositivos-e-insumos-medicos",
+        "parent": 289,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 10,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/298",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/289"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 302,
+        "name": "MEDICAMENTOS",
+        "slug": "medicamentos",
+        "parent": 289,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/302",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/289"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 307,
+        "name": "SALUD VISUAL",
+        "slug": "salud-visual-salud-y-medicamentos",
+        "parent": 289,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 0,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/307",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/289"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 309,
+    "name": "VITAMINAS Y SUPLEMENTOS",
+    "slug": "vitaminas-y-suplementos",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": null,
+    "menu_order": 0,
+    "count": 147,
+    "_links": {
+      "self": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/309",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+        }
+      ]
+    },
+    "children": [
+      {
+        "id": 3388,
+        "name": "ANTICAIDA VITAMINAS",
+        "slug": "anticaida-vitaminas-y-suplementos",
+        "parent": 309,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 0,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3388",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/309"
+            }
+          ]
+        },
+        "children": []
+      },
+      {
+        "id": 3408,
+        "name": "NIÑOS",
+        "slug": "ninos-vitaminas",
+        "parent": 309,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 36,
+        "_links": {
+          "self": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/3408",
+              "targetHints": {
+                "allow": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories"
+            }
+          ],
+          "up": [
+            {
+              "href": "https://tienda.pharmaplus.com.co/wp-json/wc/v3/products/categories/309"
+            }
+          ]
+        },
+        "children": []
+      }
+    ]
+  }
+]

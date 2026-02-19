@@ -34,7 +34,15 @@ export function isRefrigerated(product: Product | WooProduct | CartItem): boolea
 export function requiresMedicalPrescription(product: Product | WooProduct | CartItem): boolean {
     if (!product) return false;
 
-    // 1. Check explicit meta (if available) - Assuming 'requires_prescription' or similar
+    // 0. Use Explicit Property if available (from CartItem or MappedProduct)
+    if ('requiresPrescription' in product && typeof product.requiresPrescription === 'boolean') {
+        return product.requiresPrescription;
+    }
+    if ('requiresRx' in product && typeof product.requiresRx === 'boolean') {
+        return product.requiresRx;
+    }
+
+    // 1. Check explicit meta (fallback for raw WooProduct)
     if ('meta_data' in product && product.meta_data) {
         const rxMeta = product.meta_data.find((m: any) =>
             m.key === '_requires_prescription' ||
@@ -51,7 +59,22 @@ export function requiresMedicalPrescription(product: Product | WooProduct | Cart
     const description = 'short_description' in product ? product.short_description || '' : '';
 
     // Keywords for prescription
-    const keywords = ['antibiotico', 'antibiótico', 'bajo formula', 'bajo fórmula', 'controlado', 'venta bajo formula'];
+    const keywords = [
+        'antibiotico', 'antibiótico', 'bajo formula', 'bajo fórmula', 'controlado', 'venta bajo formula', 'formula medica',
+        // Antibióticos Comunes
+        'amoxicilina', 'clavulanico', 'ciprofloxacina', 'doxiciclina', 'azitromicina',
+        'cefalexina', 'clindamicina', 'metronidazol', 'nitrofurantoina', 'claritromicina',
+        'levofloxacina', 'eritromicina', 'gentamicina', 'trimetoprim', 'sulfametoxazol',
+        'ampicilina', 'penicilina', 'rifampicina',
+        // Controlados / Psiquiatría / Dolor Fuerte
+        'tramadol', 'codeina', 'alprazolam', 'clonazepam', 'diazepam', 'lorazepam', 'midazolam', 'zolpidem',
+        'morfina', 'oxicodona', 'hidrocodona', 'metadona', 'fentanilo',
+        'pregabalina', 'gabapentina',
+        // Dermatológicos Fuertes
+        'isotretinoina',
+        // Disfunción (A veces requiere)
+        'sildenafil', 'tadalafil', 'vardenafil'
+    ];
     const searchStr = (name + ' ' + description).toLowerCase();
 
     return keywords.some(k => searchStr.includes(k));

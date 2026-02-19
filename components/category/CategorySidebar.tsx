@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useSearchParams, usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { CategoryTree } from '@/types/woocommerce';
-import { MappedCategory } from '@/types/product';
-import { VIRTUAL_SUBCATEGORIES } from '@/lib/constants';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 interface CategorySidebarProps {
     currentCategory: CategoryTree;
@@ -15,171 +14,86 @@ interface CategorySidebarProps {
 
 export default function CategorySidebar({ currentCategory, categoryTree, embedded = false }: CategorySidebarProps) {
     const searchParams = useSearchParams();
-    const router = useRouter();
     const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState(true);
 
-    // Estado para el filtro de precio
-    const [minPrice, setMinPrice] = useState(searchParams.get('min_price') || '');
-    const [maxPrice, setMaxPrice] = useState(searchParams.get('max_price') || '');
+    const renderCategoryItem = (item: CategoryTree, depth: number = 0) => {
+        const isActive = pathname.includes(item.slug);
 
-    // Encontrar el contexto de la categoría actual en el árbol
-    const findCategoryContext = (tree: CategoryTree[], targetId: number): { siblings: CategoryTree[], children: CategoryTree[], parent: CategoryTree | null } | null => {
-        for (const node of tree) {
-            if (node.id === targetId) {
-                return { siblings: tree, children: node.children || [], parent: null };
-            }
-            if (node.children && node.children.length > 0) {
-                const foundInChildren = findCategoryContext(node.children, targetId);
-                if (foundInChildren) {
-                    // Si se encontró en los hijos, y el padre era null en el retorno recursivo, entonces 'node' es el padre directo
-                    if (!foundInChildren.parent) {
-                        return { ...foundInChildren, parent: node, siblings: node.children };
-                    }
-                    return foundInChildren;
-                }
-            }
-        }
-        return null; // No encontrado en este nivel
-    };
-
-    // Buscamos el nodo activo para determinar qué mostrar
-    // 1. Si tiene hijos -> Mostrar Hijos
-    // 2. Si no tiene hijos -> Mostrar Hermanos (y marcar activo)
-    const context = findCategoryContext(categoryTree, currentCategory.id);
-
-    let categoriesToShow: CategoryTree[] = [];
-    let title = "Categorías";
-    let backLink: { href: string, label: string } | null = null;
-
-    if (context) {
-        if (context.children && context.children.length > 0) {
-            categoriesToShow = context.children;
-            title = currentCategory.name; // "Explora [Categoría]"
-            if (context.parent) {
-                backLink = { href: `/categoria/${context.parent.slug}`, label: `Volver a ${context.parent.name}` };
-            } else {
-                backLink = { href: `/`, label: `Volver al Inicio` }; // O a una página de "Todas las categorías"
-            }
-        } else {
-            // Es una hoja (no tiene hijos), mostramos sus hermanos
-            categoriesToShow = context.siblings;
-            if (context.parent) {
-                title = context.parent.name;
-                backLink = { href: `/categoria/${context.parent.slug}`, label: `Volver a ${context.parent.name}` };
-            } else {
-                // Caso raro: Root sin hijos, mostramos roots
-                title = "Categorías Principales";
-            }
-        }
-    } else {
-        // Fallback: mostrar raíces si algo falla
-        categoriesToShow = categoryTree;
-    }
-
-    // Lógica para Subcategorías Virtuales (e.g., Cadena de Frío)
-    const virtuals = VIRTUAL_SUBCATEGORIES[currentCategory.slug];
-    const hasVirtuals = virtuals && virtuals.length > 0;
-
-    const displayItems = hasVirtuals ? virtuals.map(v => ({
-        id: Math.random(),
-        name: v.name,
-        slug: currentCategory.slug,
-        parent: currentCategory.id,
-        count: 0,
-        isVirtual: true,
-        query: v.query
-    })) : categoriesToShow;
-
-    if (hasVirtuals) {
-        title = `Explora ${currentCategory.name}`;
-    }
-
-    const handlePriceFilter = () => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (minPrice) params.set('min_price', minPrice);
-        else params.delete('min_price');
-
-        if (maxPrice) params.set('max_price', maxPrice);
-        else params.delete('max_price');
-
-        router.push(`${pathname}?${params.toString()}`);
-    };
-
-    // Estilos adaptativos
-    const containerClasses = embedded
-        ? "space-y-4" // Simple container inside Smart Sidebar
-        : "bg-white rounded-xl border-2 border-[var(--color-pharma-blue)] shadow-[0_0_15px_rgba(0,80,216,0.1)] p-6 sticky top-24"; // Standalone card
-
-    // Si es embedded, ocultamos filtros de precio (ya están en SmartSidebar)
-
-    return (
-        <aside className={embedded ? "" : "w-full md:w-64 flex-shrink-0"}>
-            <div className={containerClasses}>
-
-                {backLink && (
-                    <Link href={backLink.href} className="text-xs text-gray-400 hover:text-[var(--color-primary-blue)] mb-4 flex items-center transition-colors">
-                        ← {backLink.label}
-                    </Link>
-                )}
-
-                {!embedded && (
-                    <h3 className="font-bold text-[var(--color-primary-blue)] mb-4 pb-2 border-b border-gray-100">
-                        {title}
-                    </h3>
-                )}
-
-                <ul className="space-y-1">
-                    {displayItems.map((item: any) => (
-                        <li key={item.id}>
-                            <Link
-                                href={item.isVirtual
-                                    ? `/categoria/${item.slug}?search=${item.query}`
-                                    : `/categoria/${item.slug}`}
-                                className={`block py-1.5 px-3 rounded-md text-[13px] font-medium transition-colors ${(item.isVirtual
-                                        ? searchParams.get('search') === item.query
-                                        : item.slug === currentCategory.slug)
-                                        ? 'bg-blue-50 text-[var(--color-primary-blue)]'
-                                        : 'text-gray-600 hover:text-[var(--color-action-blue)] hover:bg-gray-50'
-                                    }`}
-                            >
-                                {item.name}
-                                {!item.isVirtual && item.count ? <span className="text-xs text-gray-300 ml-1">({item.count})</span> : null}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-
-                {/* Filtros de Precio (Solo si NO es embedded, para backward compatibility) */}
-                {!embedded && (
-                    <div className="pt-6 border-t border-gray-100">
-                        <h4 className="font-bold text-sm text-gray-700 mb-3">Precio</h4>
-                        <div className="flex items-center gap-2 mb-3">
-                            <input
-                                type="number"
-                                placeholder="Min"
-                                className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:border-[var(--color-action-blue)] focus:outline-none"
-                                value={minPrice}
-                                onChange={(e) => setMinPrice(e.target.value)}
-                            />
-                            <span className="text-gray-400">-</span>
-                            <input
-                                type="number"
-                                placeholder="Max"
-                                className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:border-[var(--color-action-blue)] focus:outline-none"
-                                value={maxPrice}
-                                onChange={(e) => setMaxPrice(e.target.value)}
-                            />
+        return (
+            <div key={item.id} className="w-full">
+                <Link
+                    href={`/categoria/${item.slug}`}
+                    className={`
+                        group flex items-center justify-between py-2 px-3 rounded-lg transition-all duration-200
+                        ${isActive ? 'bg-blue-50/50' : 'hover:bg-gray-50'}
+                    `}
+                    style={{ marginLeft: depth > 0 ? `${depth * 1}rem` : '0' }}
+                >
+                    <div className="flex items-center gap-3 min-w-0">
+                        {/* Radio indicator */}
+                        <div className={`
+                            w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all
+                            ${isActive
+                                ? 'border-[var(--pharma-blue)] bg-[var(--pharma-blue)] shadow-[0_0_8px_rgba(0,80,216,0.2)]'
+                                : 'border-gray-200 bg-white group-hover:border-[var(--pharma-blue)]'}
+                        `}>
+                            {isActive && <div className="w-2 h-2 rounded-full bg-white shadow-sm" />}
                         </div>
-                        <button
-                            onClick={handlePriceFilter}
-                            className="w-full py-1.5 text-sm bg-[var(--color-pharma-blue)] text-white rounded-md hover:bg-[var(--color-blue-classic)] transition-colors shadow-sm"
-                        >
-                            Filtrar
-                        </button>
+
+                        {/* Label */}
+                        <span className={`
+                            text-[13px] uppercase truncate
+                            ${depth === 0
+                                ? 'font-bold text-slate-700 tracking-tight'
+                                : 'font-normal text-slate-500'}
+                            ${isActive ? 'text-[var(--pharma-blue)]' : ''}
+                        `}>
+                            {item.name}
+                        </span>
+                    </div>
+
+                    {/* Count */}
+                    <span className="text-xs font-bold text-slate-300 ml-2">
+                        {item.count}
+                    </span>
+                </Link>
+
+                {/* Vertical line and children */}
+                {item.children && item.children.length > 0 && (
+                    <div className="relative ml-[1.35rem] py-1">
+                        {/* Subtle vertical line for hierarchy */}
+                        <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-gray-100" />
+                        <div className="space-y-0.5">
+                            {item.children.map(child => renderCategoryItem(child, depth + 1))}
+                        </div>
                     </div>
                 )}
-
             </div>
-        </aside>
+        );
+    };
+
+    return (
+        <div className="bg-white rounded-xl overflow-hidden">
+            {/* Header 'DEPARTAMENTOS' */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between py-4 px-3 bg-white"
+            >
+                <h3 className="text-[15px] font-black text-[#1e3a8a] uppercase tracking-wide">
+                    Departamentos
+                </h3>
+                <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-[var(--pharma-blue)]">
+                    {isOpen ? <ChevronUp size={14} strokeWidth={3} /> : <ChevronDown size={14} strokeWidth={3} />}
+                </div>
+            </button>
+
+            {/* Tree Content */}
+            {isOpen && (
+                <div className="p-1 space-y-1">
+                    {categoryTree.map(cat => renderCategoryItem(cat))}
+                </div>
+            )}
+        </div>
     );
 }

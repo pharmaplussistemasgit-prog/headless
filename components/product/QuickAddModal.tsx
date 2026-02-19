@@ -250,14 +250,48 @@ export default function QuickAddModal({
 
                         {/* Actions Footer - Fixed Spacing */}
                         <div className="mt-6 flex flex-col gap-3">
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={isOutOfStock}
-                                className={`w-full py-3 bg-[var(--color-pharma-blue)] hover:bg-[#0044b3] text-white text-base font-bold rounded-xl transition-all shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20 hover:-translate-y-0.5 flex items-center justify-center gap-2 ${isOutOfStock ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
-                            >
-                                <ShoppingCart className="w-5 h-5" />
-                                <span>{isOutOfStock ? 'Producto Agotado' : 'Agregar al carrito'}</span>
-                            </button>
+                            {!isOutOfStock ? (
+                                <button
+                                    onClick={handleAddToCart}
+                                    className="w-full py-3 bg-[var(--color-pharma-blue)] hover:bg-[#0044b3] text-white text-base font-bold rounded-xl transition-all shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20 hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                                >
+                                    <ShoppingCart className="w-5 h-5" />
+                                    <span>Agregar al carrito</span>
+                                </button>
+                            ) : (
+                                <div className="mb-2 p-3 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2">
+                                    <div className="flex items-start gap-2">
+                                        <div className="bg-red-100 p-1.5 rounded-full text-red-600 shrink-0 mt-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
+                                        </div>
+                                        <p className="text-xs text-red-600 leading-snug font-medium">
+                                            En el momento no hay producto en existencias, por favor comuniquese con nuestras lineas de atencion para consultar disponibilidad
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full mt-1">
+                                        <a
+                                            href="tel:6015934010"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-[var(--color-pharma-blue)] text-white rounded-lg hover:bg-blue-800 transition-colors text-xs font-bold"
+                                        >
+                                            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                            </svg>
+                                            PBX: (601) 593 - 4010
+                                        </a>
+                                        <a
+                                            href="https://wa.me/573168397933"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-[#25D366] text-white rounded-lg hover:bg-[#20BA5A] transition-colors text-xs font-bold"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+                                            WhatsApp: +57 316 839 7933
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
 
                             <Link
                                 href={`/${product?.slug}`}
@@ -273,22 +307,28 @@ export default function QuickAddModal({
                 {/* Specs Section - Centered & Compact */}
                 <div className="border-t border-gray-100 bg-gray-50 px-6 py-4 shrink-0">
                     <div className="max-w-4xl mx-auto w-full grid grid-cols-2 md:grid-cols-4 gap-y-3 gap-x-8 text-[10px] md:text-xs">
-                        <div className="flex flex-col items-start text-left">
-                            <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">Marca</span>
-                            <span className="font-semibold text-gray-700 truncate w-full">{product?.brand || 'N/A'}</span>
-                        </div>
+                        {product?.brand && product.brand !== 'N/A' && (
+                            <div className="flex flex-col items-start text-left">
+                                <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">Marca</span>
+                                <span className="font-semibold text-gray-700 truncate w-full">{product.brand}</span>
+                            </div>
+                        )}
                         <div className="flex flex-col items-start text-left">
                             <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">Presentación</span>
                             <span className="font-semibold text-gray-700 uppercase">UNIDAD</span>
                         </div>
-                        <div className="flex flex-col items-start text-left">
-                            <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">ID Invima</span>
-                            <span className="font-semibold text-gray-700 truncate w-full">{product?.invima || 'N/A'}</span>
-                        </div>
-                        <div className="flex flex-col items-start text-left">
-                            <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">Tipo</span>
-                            <span className="font-semibold text-gray-700 uppercase">{product?.productType || 'N/A'}</span>
-                        </div>
+                        {product?.invima && product.invima !== 'N/A' && (
+                            <div className="flex flex-col items-start text-left">
+                                <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">ID Invima</span>
+                                <span className="font-semibold text-gray-700 truncate w-full">{product.invima}</span>
+                            </div>
+                        )}
+                        {product?.productType && product.productType !== 'N/A' && (
+                            <div className="flex flex-col items-start text-left">
+                                <span className="font-bold text-gray-400 uppercase tracking-wide mb-0.5">Tipo</span>
+                                <span className="font-semibold text-gray-700 uppercase">{product.productType}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 

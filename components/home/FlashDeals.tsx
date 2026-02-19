@@ -204,7 +204,7 @@ function FlashDealCard({ product, discount, stock }: { product: Product; discoun
                 {/* Discount Badge */}
                 <div className="absolute top-3 left-3 z-10">
                     {discount > 0 && (
-                        <span className="bg-[#FF4D8D] text-white font-bold text-xs px-2 py-1 rounded-full shadow-sm animate-pulse">
+                        <span className="bg-[#FF4D8D] text-white font-bold text-sm px-2.5 py-1 rounded-full shadow-sm animate-pulse">
                             -{discount}%
                         </span>
                     )}
@@ -256,41 +256,43 @@ function FlashDealCard({ product, discount, stock }: { product: Product; discoun
 
                     {/* Timer */}
                     <div>
-                        <p className="text-[10px] uppercase font-bold text-gray-500 mb-1 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+                        <p className="text-xs uppercase font-bold text-gray-500 mb-1.5 flex items-center gap-1.5">
+                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                             Termina en:
                         </p>
 
                         {/* Date Range Display (New Request) */}
-                        <div className="text-[10px] text-gray-400 font-medium mb-2 flex items-center gap-1">
-                            <span>📅</span>
-                            <span>
-                                {formatDate(product.date_on_sale_from)} / {formatDate(product.date_on_sale_to)}
-                            </span>
-                        </div>
+                        {(product.date_on_sale_from || product.date_on_sale_to) && (
+                            <div className="text-[11px] text-gray-500 font-medium mb-3 flex items-center gap-1.5">
+                                <span className="text-base">📅</span>
+                                <span>
+                                    {formatDate(product.date_on_sale_from)} / {formatDate(product.date_on_sale_to)}
+                                </span>
+                            </div>
+                        )}
 
                         {timeLeft ? (
-                            <div className="flex gap-2">
+                            <div className="flex gap-2.5">
                                 <CountdownBox value={timeLeft.days} label="Días" />
                                 <CountdownBox value={timeLeft.hours} label="Hrs" />
                                 <CountdownBox value={timeLeft.minutes} label="Min" />
                                 <CountdownBox value={timeLeft.seconds} label="Seg" />
                             </div>
                         ) : (
-                            <div className="text-xs text-red-500 font-bold">¡Oferta Finalizada!</div>
+                            <div className="text-sm text-red-500 font-bold">¡Oferta Finalizada!</div>
                         )}
                     </div>
 
                     {/* Stock & Button Row */}
-                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2 mt-auto">
+                    <div className="pt-4 border-t border-gray-100 flex items-center justify-between gap-3 mt-auto">
 
                         {/* Stock Left */}
                         <div className="flex-1 max-w-[50%]">
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-[9px] text-gray-500 font-bold uppercase">Disponibles</span>
-                                <span className="text-[9px] text-[var(--color-pharma-green)] font-bold">{stock}</span>
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-[10px] text-gray-600 font-bold uppercase">Disponibles</span>
+                                <span className="text-[10px] text-[var(--color-pharma-green)] font-bold">{stock}</span>
                             </div>
-                            <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                                 <div
                                     className="bg-[var(--color-pharma-green)] h-full rounded-full"
                                     style={{ width: `${Math.min(stockPercentage, 100)}%` }}
@@ -317,11 +319,11 @@ function FlashDealCard({ product, discount, stock }: { product: Product; discoun
 // Countdown Box
 function CountdownBox({ value, label }: { value: number; label: string }) {
     return (
-        <div className="bg-gray-50 rounded border border-gray-100 text-center px-1.5 py-1 min-w-[32px]">
-            <span className="block text-sm font-black text-[var(--color-pharma-blue)] leading-none mb-0.5">
+        <div className="bg-gray-50 rounded-lg border border-gray-100 text-center px-2 py-1.5 min-w-[42px]">
+            <span className="block text-lg font-black text-[var(--color-pharma-blue)] leading-none mb-0.5">
                 {String(value).padStart(2, '0')}
             </span>
-            <span className="block text-[7px] text-gray-600 font-bold uppercase tracking-wide">
+            <span className="block text-[9px] text-gray-600 font-bold uppercase tracking-wide">
                 {label}
             </span>
         </div>

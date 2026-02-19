@@ -24,6 +24,9 @@ export interface PromotionRule {
 
     /** ID único de la promoción (opcional, para futuro uso con API real) */
     id?: number;
+
+    /** Cantidad máxima de beneficios permitidos por transacción (opcional) */
+    maxQuantity?: number;
 }
 
 export interface ActivePromotion {

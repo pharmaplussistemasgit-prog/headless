@@ -1,102 +1,101 @@
-import { Suspense } from 'react';
-import ProductGrid from '@/components/category/ProductGrid';
-import { getProducts } from '@/lib/woocommerce';
-import { Metadata } from 'next';
-import { mapWooProduct } from '@/lib/mappers';
-import { enrichProductsWithPromotions } from '@/lib/enrichProducts';
-import { getPromotedProductSkus } from '@/services/promotions';
+import { getCustomApiOffers, wcFetchRaw, getCategoryTreeData } from "@/lib/woocommerce";
+import { mapWooProduct } from "@/lib/mappers";
+import { Metadata } from "next";
+import { getPromotedProductSkus } from "@/services/promotions";
+import { enrichProductsWithPromotions } from "@/lib/enrichProducts";
+import type { Product } from "@/types/woocommerce";
+import CategoryCatalogue from "@/components/category/CategoryCatalogue";
+import { analyzeProductsForFilters } from "@/lib/filterUtils";
+import Breadcrumbs from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-    title: 'Mundo Ofertas - Promociones Pague X Lleve Y | PharmaPlus',
-    description: 'Aprovecha nuestras promociones especiales "Pague X Lleve Y". Compra más, ahorra más en productos seleccionados con stock disponible.',
+    title: "Mundo Ofertas | PharmaPlus",
+    description: "Descubre las mejores ofertas y descuentos en medicamentos y productos de salud. Aprovecha nuestras promociones por tiempo limitado.",
 };
 
-/**
- * Mundo Ofertas - Página de Promociones PTC
- * 
- * LÓGICA IMPLEMENTADA:
- * 1. Obtiene SKUs con promociones activas desde services/promotions.ts
- * 2. Filtra productos por SKU para obtener solo los promocionados
- * 3. Aplica filtro estricto de stock (instock only)
- * 4. Enriquece productos con datos de promoción
- * 
- * PRÓXIMOS PASOS (cuando API real esté disponible):
- * - Reemplazar mock en services/promotions.ts con fetch a:
- *   GET /wp-json/custom-api/v1/item-ptc
- */
-async function OffersContent() {
-    // 1. Obtener SKUs de productos con promociones activas
-    const promotedSkus = await getPromotedProductSkus();
+export const revalidate = 60;
 
-    if (promotedSkus.length === 0) {
-        return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-                <h1 className="text-3xl font-bold text-[var(--color-pharma-blue)] mb-4">Mundo Ofertas</h1>
-                <p className="text-slate-600 max-w-2xl mx-auto">
-                    No hay promociones activas en este momento. Vuelve pronto para descubrir nuestras ofertas especiales.
-                </p>
-            </div>
-        );
+export default async function OfertasPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string }>;
+}) {
+    const params = await searchParams;
+    const currentPage = Number(params.page) || 1;
+
+    // Parallel fetch for everything
+    const [promotedSkus, categoryTree, { products: saleProducts, total, totalPages }] = await Promise.all([
+        getPromotedProductSkus(),
+        getCategoryTreeData(),
+        getCustomApiOffers(currentPage, 12) // Limit to 12
+    ]);
+
+    // Fetch PTC products
+    let ptcProducts: Product[] = [];
+    if (promotedSkus.length > 0) {
+        try {
+            const { data } = await wcFetchRaw<any>('products', {
+                skus: promotedSkus.join(','),
+                stock_status: 'instock',
+                fields: 'full'
+            }, 60, 'custom-api/v1');
+
+            if (data && data.success && Array.isArray(data.rows)) {
+                ptcProducts = data.rows as Product[];
+            } else if (Array.isArray(data)) {
+                ptcProducts = data as Product[];
+            }
+        } catch (error) {
+            console.error('Error fetching PTC products:', error);
+        }
     }
 
-    // 2. Obtener productos por SKU con filtro de stock
-    // NOTA: WooCommerce API no soporta filtro directo por múltiples SKUs,
-    // por lo que obtenemos todos los productos en stock y filtramos después
-    const { products: rawProducts } = await getProducts({
-        perPage: 100,
-        stockStatus: 'instock', // CRÍTICO: Solo productos con stock
-        orderby: 'popularity',
-    });
+    // Merge and Deduplicate (Priority: PTC)
+    const ptcIds = new Set(ptcProducts.map(p => p.id));
+    const uniqueSaleProducts = saleProducts.filter(p => !ptcIds.has(p.id));
+    const allRawProducts = [...ptcProducts, ...uniqueSaleProducts];
 
-    // 3. Mapear productos
-    const allProducts = rawProducts.map((p: any) => mapWooProduct(p));
+    // Map and Enrich
+    const mappedProducts = (allRawProducts as any[]).map(mapWooProduct);
+    const enrichedProducts = await enrichProductsWithPromotions(mappedProducts);
 
-    // 4. Filtrar solo productos con promociones activas
-    const promotedProducts = allProducts.filter(
-        product => product.sku && promotedSkus.includes(product.sku)
-    );
+    const facets = analyzeProductsForFilters(enrichedProducts);
 
-    // 5. Enriquecer con datos de promoción
-    const enrichedProducts = await enrichProductsWithPromotions(promotedProducts);
-
-    return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-[var(--color-pharma-blue)] mb-4">
-                    🎁 Mundo Ofertas
+    const HeroHeader = (
+        <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white py-10 px-6 rounded-2xl mb-8 relative overflow-hidden shadow-sm">
+            <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('/pattern.png')] mix-blend-overlay"></div>
+            <div className="relative z-10">
+                <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-2 drop-shadow-md">
+                    Mundo <span className="text-yellow-300">Ofertas</span>
                 </h1>
-                <p className="text-slate-600 max-w-2xl">
-                    Aprovecha nuestras promociones especiales <strong>"Pague X Lleve Y"</strong>.
-                    Compra más unidades y recibe productos adicionales gratis.
-                    Todas las promociones aplican solo para productos con stock disponible.
+                <p className="text-lg font-medium opacity-95 text-green-50 max-w-xl">
+                    Ahorra en grande con nuestros descuentos exclusivos por tiempo limitado.
                 </p>
-                <div className="mt-4 inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium">
-                    <span className="text-lg">🎯</span>
-                    {enrichedProducts.length} {enrichedProducts.length === 1 ? 'producto' : 'productos'} con promoción activa
-                </div>
             </div>
-
-            {enrichedProducts.length > 0 ? (
-                <ProductGrid products={enrichedProducts} />
-            ) : (
-                <div className="text-center py-12 text-slate-500">
-                    <p>No hay productos con promociones activas en este momento.</p>
-                </div>
-            )}
         </div>
     );
-}
 
-export default function OffersPage() {
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Suspense fallback={
-                <div className="p-12 text-center text-slate-500">
-                    <div className="animate-pulse">Cargando promociones...</div>
-                </div>
-            }>
-                <OffersContent />
-            </Suspense>
+        <div className="container mx-auto px-4 py-8">
+            <Breadcrumbs
+                items={[
+                    { label: 'Inicio', href: '/' },
+                    { label: 'Ofertas', href: '/ofertas' }
+                ]}
+            />
+
+            <CategoryCatalogue
+                initialProducts={enrichedProducts}
+                categoryName="Ofertas"
+                categorySlug="ofertas"
+                page={currentPage}
+                totalPages={totalPages}
+                searchParams={params}
+                categoryTree={categoryTree}
+                facets={facets}
+                basePath="/ofertas"
+                customHeader={HeroHeader}
+            />
         </div>
     );
 }

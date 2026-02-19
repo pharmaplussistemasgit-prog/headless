@@ -18,12 +18,12 @@ Se implementó un sistema completo de promociones usando datos mock (hardcodeado
 - ✅ Mostrar descripciones de promociones (ej: "🎁 Pague 2 Lleve 3")
 - ✅ Infraestructura lista para migración a API real
 
-### **FASE 2: API INTEGRATION** 🔴 PENDIENTE
+### **FASE 2: API INTEGRATION** ✅ IMPLEMENTADA
 
 Requiere:
-1. Agregar tabla `item_ptc` a `CUSTOM_API_V3.3.md` en WordPress
-2. Reemplazar mock en `services/promotions.ts` con fetch real
-3. Desplegar snippet actualizado en WordPress
+1. ✅ Agregar tabla `item_ptc` a `CUSTOM_API_V3.3.md` en WordPress
+2. ✅ Reemplazar mock en `services/promotions.ts` con fetch real
+3. ⚠️ Desplegar snippet actualizado en WordPress (ACCIÓN REQUERIDA POR EL USUARIO)
 
 ---
 

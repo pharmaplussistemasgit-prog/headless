@@ -61,11 +61,6 @@ export default async function CategoryPage({
         getCategoryTreeData(),
     ]);
 
-    // OPTIMIZATION: Generate filters dynamically from the products we just loaded.
-    // This avoids an extra API call (getCategoryGlobalFacets) that was causing 4s+ load times.
-    // Trade-off: Filters only show brands/tags present in the current page (or initial load).
-    // This aligns with user request: "cargar solo los 12 iniciales".
-    const facets = analyzeProductsForFilters(products);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -87,7 +82,6 @@ export default async function CategoryPage({
                 totalPages={totalPages}
                 searchParams={resolvedSearchParams}
                 categoryTree={categoryTree}
-                facets={facets}
             />
         </div>
     );

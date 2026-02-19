@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from '@/components/product/ProductCard';
 import SmartFilterSidebar from '@/components/category/SmartFilterSidebar';
-import { analyzeProductsForFilters, applyFilters, FilterState } from '@/lib/filterUtils';
 import { CategoryTree } from '@/types/woocommerce';
 
 interface CategoryCatalogueProps {
@@ -17,7 +16,7 @@ interface CategoryCatalogueProps {
     searchParams?: { [key: string]: string | string[] | undefined };
     categoryTree: CategoryTree[];
     customHeader?: React.ReactNode;
-    facets?: FilterState | null; // New: Global Facets from Server Cache
+    basePath?: string; // New: Base path for pagination links (default: /categoria)
 }
 
 export default function CategoryCatalogue({
@@ -29,7 +28,7 @@ export default function CategoryCatalogue({
     searchParams,
     categoryTree,
     customHeader,
-    facets
+    basePath = '/categoria'
 }: CategoryCatalogueProps) {
 
     // Helper to build pagination links
@@ -38,33 +37,16 @@ export default function CategoryCatalogue({
         if (searchParams?.min_price) params.set('min_price', searchParams.min_price as string);
         if (searchParams?.max_price) params.set('max_price', searchParams.max_price as string);
         params.set('page', newPage.toString());
-        return `/categoria/${categorySlug}?${params.toString()}`;
+
+        if (basePath === '/tienda') {
+            return `/tienda?${params.toString()}`;
+        }
+
+        return `${basePath}/${categorySlug}?${params.toString()}`;
     };
 
-    // Initialize filters: Prefer Global Facets (server) -> Local Analysis (client fallback)
-    const initialFilterState = useMemo(() => {
-        if (facets) return facets;
-        return analyzeProductsForFilters(initialProducts);
-    }, [initialProducts, facets]);
-
-    const [filters, setFilters] = useState<FilterState>(initialFilterState);
-
-    // Recalculate filters if initialProducts changes (pagination), BUT ONLY if not using Global Facets
-    useEffect(() => {
-        if (!facets) {
-            setFilters(analyzeProductsForFilters(initialProducts));
-        }
-    }, [initialProducts, facets]);
-
-    // Apply active filters to the product list
-    const filteredProducts = useMemo(() => {
-        return applyFilters(initialProducts, filters);
-    }, [initialProducts, filters]);
-
-    const hasActiveFilters =
-        filters.brands.some(b => b.active) ||
-        filters.usage.some(u => u.active) ||
-        filters.conditions.some(c => c.active);
+    // Use initialProducts directly as we are removing client-side filters
+    const filteredProducts = initialProducts;
 
     // Find the real active category node from the tree
     const activeCategoryNode = useMemo(() => {
@@ -94,10 +76,8 @@ export default function CategoryCatalogue({
     return (
         <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar Dinámico (Adaptive System) */}
-            <div className="w-full md:w-64 flex-shrink-0">
+            <div className="w-full md:w-72 flex-shrink-0">
                 <SmartFilterSidebar
-                    filters={filters}
-                    onFilterChange={setFilters}
                     categoryTree={categoryTree}
                     currentCategory={activeCategoryNode}
                 />
@@ -129,7 +109,7 @@ export default function CategoryCatalogue({
                         </div>
 
                         {/* Pagination Controls (Server Side Navigation) */}
-                        {totalPages > 1 && !hasActiveFilters && (
+                        {totalPages > 1 && (
                             <div className="mt-12 flex items-center justify-center gap-6">
                                 <Link
                                     href={page > 1 ? getPageUrl(page - 1) : '#'}
@@ -161,25 +141,16 @@ export default function CategoryCatalogue({
                             </div>
                         )}
 
-                        {hasActiveFilters && totalPages > 1 && (
-                            <div className="mt-8 p-4 bg-blue-50 text-blue-800 text-sm rounded-lg border border-blue-100 text-center">
-                                Nota: Los filtros se aplican a los productos de la página actual. Navega a otras páginas para ver más productos.
-                            </div>
-                        )}
                     </>
                 ) : (
                     <div className="bg-gray-50 rounded-xl p-12 text-center border border-gray-100 border-dashed">
                         <div className="text-5xl mb-4">🧪</div>
-                        <h3 className="text-xl font-bold text-gray-700 mb-2">No hay productos con estos filtros</h3>
-                        <p className="text-gray-500 mb-6">
-                            Intenta ajustar tus criterios de búsqueda o limpiar los filtros.
-                        </p>
-                        <button
-                            onClick={() => setFilters(initialFilterState)}
+                        <Link
+                            href={getPageUrl(1)}
                             className="text-[var(--color-pharma-blue)] font-semibold hover:underline"
                         >
-                            Limpiar filtros
-                        </button>
+                            Ver todos los productos
+                        </Link>
                     </div>
                 )}
             </main>

@@ -61,15 +61,18 @@ export default function PedidosPage() {
                 }
 
                 const response = await fetch(`/api/orders?customer=${user.id || user.email}`);
-                if (!response.ok) throw new Error('Error al cargar pedidos');
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error || 'Error al cargar pedidos');
+                }
 
                 const data = await response.json();
                 setOrders(data);
                 setFilteredOrders(data);
-            } catch (err) {
+            } catch (err: any) {
                 console.error(err);
                 setOrders([]);
-                setError('No tienes pedidos recientes o hubo un error al cargarlos.');
+                setError(err.message || 'No tienes pedidos recientes o hubo un error al cargarlos.');
             } finally {
                 setLoading(false);
             }

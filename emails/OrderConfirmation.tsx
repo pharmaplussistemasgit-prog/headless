@@ -194,13 +194,15 @@ export const OrderConfirmation = ({
                         {/* Footer */}
                         <Section className="text-center">
                             <Link
-                                href="https://wa.me/573001234567"
+                                href="https://wa.me/573168397933"
                                 className="inline-block rounded-full bg-green-500 px-6 py-3 text-sm font-bold text-white no-underline shadow-sm hover:bg-green-600"
                             >
                                 ¿Necesitas ayuda? Escríbenos a WhatsApp
                             </Link>
                             <Text className="mt-8 text-xs text-gray-400">
                                 PharmaPlus - Tu Salud, Nuestra Prioridad
+                                <br />
+                                PBX: (601) 593 - 4010 | WhatsApp: +57 316 839 7933
                                 <br />
                                 <Link href={`${baseUrl}/politicas`} className="text-gray-500 underline">
                                     Términos y Condiciones

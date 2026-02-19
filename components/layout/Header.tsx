@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
     Search, ShoppingCart, User, MapPin, ChevronDown,
-    Phone, Mail, Tag, Heart, Store, Pill, Menu, CreditCard, Snowflake, FileText, HelpCircle, Truck, ClipboardList
+    Phone, Mail, Tag, Heart, Store, Pill, Menu, CreditCard, Snowflake, FileText, HelpCircle, Truck, ClipboardList, MessageCircle
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { CategoryTree } from '@/types/woocommerce';
@@ -78,9 +78,13 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
                     <div className="flex items-center justify-between h-9 text-[11px] sm:text-xs font-medium tracking-wide">
                         {/* Left: Contact Info */}
                         <div className="hidden md:flex items-center gap-6 text-slate-500">
-                            <a href="tel:6015934005" className="flex items-center gap-1.5 hover:text-[var(--color-pharma-blue)] transition-colors">
+                            <a href="https://wa.me/573168397933" target="_blank" className="flex items-center gap-1.5 hover:text-[var(--color-pharma-blue)] transition-colors font-bold">
+                                <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                                <span>316 839 7933</span>
+                            </a>
+                            <a href="tel:6015934010" className="flex items-center gap-1.5 hover:text-[var(--color-pharma-blue)] transition-colors">
                                 <Phone className="w-3 h-3" />
-                                <span>(601) 593 4005</span>
+                                <span>(601) 593 4010</span>
                             </a>
                             <a href="mailto:atencionalusuario@pharmaplus.com.co" className="flex items-center gap-1.5 hover:text-[var(--color-pharma-blue)] transition-colors">
                                 <Mail className="w-3 h-3" />
@@ -139,12 +143,6 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
                         </div>
 
                         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                            {/* Wishlist - Me Interesan */}
-                            <Link href="/wishlist" className="relative group p-2 hidden sm:block" aria-label="Ver Me Interesan">
-                                <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 group-hover:border-[var(--color-pharma-blue)] group-hover:bg-blue-50 flex items-center justify-center text-slate-600 group-hover:text-[var(--color-pharma-blue)] transition-all duration-300">
-                                    <ClipboardList className="w-5 h-5" />
-                                </div>
-                            </Link>
 
                             <AccountButton />
 
@@ -226,13 +224,13 @@ export default function Header({ categories = [], shippingRules = [], shippingRa
                                 <span className="tracking-wide">Pastillero Virtual</span>
                             </Link>
 
-                            {/* HIGHLIGHTED: Cadena de Frío */}
+                            {/* HIGHLIGHTED: Mis Favoritos */}
                             <Link
-                                href="/categoria/cadena-de-frio"
-                                className="flex items-center gap-2 text-[13px] font-bold text-cyan-50 hover:text-white hover:bg-cyan-500/30 px-3 py-2 rounded-lg transition-all whitespace-nowrap mx-1 group"
+                                href="/mi-cuenta/favoritos"
+                                className="flex items-center gap-2 text-[13px] font-bold text-green-50 hover:text-white hover:bg-green-500/20 px-3 py-2 rounded-lg transition-all whitespace-nowrap mx-1 group"
                             >
-                                <Snowflake className="w-4 h-4 text-cyan-300 group-hover:animate-spin-slow" />
-                                <span className="group-hover:text-cyan-100 transition-colors">Cadena de Frío</span>
+                                <Heart className="w-4 h-4 text-green-400 group-hover:fill-current group-hover:text-green-300 transition-all duration-300 group-hover:scale-110 drop-shadow-sm" />
+                                <span className="group-hover:text-green-100 transition-colors">Mis Favoritos</span>
                             </Link>
 
                             <Link

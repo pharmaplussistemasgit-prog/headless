@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { FEATURED_BRANDS } from '@/lib/brands-data';
+import { BRAND_LOGOS } from '@/lib/brands-logos';
 
 export default function FeaturedBrands() {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -112,12 +113,12 @@ export default function FeaturedBrands() {
                                 <div className={`absolute -top-6 -right-6 w-12 h-12 rounded-full ${isEven ? 'bg-blue-50' : 'bg-green-50'} group-hover:scale-[8] transition-transform duration-500 opacity-20`}></div>
 
                                 <div className="w-full h-full flex items-center justify-center relative z-10">
-                                    {brand.url && brand.url.length > 5 ? (
+                                    {(BRAND_LOGOS[brand.slug] || (brand.url && brand.url.length > 5)) ? (
                                         /* eslint-disable-next-line @next/next/no-img-element */
                                         <img
-                                            src={brand.url}
+                                            src={BRAND_LOGOS[brand.slug] || brand.url}
                                             alt={brand.title || 'Marca'}
-                                            className="max-w-full max-h-20 md:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-105"
+                                            className="max-w-[80%] max-h-20 md:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-110"
                                             loading="lazy"
                                         />
                                     ) : (

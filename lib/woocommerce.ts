@@ -61,6 +61,10 @@ export async function getProductVariations(productId: number): Promise<Variation
 // Traer producto por slug (primer resultado)
 // Revalidación desactivada (0) para evitar problemas de caché persistente y desincronización
 export async function getProductBySlug(slug: string): Promise<Product | null> {
+  // Guard for system files and common non-product paths to avoid slow 2s API calls
+  if (!slug || slug.includes('.') || ['favicon', 'apple-touch-icon', 'robots', 'sitemap'].some(s => slug.startsWith(s))) {
+    return null;
+  }
   try {
     const response = await wcFetchRaw<Product[]>("products", { slug, per_page: 1 }, 0);
     const items = response.data ?? [];
@@ -209,11 +213,11 @@ export async function getSizeOptionsFromVariations(productId: number): Promise<A
 
 // -------- Catálogo global: categorías, etiquetas y atributos --------
 
-function buildUrl(endpoint: string, params: Record<string, unknown> = {}): string {
+function buildUrl(endpoint: string, params: Record<string, unknown> = {}, namespace: string = "wc/v3"): string {
   const base = (process.env.WOOCOMMERCE_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://example.com").replace(/\/$/, "");
   const ck = process.env.WOOCOMMERCE_CONSUMER_KEY || "";
   const cs = process.env.WOOCOMMERCE_CONSUMER_SECRET || "";
-  const url = new URL(`${base}/wp-json/wc/v3/${endpoint}`);
+  const url = new URL(`${base}/wp-json/${namespace}/${endpoint}`);
 
   Object.entries(params || {}).forEach(([k, v]) => {
     if (v === undefined || v === null) return;
@@ -225,9 +229,10 @@ function buildUrl(endpoint: string, params: Record<string, unknown> = {}): strin
   return url.toString();
 }
 
-export async function wcFetchRaw<T>(endpoint: string, params: Record<string, unknown> = {}, revalidate = 600): Promise<{ data: T; headers: Headers }> {
-  const url = buildUrl(endpoint, params);
-  console.log(`[WooCommerce] Fetching: ${url}`);
+export async function wcFetchRaw<T>(endpoint: string, params: Record<string, unknown> = {}, revalidate = 600, namespace: string = "wc/v3"): Promise<{ data: T; headers: Headers }> {
+  const start = performance.now();
+  const url = buildUrl(endpoint, params, namespace);
+  console.log(`[WooCommerce] Fetching (${namespace}): ${url}`);
 
   try {
     const controller = new AbortController();
@@ -238,6 +243,8 @@ export async function wcFetchRaw<T>(endpoint: string, params: Record<string, unk
     };
 
     const res = await fetch(url, fetchOptions);
+    const end = performance.now();
+    console.log(`[WooCommerce] ${endpoint} took ${(end - start).toFixed(0)}ms | Status: ${res.status}`);
     clearTimeout(timeoutId);
 
     if (!res.ok) {
@@ -251,21 +258,118 @@ export async function wcFetchRaw<T>(endpoint: string, params: Record<string, unk
     const data = (await res.json()) as T;
     return { data, headers: res.headers };
   } catch (error: any) {
-    console.error(`[WooCommerce] Fetch Error for ${url}:`, error);
+    if (error.name === 'AbortError') {
+      console.error(`[WooCommerce] Timeout (25s) fetching ${url}`);
+      throw new Error("Tiempo de espera agotado al conectar con el servidor.");
+    }
+    console.error(`[WooCommerce] Fetch Error for ${url}:`, error.message || error);
     if (error?.cause) console.error(`[WooCommerce] Cause:`, error.cause);
+
+    if (error.message?.includes('fetch failed')) {
+      throw new Error("Error de red: No se pudo conectar con el servidor de WooCommerce.");
+    }
     throw error;
   }
 }
 
+
+/**
+ * Fetch especializado para la Custom API (usa X-API-KEY, no consumer_key/secret)
+ * Con timeout reducido para no bloquear la home si el endpoint no existe/falla
+ */
+async function customApiFetch<T>(endpoint: string, params: Record<string, unknown> = {}, timeoutMs = 8000): Promise<T | null> {
+  const base = (process.env.WOOCOMMERCE_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_URL || "").replace(/\/$/, "");
+  const apiKey = process.env.CUSTOM_API_KEY || process.env.WORDPRESS_API_KEY || "";
+  const url = new URL(`${base}/wp-json/custom-api/v1/${endpoint}`);
+
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+  });
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(url.toString(), {
+      signal: controller.signal,
+      headers: {
+        'X-API-KEY': apiKey,
+        'Content-Type': 'application/json',
+      },
+      next: { revalidate: 300 }, // Cache 5 min
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      console.warn(`[CustomAPI] ${endpoint} -> ${res.status} ${res.statusText}`);
+      return null;
+    }
+    return (await res.json()) as T;
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    if (error?.name === 'AbortError') {
+      console.warn(`[CustomAPI] Timeout (${timeoutMs}ms) alcanzado para: ${endpoint}`);
+    } else {
+      console.warn(`[CustomAPI] Error en ${endpoint}:`, error?.message || error);
+    }
+    return null; // Siempre retorna null en error, nunca lanza
+  }
+}
+
+/**
+ * Obtiene ofertas usando la Custom API optimizada (V4.0)
+ * Si la Custom API no está disponible, retorna array vacío (sin romper la home)
+ */
+export async function getCustomApiOffers(page: number = 1, perPage: number = 20): Promise<{ products: Product[]; total: number; totalPages: number }> {
+  const EMPTY = { products: [], total: 0, totalPages: 0 };
+
+  const data = await customApiFetch<any>('products', {
+    on_sale: true,
+    per_page: perPage,
+    page,
+    fields: 'full',
+  });
+
+  if (!data) return EMPTY;
+
+  if (data.success && Array.isArray(data.rows)) {
+    return {
+      products: data.rows as Product[],
+      total: data.total || 0,
+      totalPages: data.max_pages || 0,
+    };
+  }
+
+  // Si la API devuelve array directo (sin wrapper)
+  if (Array.isArray(data)) {
+    return { products: data as Product[], total: data.length, totalPages: 1 };
+  }
+
+  return EMPTY;
+}
+
+
 async function wcFetchAll<T>(endpoint: string, params: Record<string, unknown> = {}, revalidate = 600): Promise<T[]> {
+  const start = performance.now();
   const first = await wcFetchRaw<T[]>(endpoint, { ...params, page: 1 }, revalidate);
   const totalPages = parseInt(first.headers.get("x-wp-totalpages") || "1");
   const all: T[] = Array.isArray(first.data) ? [...first.data] : [];
 
+  // Fetch remaining pages in parallel chunks to speed up
+  const pagePromises = [];
   for (let page = 2; page <= totalPages; page++) {
-    const resp = await wcFetchRaw<T[]>(endpoint, { ...params, page }, revalidate);
-    if (Array.isArray(resp.data)) all.push(...resp.data);
+    pagePromises.push(wcFetchRaw<T[]>(endpoint, { ...params, page }, revalidate));
   }
+
+  if (pagePromises.length > 0) {
+    const results = await Promise.all(pagePromises);
+    results.forEach(resp => {
+      if (Array.isArray(resp.data)) all.push(...resp.data);
+    });
+  }
+
+  const end = performance.now();
+  console.log(`[WooCommerce] wcFetchAll('${endpoint}') took ${(end - start).toFixed(2)}ms | Pages: ${totalPages} | Items: ${all.length}`);
   return all;
 }
 
@@ -274,6 +378,7 @@ async function wcFetchAll<T>(endpoint: string, params: Record<string, unknown> =
 const CATEGORY_CACHE_TTL = 86400;
 
 export async function getAllProductCategories(): Promise<Category[]> {
+  const start = performance.now();
   try {
     const categories = await wcFetchAll<Category>("products/categories", { per_page: 100 }, CATEGORY_CACHE_TTL);
     // Filter out system/miscellaneous categories that should not appear in navigation
@@ -283,6 +388,8 @@ export async function getAllProductCategories(): Promise<Category[]> {
       'ninguna',
       'otros-productos',  // Contains misclassified products pending reorganization
     ];
+    const end = performance.now();
+    console.log(`[WooCommerce] getAllProductCategories took ${(end - start).toFixed(2)}ms`);
     return categories.filter(cat => !excludedSlugs.includes(cat.slug));
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -375,9 +482,48 @@ export function buildCategoryTree(categories: Category[]): CategoryTree[] {
   return roots;
 }
 
+// --------------------------------------------------------------------------------
+// STATIC MIRROR SYSTEM
+// --------------------------------------------------------------------------------
+import fixedCategories from './data/fixed-categories.json';
+
 export async function getCategoryTreeData(): Promise<CategoryTree[]> {
+  const start = performance.now();
+
+  // PRIMARY: serving from Static Mirror (JSON Local)
+  if (fixedCategories && fixedCategories.length > 0) {
+    const end = performance.now();
+    console.log(`[StaticMirror] Serving category tree from local JSON took ${(end - start).toFixed(2)}ms`);
+    return fixedCategories as CategoryTree[];
+  }
+
+  // FALLBACK: API (If local file is empty or missing during dev)
+  console.warn('[StaticMirror] Local categories JSON not found or empty. Falling back to API fetch...');
   const categories = await getAllProductCategories();
-  return buildCategoryTree(categories);
+  const tree = buildCategoryTree(categories);
+  const endFallback = performance.now();
+  console.log(`[WooCommerce] getCategoryTreeData (API Fallback) took ${(endFallback - start).toFixed(2)}ms`);
+  return tree;
+}
+
+/**
+ * Busca una categoría por slug dentro del JSON estático (Static Mirror)
+ * Esto evita llamadas costosas a la API de WooCommerce solo para obtener el ID/Nombre.
+ */
+export function getCategoryFromStatic(slug: string): CategoryTree | null {
+  const findInTree = (nodes: any[]): CategoryTree | null => {
+    for (const node of nodes) {
+      if (node.slug === slug) return node as CategoryTree;
+      if (node.children && node.children.length > 0) {
+        const found = findInTree(node.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  if (!fixedCategories || fixedCategories.length === 0) return null;
+  return findInTree(fixedCategories);
 }
 
 /**
@@ -414,7 +560,7 @@ export async function getProducts(params: {
       maxPrice,
       laboratory,
       laboratorySlug,
-      stockStatus = 'instock', // Default to instock
+      stockStatus = null, // Changed from 'instock' to null to show all products by default
     } = params;
 
     // Build query params
@@ -438,6 +584,9 @@ export async function getProducts(params: {
     if (featured !== undefined) queryParams.featured = featured;
     if (minPrice) queryParams.min_price = minPrice;
     if (maxPrice) queryParams.max_price = maxPrice;
+
+    // Optimization: Request only necessary fields to reduce payload size and WP processing time
+    queryParams._fields = 'id,name,slug,sku,price,regular_price,on_sale,stock_status,stock_quantity,images,categories,tags,short_description,average_rating,rating_count,date_on_sale_from,date_on_sale_to,meta_data';
 
     // El snippet PHP en WordPress espera 'laboratorios' para filtrar por esta taxonomía
     if (laboratory || laboratorySlug) {
@@ -478,7 +627,6 @@ export async function getCategoryGlobalFacets(categoryId: number): Promise<Filte
       category: categoryId.toString(),
       per_page: 80, // Limit to 80 items for speed (approx 1.5s max request)
       status: 'publish',
-      stock_status: 'instock'
     }, CATEGORY_CACHE_TTL);
 
     const mapped = (products || []).map((p: any) => mapWooProduct(p));
