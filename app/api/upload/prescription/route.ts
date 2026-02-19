@@ -48,7 +48,32 @@ export async function POST(req: NextRequest) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // 5. Upload to Supabase
+        // 5. Check and Create Bucket if not exists
+        const { data: bucketData, error: bucketError } = await supabaseAdmin
+            .storage
+            .getBucket(bucketName);
+
+        if (bucketError) {
+            // Bucket doesn't exist or other error, try to create it
+            console.log(`Bucket '${bucketName}' not found or error, attempting to create...`);
+            const { data: newBucket, error: createError } = await supabaseAdmin
+                .storage
+                .createBucket(bucketName, {
+                    public: true, // IMPORTANT: Public URL access
+                    fileSizeLimit: 5242880, // 5MB limit
+                    allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'application/pdf']
+                });
+
+            if (createError) {
+                console.error("Failed to create bucket:", createError);
+                // If creation fails (e.g. already exists race condition), we proceed to upload attempt
+                // but log it. If it was a permission error, upload will fail below.
+            } else {
+                console.log(`Bucket '${bucketName}' created successfully.`);
+            }
+        }
+
+        // 6. Upload to Supabase
         const { data, error } = await supabaseAdmin
             .storage
             .from(bucketName)

@@ -12,7 +12,8 @@ export async function POST(request: Request) {
             paymentMethodTitle,
             shippingLine,
             metaData,
-            amount // Optional validation
+            amount, // Optional validation
+            status // Optional custom status (e.g., 'on-hold', 'processing')
         } = body;
 
         const api = getWooApi();
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
             payment_method: paymentMethod || 'other',
             payment_method_title: paymentMethodTitle || 'Otro',
             set_paid: false,
-            status: 'pending',
+            status: status || 'pending',
             billing: {
                 first_name: customer.firstName,
                 last_name: customer.lastName,

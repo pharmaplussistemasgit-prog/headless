@@ -32,12 +32,32 @@ function ResultadoContent() {
     const wompiId = searchParams.get('id');
     // Credibanco (We use 'ref' for order number)
     const credibancoRef = searchParams.get('ref');
+    // Manual Methods (cod, bacs)
+    const methodParam = searchParams.get('method');
+    const orderIdParam = searchParams.get('id');
 
     const [result, setResult] = useState<PaymentResult | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        // Handle Manual Methods
+        if (methodParam === 'cod' || methodParam === 'bacs') {
+            setTimeout(() => {
+                setResult({
+                    status: 'APPROVED', // We treat them as approved/confirmed orders for display purposes
+                    id: orderIdParam || 'N/A',
+                    reference: orderIdParam || 'N/A',
+                    amount: 0, // We might not have amount here, but it's optional for these screens
+                    currency: 'COP',
+                    method: methodParam,
+                    date: new Date().toISOString()
+                });
+                setLoading(false);
+            }, 1000);
+            return;
+        }
+
         const fetchWompi = async () => {
             try {
                 const isProduction = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY?.startsWith('pub_prod');
@@ -164,7 +184,96 @@ function ResultadoContent() {
     };
     const paymentLabel = paymentMethodLabels[method] || method;
 
-    // ---- APROBADO ----
+    // ---- PAGO CONTRA ENTREGA ----
+    if (method === 'cod') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50 px-4 py-12">
+                <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center space-y-6">
+                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto ring-4 ring-green-200 ring-offset-2 animate-[pulse_2s_ease-in-out_once]">
+                        <ShoppingBag size={44} className="text-green-600" />
+                    </div>
+
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-1">¡Pedido Confirmado!</h1>
+                        <p className="text-gray-500">Tu pedido ha sido creado exitosamente.</p>
+                    </div>
+
+                    <div className="bg-green-50 rounded-xl p-5 text-left border border-green-100">
+                        <h4 className="font-bold text-green-800 mb-2 flex items-center gap-2">
+                            <CheckCircle size={16} />
+                            Instrucciones
+                        </h4>
+                        <p className="text-sm text-green-700">
+                            Recuerda tener el efectivo listo o un medio de pago habilitado (si aplica datafono) al momento de recibir tu pedido.
+                        </p>
+                        <div className="mt-4 pt-3 border-t border-green-200 flex justify-between text-sm">
+                            <span className="font-semibold text-green-800">Total a Pagar:</span>
+                            {/* We don't have amount here easily without fetching, use generic or passed param if available */}
+                            <span className="font-bold text-green-800">Contra Entrega</span>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <Link href="/" className="flex-1 py-3 border-2 border-gray-200 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 transition-all text-center">
+                            Ir al inicio
+                        </Link>
+                        <Link href="/mi-cuenta/pedidos" className="flex-1 py-3 bg-[var(--color-pharma-blue)] text-white rounded-xl font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+                            Ver mis pedidos <ArrowRight size={16} />
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ---- TRANSFERENCIA BANCARIA ----
+    if (method === 'bacs') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 px-4 py-12">
+                <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center space-y-6">
+                    <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto ring-4 ring-blue-200 ring-offset-2">
+                        <Clock size={44} className="text-blue-600" />
+                    </div>
+
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-1">¡Pedido Recibido!</h1>
+                        <p className="text-gray-500">Tu pedido está en espera de pago.</p>
+                    </div>
+
+                    <div className="bg-blue-50 rounded-xl p-5 text-left border border-blue-100">
+                        <h4 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                            <Loader2 size={16} />
+                            Instrucciones para Transferir
+                        </h4>
+                        <ul className="list-disc pl-5 space-y-1 mb-3 text-xs text-blue-900">
+                            <li><strong>Bancolombia Ahorros:</strong> 031-000000-00</li>
+                            <li><strong>Nequi / Daviplata:</strong> 300-123-4567</li>
+                        </ul>
+                        <p className="text-xs text-blue-700 mt-2">
+                            Envía tu comprobante a nuestro WhatsApp indicando el pedido <strong>#{reference}</strong>.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <a
+                            href={`https://wa.me/573001234567?text=Hola,%20envio%20comprobante%20para%20pedido%20${reference}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex-1 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-all flex items-center justify-center gap-2"
+                        >
+                            <Phone size={16} />
+                            Enviar Comprobante
+                        </a>
+                        <Link href="/mi-cuenta/pedidos" className="flex-1 py-3 border-2 border-gray-200 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 transition-all text-center">
+                            Mis Pedidos
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ---- APROBADO (WOMPI/CREDIBANCO) ----
     if (status === 'APPROVED') {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50 px-4 py-12">

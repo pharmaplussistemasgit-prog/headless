@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText, CreditCard, Building, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, ArrowRight, Truck, ShieldCheck, MapPin, AlertTriangle, ThermometerSnowflake, Calendar, FileText, CreditCard, Building, CheckCircle, Loader2, AlertCircle, Banknote } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/product/ProductCard';
@@ -48,7 +48,9 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
     const [availableCities, setAvailableCities] = useState<Array<{ code: string, name: string }>>([]);
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [privacyAccepted, setPrivacyAccepted] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<'wompi' | 'credibanco'>('wompi');
+    const [paymentMethod, setPaymentMethod] = useState<'wompi' | 'credibanco' | 'bacs' | 'cod'>('wompi');
+    const [codPaymentType, setCodPaymentType] = useState<'cash' | 'dataphone'>('dataphone');
+    const [codChangeAmount, setCodChangeAmount] = useState('');
 
     const [customerData, setCustomerData] = useState({
         firstName: '',
@@ -409,6 +411,62 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
             setIsLoading(false);
         }
     };
+
+    const handleManualPayment = async (method: 'bacs' | 'cod') => {
+        if (!validateForm()) return;
+        setIsLoading(true);
+
+        try {
+            const currentMetaData = [
+                { key: "fee_amount", value: requiresColdChain ? coldChainFee.toString() : "0" },
+                { key: "_cl_rx_attachment_url", value: prescriptionFileUrl || "" },
+                { key: "_cl_rx_missing", value: (requiresPrescription && !prescriptionFileUrl) ? "1" : "0" }
+            ];
+
+            if (method === 'cod') {
+                currentMetaData.push({ key: "_cod_payment_type", value: codPaymentType === 'dataphone' ? 'Datáfono' : 'Efectivo' });
+                if (codPaymentType === 'cash') {
+                    currentMetaData.push({ key: "_cod_change_amount", value: codChangeAmount });
+                }
+            }
+
+            const response = await fetch('/api/checkout/create-pending-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customer: customerData,
+                    items: items,
+                    paymentMethod: method,
+                    paymentMethodTitle: method === 'bacs' ? 'Transferencia Bancaria' : 'Pago Contra Entrega',
+                    shippingLine: {
+                        method_id: deliveryMethod === 'pickup' ? 'local_pickup' : 'flat_rate',
+                        method_title: shippingMethodName,
+                        total: shippingCost.toString()
+                    },
+                    metaData: currentMetaData,
+                    amount: finalTotal,
+                    status: method === 'cod' ? 'processing' : 'on-hold' // Processing for COD, On-Hold for BACS
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                clearCart();
+                // Redirect with method query param to show correct message on success page
+                window.location.href = `/checkout/resultado?id=${result.orderId}&method=${method}`;
+            } else {
+                toast.error(result.message || 'Error al procesar el pedido');
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Ocurrió un error al procesar el pedido');
+            setIsLoading(false);
+        }
+    };
+
+
 
     const handleCheckout = async (isAgreement = false) => {
         if (!validateForm()) return;
@@ -964,178 +1022,325 @@ export default function CheckoutForm({ shippingRules }: CheckoutFormProps) {
                         </label>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-3 mb-6">
                         {/* WOMPI – Pago con tarjeta/PSE/Nequi/Efectivo */}
                         {/* Payment Method Selector */}
                         {!agreementTransactionId && (
                             <div className="space-y-4">
                                 <h3 className="font-bold text-gray-800 text-sm">Selecciona el método de pago:</h3>
-                                <div className="space-y-3">
+
+                                {/* Grid Layout for Payment Methods */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {/* Option: Wompi */}
                                     <button
                                         onClick={() => setPaymentMethod('wompi')}
-                                        className={`w-full text-left p-4 border rounded-xl flex items-center justify-between transition-all duration-200 group ${paymentMethod === 'wompi'
+                                        className={`p-3 border rounded-xl flex items-center gap-3 transition-all duration-200 relative overflow-hidden ${paymentMethod === 'wompi'
                                             ? 'border-[var(--color-pharma-blue)] bg-blue-50/50 shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
                                             : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
                                             }`}
                                     >
-                                        <div className="flex items-center gap-4">
-                                            {/* Icon/Logo Placeholder */}
-                                            <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm">
-                                                <CreditCard size={20} className="text-gray-600" />
-                                            </div>
-                                            <div>
-                                                <div className="font-bold text-gray-800 text-sm">Wompi</div>
-                                                <div className="text-xs text-gray-500 font-medium">
-                                                    Nequi, PSE, Bancolombia, Tarjetas
-                                                </div>
-                                            </div>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'wompi' ? 'bg-[var(--color-pharma-blue)] text-white' : 'bg-gray-100 text-gray-500'}`}>
+                                            <CreditCard size={16} />
                                         </div>
-
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${paymentMethod === 'wompi'
-                                            ? 'bg-[var(--color-pharma-blue)] border-[var(--color-pharma-blue)]'
-                                            : 'border-gray-300 bg-white group-hover:border-gray-400'
-                                            }`}>
-                                            {paymentMethod === 'wompi' && <CheckCircle size={14} className="text-white" />}
+                                        <div className="text-left">
+                                            <div className="font-bold text-gray-800 text-sm leading-tight">Wompi</div>
+                                            <div className="text-[10px] text-gray-500 font-medium leading-tight">Nequi, PSE, Tarjetas</div>
                                         </div>
+                                        {paymentMethod === 'wompi' && <div className="absolute top-2 right-2 text-[var(--color-pharma-blue)]"><CheckCircle size={14} /></div>}
                                     </button>
 
                                     {/* Option: Credibanco */}
                                     <button
                                         onClick={() => setPaymentMethod('credibanco')}
-                                        className={`w-full text-left p-4 border rounded-xl flex items-center justify-between transition-all duration-200 group ${paymentMethod === 'credibanco'
+                                        className={`p-3 border rounded-xl flex items-center gap-3 transition-all duration-200 relative overflow-hidden ${paymentMethod === 'credibanco'
                                             ? 'border-[var(--color-pharma-blue)] bg-blue-50/50 shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
                                             : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
                                             }`}
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm">
-                                                <CreditCard size={20} className="text-gray-600" />
-                                            </div>
-                                            <div>
-                                                <div className="font-bold text-gray-800 text-sm">Credibanco</div>
-                                                <div className="text-xs text-gray-500 font-medium">
-                                                    Tarjetas Crédito y Débito
-                                                </div>
-                                            </div>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'credibanco' ? 'bg-[var(--color-pharma-blue)] text-white' : 'bg-gray-100 text-gray-500'}`}>
+                                            <CreditCard size={16} />
                                         </div>
+                                        <div className="text-left">
+                                            <div className="font-bold text-gray-800 text-sm leading-tight">Credibanco</div>
+                                            <div className="text-[10px] text-gray-500 font-medium leading-tight">Tarjetas Crédito/Débito</div>
+                                        </div>
+                                        {paymentMethod === 'credibanco' && <div className="absolute top-2 right-2 text-[var(--color-pharma-blue)]"><CheckCircle size={14} /></div>}
+                                    </button>
 
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${paymentMethod === 'credibanco'
-                                            ? 'bg-[var(--color-pharma-blue)] border-[var(--color-pharma-blue)]'
-                                            : 'border-gray-300 bg-white group-hover:border-gray-400'
-                                            }`}>
-                                            {paymentMethod === 'credibanco' && <CheckCircle size={14} className="text-white" />}
+                                    {/* Option: Transferencia */}
+                                    <button
+                                        onClick={() => setPaymentMethod('bacs')}
+                                        className={`p-3 border rounded-xl flex items-center gap-3 transition-all duration-200 relative overflow-hidden ${paymentMethod === 'bacs'
+                                            ? 'border-[var(--color-pharma-blue)] bg-blue-50/50 shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
+                                            : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                    >
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'bacs' ? 'bg-[var(--color-pharma-blue)] text-white' : 'bg-gray-100 text-gray-500'}`}>
+                                            <Building size={16} />
                                         </div>
+                                        <div className="text-left">
+                                            <div className="font-bold text-gray-800 text-sm leading-tight">Transferencia</div>
+                                            <div className="text-[10px] text-gray-500 font-medium leading-tight">Bancolombia, Nequi</div>
+                                        </div>
+                                        {paymentMethod === 'bacs' && <div className="absolute top-2 right-2 text-[var(--color-pharma-blue)]"><CheckCircle size={14} /></div>}
+                                    </button>
+
+                                    {/* Option: Contra Entrega */}
+                                    <button
+                                        onClick={() => setPaymentMethod('cod')}
+                                        className={`p-3 border rounded-xl flex items-center gap-3 transition-all duration-200 relative overflow-hidden ${paymentMethod === 'cod'
+                                            ? 'border-[var(--color-pharma-blue)] bg-blue-50/50 shadow-sm ring-1 ring-[var(--color-pharma-blue)]'
+                                            : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                    >
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${paymentMethod === 'cod' ? 'bg-[var(--color-pharma-green)] text-white' : 'bg-gray-100 text-gray-500'}`}>
+                                            <Banknote size={16} />
+                                        </div>
+                                        <div className="text-left">
+                                            <div className="font-bold text-gray-800 text-sm leading-tight">Contra Entrega</div>
+                                            <div className="text-[10px] text-gray-500 font-medium leading-tight">Efectivo o Datáfono</div>
+                                        </div>
+                                        {paymentMethod === 'cod' && <div className="absolute top-2 right-2 text-[var(--color-pharma-blue)]"><CheckCircle size={14} /></div>}
                                     </button>
                                 </div>
 
-                                {paymentMethod === 'wompi' && (
-                                    <WompiButton
-                                        amountCOP={finalTotal}
-                                        reference={wompiReference}
-                                        customerData={{
-                                            email: customerData.email,
-                                            fullName: `${customerData.firstName} ${customerData.lastName}`.trim(),
-                                            phoneNumber: customerData.phone,
-                                            legalId: customerData.documentId,
-                                            legalIdType: isCompany ? 'NIT' : 'CC',
-                                        }}
-                                        shippingAddress={deliveryMethod === 'shipping' ? {
-                                            addressLine1: customerData.address,
-                                            city: customerData.city,
-                                            region: COLOMBIA_STATES.find(s => s.code === selectedState)?.name || selectedState,
-                                            phoneNumber: customerData.phone,
-                                        } : undefined}
-                                        redirectUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/checkout/resultado`}
-                                        onResult={handleWompiResult}
-                                        disabled={!isFormReady}
-                                    />
-                                )}
+                                {/* DETAILS SECTION */}
+                                <div className="mt-4 animate-in fade-in zoom-in-95 duration-200">
 
-                                {paymentMethod === 'credibanco' && (
-                                    <button
-                                        onClick={handleCredibancoPayment}
-                                        disabled={!isFormReady || isLoading}
-                                        className={`
-                                            w-full py-4 rounded-xl font-bold text-base
-                                            flex items-center justify-center gap-3
-                                            transition-all duration-200 shadow-md
-                                            bg-[var(--color-pharma-blue)] hover:bg-blue-700 text-white
-                                            disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
-                                        `}
-                                    >
-                                        {isLoading ? (
-                                            <>
-                                                <Loader2 size={20} className="animate-spin" />
-                                                <span>Procesando...</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <CreditCard size={20} />
-                                                <span>Pagar con Credibanco</span>
-                                            </>
-                                        )}
-                                    </button>
-                                )}
+                                    {/* WOMPI DETAILS */}
+                                    {paymentMethod === 'wompi' && (
+                                        <WompiButton
+                                            amountCOP={finalTotal}
+                                            reference={wompiReference}
+                                            customerData={{
+                                                email: customerData.email,
+                                                fullName: `${customerData.firstName} ${customerData.lastName}`.trim(),
+                                                phoneNumber: customerData.phone,
+                                                legalId: customerData.documentId,
+                                                legalIdType: isCompany ? 'NIT' : 'CC',
+                                            }}
+                                            shippingAddress={deliveryMethod === 'shipping' ? {
+                                                addressLine1: customerData.address,
+                                                city: customerData.city,
+                                                region: COLOMBIA_STATES.find(s => s.code === selectedState)?.name || selectedState,
+                                                phoneNumber: customerData.phone,
+                                            } : undefined}
+                                            redirectUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/checkout/resultado`}
+                                            onResult={handleWompiResult}
+                                            disabled={!isFormReady}
+                                        />
+                                    )}
+
+                                    {/* CREDIBANCO DETAILS */}
+                                    {paymentMethod === 'credibanco' && (
+                                        <button
+                                            onClick={handleCredibancoPayment}
+                                            disabled={!isFormReady || isLoading}
+                                            className={`
+                                                w-full py-4 rounded-xl font-bold text-base
+                                                flex items-center justify-center gap-3
+                                                transition-all duration-200 shadow-md
+                                                bg-[var(--color-pharma-blue)] hover:bg-blue-700 text-white
+                                                disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+                                            `}
+                                        >
+                                            {isLoading ? (
+                                                <>
+                                                    <Loader2 size={20} className="animate-spin" />
+                                                    <span>Procesando...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <CreditCard size={20} />
+                                                    <span>Pagar con Credibanco</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+
+                                    {/* BACS DETAILS */}
+                                    {paymentMethod === 'bacs' && (
+                                        <div className="space-y-4">
+                                            <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl text-sm text-blue-800">
+                                                <h4 className="font-bold mb-2 flex items-center gap-2">
+                                                    <Building size={16} />
+                                                    Instrucciones de Pago
+                                                </h4>
+                                                <p className="mb-2 text-xs">Realiza tu transferencia a:</p>
+                                                <ul className="list-disc pl-5 space-y-1 mb-3 text-xs">
+                                                    <li><strong>Bancolombia Ahorros:</strong> 031-000000-00</li>
+                                                    <li><strong>Nequi:</strong> 300-123-4567</li>
+                                                    <li><strong>BBVA / BREB:</strong> 987-654-321</li>
+                                                </ul>
+                                                <div className="flex items-start gap-2 bg-blue-100/50 p-2 rounded-lg">
+                                                    <AlertCircle size={14} className="mt-0.5 shrink-0" />
+                                                    <p className="text-[11px] font-bold">
+                                                        IMPORTANTE: Toma nota del número de pedido que aparecerá al finalizar. Deberás adjuntarlo con tu comprobante de pago.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                onClick={() => handleManualPayment('bacs')}
+                                                disabled={!isFormReady || isLoading}
+                                                className={`
+                                                w-full py-4 rounded-xl font-bold text-base
+                                                flex items-center justify-center gap-3
+                                                transition-all duration-200 shadow-md
+                                                bg-[var(--color-pharma-blue)] hover:bg-blue-700 text-white
+                                                disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+                                            `}
+                                            >
+                                                {isLoading ? (
+                                                    <>
+                                                        <Loader2 size={20} className="animate-spin" />
+                                                        <span>Procesando...</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <CheckCircle size={20} />
+                                                        <span>Confirmar Pedido</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* COD DETAILS */}
+                                    {paymentMethod === 'cod' && (
+                                        <div className="space-y-4">
+                                            <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl space-y-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-700 block">¿Cómo deseas pagar al recibir?</label>
+                                                    <div className="flex gap-4">
+                                                        <label className="flex items-center gap-2 cursor-pointer">
+                                                            <input
+                                                                type="radio"
+                                                                name="codType"
+                                                                value="dataphone"
+                                                                checked={codPaymentType === 'dataphone'}
+                                                                onChange={() => setCodPaymentType('dataphone')}
+                                                                className="w-4 h-4 text-[var(--color-pharma-blue)]"
+                                                            />
+                                                            <span className="text-sm">Datáfono (Tarjeta)</span>
+                                                        </label>
+                                                        <label className="flex items-center gap-2 cursor-pointer">
+                                                            <input
+                                                                type="radio"
+                                                                name="codType"
+                                                                value="cash"
+                                                                checked={codPaymentType === 'cash'}
+                                                                onChange={() => setCodPaymentType('cash')}
+                                                                className="w-4 h-4 text-[var(--color-pharma-blue)]"
+                                                            />
+                                                            <span className="text-sm">Efectivo</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                {codPaymentType === 'cash' && (
+                                                    <div className="animate-in slide-in-from-top-2">
+                                                        <label className="text-xs font-semibold text-gray-600 block mb-1">
+                                                            ¿Con qué billete vas a pagar? (Para llevar vueltos)
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Ej: $50.000"
+                                                            value={codChangeAmount}
+                                                            onChange={(e) => setCodChangeAmount(e.target.value)}
+                                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[var(--color-pharma-blue)] outline-none"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <button
+                                                onClick={() => handleManualPayment('cod')}
+                                                disabled={!isFormReady || isLoading || (codPaymentType === 'cash' && !codChangeAmount)}
+                                                className={`
+                                                w-full py-4 rounded-xl font-bold text-base
+                                                flex items-center justify-center gap-3
+                                                transition-all duration-200 shadow-md
+                                                bg-[var(--color-pharma-green)] hover:bg-green-700 text-white
+                                                disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+                                            `}
+                                            >
+                                                {isLoading ? (
+                                                    <>
+                                                        <Loader2 size={20} className="animate-spin" />
+                                                        <span>Procesando...</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Truck size={20} />
+                                                        <span>Confirmar Envío</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
+                    </div>
 
-                        <button
-                            onClick={() => handleCheckout(true)}
-                            disabled={isLoading || !selectedState || isBelowMinAmount}
-                            className={`
-                                w-full py-4 font-bold rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed
+                    <button
+                        onClick={() => handleCheckout(true)}
+                        disabled={isLoading || !selectedState || isBelowMinAmount}
+                        className={`
+                                w-full py-4 mt-6 font-bold rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed
                                 ${agreementTransactionId
-                                    ? 'bg-[var(--color-pharma-blue)] text-white hover:bg-blue-700 shadow-md ring-2 ring-offset-2 ring-[var(--color-pharma-blue)]'
-                                    : 'bg-white text-[var(--color-pharma-blue)] border-2 border-[var(--color-pharma-blue)] hover:bg-blue-50'
-                                }
+                                ? 'bg-[var(--color-pharma-blue)] text-white hover:bg-blue-700 shadow-md ring-2 ring-offset-2 ring-[var(--color-pharma-blue)]'
+                                : 'bg-white text-[var(--color-pharma-blue)] border-2 border-[var(--color-pharma-blue)] hover:bg-blue-50'
+                            }
                                 disabled:bg-gray-100 disabled:border-gray-300 disabled:text-gray-400
                             `}
+                    >
+                        {isLoading && agreementTransactionId ? 'Procesando Convenio...'
+                            : agreementTransactionId ? 'Finalizar Compra con Convenio'
+                                : 'Pagar con Convenio / Libranza'}
+                        <CreditCard size={18} />
+                    </button>
+
+                    {agreementTransactionId && (
+                        <button
+                            onClick={() => {
+                                setAgreementTransactionId(null);
+                                toast.info("Convenio removido. Selecciona otro método de pago.");
+                            }}
+                            className="w-full py-2 text-xs text-red-500 hover:text-red-700 underline"
                         >
-                            {isLoading && agreementTransactionId ? 'Procesando Convenio...'
-                                : agreementTransactionId ? 'Finalizar Compra con Convenio'
-                                    : 'Pagar con Convenio / Libranza'}
-                            <CreditCard size={18} />
+                            Cancelar / Cambiar Método de Pago
                         </button>
-
-                        {agreementTransactionId && (
-                            <button
-                                onClick={() => {
-                                    setAgreementTransactionId(null);
-                                    toast.info("Convenio removido. Selecciona otro método de pago.");
-                                }}
-                                className="w-full py-2 text-xs text-red-500 hover:text-red-700 underline"
-                            >
-                                Cancelar / Cambiar Método de Pago
-                            </button>
-                        )}
-                    </div>
-
-                    <div className="mt-4 flex flex-col items-center justify-center gap-2 text-xs text-gray-400 text-center">
-                        <div className="flex items-center gap-2 mb-1">
-                            <ShieldCheck size={14} />
-                            <span>Pagos procesados de forma segura</span>
-                        </div>
-                        <p className="max-w-xs">
-                            Al continuar, aceptas nuestros{' '}
-                            <Link href="/politicas/terminos-condiciones" target="_blank" className="text-[var(--color-pharma-blue)] hover:underline">
-                                Términos y Condiciones
-                            </Link>
-                            {' '}y{' '}
-                            <Link href="/revision-pago-electronico" target="_blank" className="text-[var(--color-pharma-blue)] hover:underline">
-                                Política de Reversión de Pago
-                            </Link>.
-                        </p>
-                    </div>
+                    )}
                 </div>
-            </div >
 
-            {showAgreementModal && (
-                <AgreementModal
-                    onAuthorized={handleAgreementAuthorized}
-                    onCancel={() => setShowAgreementModal(false)}
-                />
-            )
+                <div className="mt-4 flex flex-col items-center justify-center gap-2 text-xs text-gray-400 text-center">
+                    <div className="flex items-center gap-2 mb-1">
+                        <ShieldCheck size={14} />
+                        <span>Pagos procesados de forma segura</span>
+                    </div>
+                    <p className="max-w-xs">
+                        Al continuar, aceptas nuestros{' '}
+                        <Link href="/politicas/terminos-condiciones" target="_blank" className="text-[var(--color-pharma-blue)] hover:underline">
+                            Términos y Condiciones
+                        </Link>
+                        {' '}y{' '}
+                        <Link href="/revision-pago-electronico" target="_blank" className="text-[var(--color-pharma-blue)] hover:underline">
+                            Política de Reversión de Pago
+                        </Link>.
+                    </p>
+                </div>
+            </div>
+
+
+            {
+                showAgreementModal && (
+                    <AgreementModal
+                        onAuthorized={handleAgreementAuthorized}
+                        onCancel={() => setShowAgreementModal(false)}
+                    />
+                )
             }
         </div >
     );
