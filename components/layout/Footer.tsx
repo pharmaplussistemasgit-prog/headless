@@ -186,6 +186,7 @@ export default function Footer() {
                   <li><Link href="/politicas/proteccion-datos" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Política de Protección de Datos</Link></li>
                   <li><Link href="/politicas/aviso-privacidad" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Aviso de Privacidad</Link></li>
                   <li><Link href="/politicas/preferencias-cookies" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Preferencias de Cookies</Link></li>
+                  <li><a href="https://tienda.pharmaplus.com.co/wp-content/uploads/2026/02/INSTRUCTIVO-USO-ADECUADO-DEL-MEDICAMENTO-2.pdf" target="_blank" rel="noopener noreferrer" className="text-sm text-blue-100 hover:text-[var(--color-pharma-green)] transition-colors">Buen Uso de Medicamento</a></li>
                 </ul>
               </div>
             </div>

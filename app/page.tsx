@@ -138,6 +138,7 @@ export default async function HomePage() {
   const featuredProductsList = featuredSlice.length > 4 ? featuredSlice : shuffledFeaturedTotal;
 
   return (
+    // Force re-render to fix hydration mismatch
     <div className="w-full bg-[var(--color-bg-light)]">
       {/* Hero Section */}
       <HeroSection
